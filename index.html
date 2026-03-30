@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ko" class="theme-light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TecAce | Galaxy S25 vs S26 On-Device AI Benchmark</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html.theme-light{
+  --color-primary:#1550FC;--color-accent:#E700DB;
+  --color-heading:#101828;--color-body:#364153;
+  --color-bg:#FFFFFF;--color-card-bg:#F9FAFB;
+  --color-card-border:#E5E7EB;--color-muted:#667085;
+  --bg:#FFFFFF;--surface:#F9FAFB;--surface-hover:#F3F4F6;
+  --border:#E5E7EB;
+}
+html.theme-dark{
+  --color-primary:#4B7BFF;--color-accent:#F040E8;
+  --color-heading:#F9FAFB;--color-body:#D1D5DB;
+  --color-bg:#0D0D0D;--color-card-bg:#1A1A1A;
+  --color-card-border:#2D2D2D;--color-muted:#9CA3AF;
+  --bg:#0D0D0D;--surface:#1A1A1A;--surface-hover:#242424;
+  --border:#2D2D2D;
+}
+body{font-family:'Poppins','Pretendard',sans-serif;background:var(--color-bg);color:var(--color-body);line-height:1.65;-webkit-font-smoothing:antialiased;transition:background 0.3s,color 0.3s;}
+h1,h2,h3{font-family:'Poppins','Pretendard',sans-serif;color:var(--color-heading);line-height:1.1;}
+h1{font-weight:300;letter-spacing:0.4px;}h2{font-weight:300;letter-spacing:0.5px;}h3{font-weight:600;}
+
+/* TOP NAV */
+.top-nav{position:relative;z-index:10;background:var(--color-bg);border-bottom:1px solid var(--color-card-border);display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:54px;transition:background 0.3s,border-color 0.3s;}
+.nav-left{display:flex;align-items:center;gap:12px;}
+.nav-logo{font-size:14px;font-weight:700;color:var(--color-primary);}
+.nav-sep{width:1px;height:16px;background:var(--color-card-border);}
+.nav-title{font-size:13px;color:var(--color-muted);}
+.nav-right{display:flex;gap:8px;}
+.nav-btn{display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:1px solid var(--color-card-border);background:var(--color-card-bg);cursor:pointer;font-size:12px;font-weight:600;color:var(--color-muted);font-family:'Poppins','Pretendard',sans-serif;transition:all 0.15s;}
+.nav-btn:hover{background:var(--surface-hover);color:var(--color-heading);}
+.nav-btn.primary{background:var(--color-primary);color:white;border-color:var(--color-primary);}
+.nav-btn.primary:hover{opacity:0.88;}
+.nav-btn.lang-btn{background:rgba(21,80,252,0.07);color:var(--color-primary);border-color:rgba(21,80,252,0.2);font-weight:700;letter-spacing:0.3px;}
+html.theme-dark .nav-btn.lang-btn{background:rgba(75,123,255,0.12);color:#93C5FD;border-color:rgba(75,123,255,0.3);}
+.nav-btn.lang-btn:hover{background:rgba(21,80,252,0.15);}
+.nav-btn:disabled{opacity:0.5;cursor:default;}
+
+/* HEADER */
+.header-topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 64px;border-bottom:1px solid var(--color-card-border);transition:border-color 0.3s;}
+.company-tagline{font-size:12px;font-weight:600;color:var(--color-muted);letter-spacing:0.5px;text-transform:uppercase;}
+.doc-date{font-size:11px;color:var(--color-muted);margin-top:2px;}
+.tecace-logo svg{display:block;height:26px;width:auto;}
+html.theme-dark .tecace-logo .tc-logo-path{fill:#F9FAFB;}
+
+.header-banner{padding:64px 64px 56px;background:linear-gradient(135deg,#e8d5f5 0%,#c4d0fc 40%,#a5b8fc 100%);position:relative;overflow:hidden;}
+html.theme-dark .header-banner{background:linear-gradient(135deg,#2a1a3e 0%,#0f1f6e 100%);}
+.header-banner::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 50%,rgba(231,0,219,0.12) 0%,transparent 60%);pointer-events:none;}
+.doc-type-badge{display:inline-block;background:var(--color-primary);color:white;border-radius:6px;padding:5px 14px;font-size:11px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:20px;position:relative;z-index:1;}
+.doc-title{font-size:clamp(32px,4.5vw,58px);font-weight:300;color:#101828;margin-bottom:14px;position:relative;z-index:1;}
+html.theme-dark .doc-title{color:#F9FAFB;}
+.doc-subtitle{font-size:16px;color:#364153;max-width:580px;line-height:1.65;position:relative;z-index:1;}
+html.theme-dark .doc-subtitle{color:#D1D5DB;}
+.doc-meta{display:flex;gap:28px;margin-top:28px;flex-wrap:wrap;position:relative;z-index:1;}
+.doc-meta-item{font-size:12px;color:#667085;}
+.doc-meta-item strong{color:#101828;font-weight:600;}
+html.theme-dark .doc-meta-item{color:#9CA3AF;}
+html.theme-dark .doc-meta-item strong{color:#F9FAFB;}
+
+/* BODY */
+.doc-body{max-width:960px;margin:0 auto;padding:56px 64px 80px;}
+.section{margin-bottom:52px;}
+.section-label{font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--color-primary);margin-bottom:10px;}
+.section-title{font-size:clamp(22px,3vw,32px);font-weight:300;color:var(--color-heading);margin-bottom:14px;}
+.section-desc{font-size:15px;color:var(--color-muted);line-height:1.7;margin-bottom:28px;max-width:680px;}
+.section-divider{border:none;border-top:1px solid var(--color-card-border);margin:44px 0;transition:border-color 0.3s;}
+
+/* CARDS */
+.card{background:var(--color-card-bg);border:1px solid var(--color-card-border);border-radius:13px;padding:24px;transition:background 0.3s,border-color 0.3s;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+
+/* STAT CARDS */
+.stat-card{padding:20px;border-radius:12px;background:var(--color-card-bg);border:1px solid var(--color-card-border);}
+.stat-label{font-size:10px;font-weight:600;letter-spacing:0.6px;text-transform:uppercase;color:var(--color-muted);margin-bottom:6px;}
+.stat-value{font-size:30px;font-weight:300;color:var(--color-primary);letter-spacing:-1px;line-height:1;}
+.stat-unit{font-size:14px;font-weight:400;}
+.stat-sub{font-size:11px;color:var(--color-muted);margin-top:6px;line-height:1.4;}
+.td-badge{display:inline-block;background:rgba(21,80,252,0.1);color:var(--color-primary);font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;margin-left:4px;}
+html.theme-dark .td-badge{background:rgba(75,123,255,0.18);}
+.td-badge.acc{background:rgba(231,0,219,0.1);color:var(--color-accent);}
+html.theme-dark .td-badge.acc{background:rgba(240,64,232,0.12);}
+
+/* TABLE */
+.data-table{width:100%;border-collapse:collapse;}
+.data-table th{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--color-muted);padding:10px 14px;text-align:left;border-bottom:2px solid var(--color-card-border);}
+.data-table td{font-size:13px;padding:11px 14px;border-bottom:1px solid var(--color-card-border);color:var(--color-body);}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table tr:hover td{background:var(--surface-hover);}
+.td-p{color:var(--color-primary);font-weight:700;}
+.td-a{color:var(--color-accent);font-weight:700;}
+
+/* BARS */
+.bar-group-title{font-size:13px;font-weight:600;color:var(--color-heading);margin-bottom:4px;}
+.bar-group-sub{font-size:12px;color:var(--color-muted);margin-bottom:14px;}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.bar-label{font-size:12px;font-weight:500;color:var(--color-body);width:145px;flex-shrink:0;}
+.bar-track{flex:1;height:8px;background:var(--color-card-border);border-radius:4px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:4px;}
+.bar-fill.blue{background:var(--color-primary);}
+.bar-fill.acc{background:var(--color-accent);}
+.bar-fill.red{background:#f43f5e;}
+.bar-fill.green{background:#10b981;}
+.bar-val{font-size:12px;font-weight:700;width:80px;text-align:right;flex-shrink:0;}
+.bar-val.blue{color:var(--color-primary);}
+.bar-val.acc{color:var(--color-accent);}
+.bar-val.green{color:#10b981;}
+.bar-val.red{color:#f43f5e;}
+
+/* INSIGHT */
+.insight{border-left:3px solid var(--color-primary);padding:14px 18px;background:rgba(21,80,252,0.04);border-radius:0 10px 10px 0;margin-bottom:16px;}
+html.theme-dark .insight{background:rgba(75,123,255,0.06);}
+.insight.acc{border-color:var(--color-accent);background:rgba(231,0,219,0.04);}
+html.theme-dark .insight.acc{background:rgba(240,64,232,0.06);}
+.insight-title{font-size:13px;font-weight:700;color:var(--color-primary);margin-bottom:5px;}
+.insight.acc .insight-title{color:var(--color-accent);}
+.insight-body{font-size:13px;color:var(--color-body);line-height:1.65;}
+
+/* FINDING */
+.finding{margin-bottom:22px;}
+.finding-num{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--color-primary);margin-bottom:6px;}
+.finding-title{font-size:17px;font-weight:600;color:var(--color-heading);margin-bottom:8px;}
+.finding-body{font-size:14px;color:var(--color-body);line-height:1.7;}
+
+/* NEXT BOX */
+.next-box{margin-top:20px;padding:16px 20px;border-radius:10px;background:var(--surface);border:1px solid var(--color-card-border);}
+.next-box-label{font-size:12px;font-weight:600;color:var(--color-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;}
+.next-box-body{font-size:14px;color:var(--color-body);line-height:1.7;}
+
+/* FOOTER */
+.doc-footer{border-top:1px solid var(--color-card-border);padding:20px 64px;display:flex;align-items:center;justify-content:space-between;transition:border-color 0.3s;}
+.footer-left{font-size:12px;color:var(--color-muted);}
+.footer-right{font-size:11px;font-weight:600;color:var(--color-accent);letter-spacing:0.3px;text-transform:uppercase;}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity 0.55s ease,transform 0.55s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+@media(max-width:768px){
+  .top-nav{padding:0 16px;}
+  .header-topbar,.header-banner{padding:14px 20px;}
+  .header-banner{padding:36px 20px;}
+  .doc-body{padding:36px 20px;}
+  .grid-2,.grid-4{grid-template-columns:1fr;}
+  .doc-footer{padding:16px 20px;flex-direction:column;gap:8px;text-align:center;}
+  .doc-title{font-size:30px;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div class="nav-left">
+    <span class="nav-logo">TecAce</span>
+    <span class="nav-sep"></span>
+    <span class="nav-title" data-i18n="nav_title">Tech Log — Special Edition</span>
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn lang-btn" id="langBtn" onclick="toggleLang()">한국어</button>
+    <button class="nav-btn" onclick="cycleTheme()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <span id="themeLabel">Light</span>
+    </button>
+    <button class="nav-btn primary" id="pdfBtn" onclick="downloadPDF()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <span data-i18n="pdf_btn">PDF Download</span>
+    </button>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<header>
+  <div class="header-topbar">
+    <div>
+      <span class="company-tagline">tecace.com</span>
+      <span class="doc-date">March 2026</span>
+    </div>
+    <a href="https://tecace.com" target="_blank" style="text-decoration:none;">
+      <span class="tecace-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2379.61 425.2">
+          <g>
+            <path class="tc-logo-path" fill="#1e3666" d="M354.7,382.59s-.04-24.99-.04-34.26l.3-257.9-116.99-.13,6.25-47.78,300.24.32,6.11,47.8-116.94-.13-.29,257.9c-.01,8.29.02,34.26.02,34.26l-78.65-.08Z"/>
+            <path class="tc-logo-path" fill="#1e3666" d="M1362.68,48.83h-63.41l.03-.05-56.22-.06,27.31,45.32c-45.42,89.14-108.32,212.39-109.69,214.03h.63c-21.55,42.12-37.62,73.34-38.3,74.16l61.81-.37,36.49-74.16,15.11-30.7h145.42l50.28,105.68,87.25-.44-34.69-73.79-122.02-259.61ZM1252.8,246.16h-4.61l61.36-122.99.32.72,22.28,48.12,14.28,30.82,20.07,43.33h-113.7Z"/>
+            <path class="tc-logo-path" fill="#1e3666" d="M2141.65,272.89v-82.4c0-41.06-19.5-61.64-58.34-61.64h-188.16c-38.89,0-58.42,20.58-58.42,61.71v123.5c0,41.15,19.53,68.62,58.42,68.62h226.31c6.41-12.52,13.03-25.51,19.73-38.64v-.07h-205.59c-10.64,0-17.78-2.07-21.53-6.1-3.75-4.09-5.71-11.85-5.71-23.38v-41.6h233.3ZM1908.35,198.12c0-11.49,1.96-19.25,5.71-23.26,3.75-4.11,10.93-6.13,21.53-6.13h107.45c10.55,0,17.65,2.02,21.36,6.13,3.72,4.01,5.61,11.77,5.61,23.26v42.95h-161.66v-42.95Z"/>
+            <path class="tc-logo-path" fill="#1e3666" d="M974.47,343.96h-46.64c-10.65,0-17.92-2.07-21.61-6.1-3.78-4.09-5.67-11.85-5.67-23.38v-115.14c0-11.45,1.89-19.26,5.67-23.26,3.69-4.12,10.96-6.13,21.61-6.13h136.15c6.86-13.45,13.29-27.31,19.09-38.69v-.1h-195.69c-38.97,0-58.42,26.36-58.42,67.47v115.43c0,41.14,19.45,68.61,58.42,68.61h176.13c5.99-11.7,12.7-24.78,19.82-38.71h-108.85Z"/>
+            <path class="tc-logo-path" fill="#1e3666" d="M1681.87,343.96h-46.64c-10.64,0-17.92-2.07-21.61-6.1-3.78-4.09-5.67-11.85-5.67-23.38v-115.14c0-11.45,1.89-19.26,5.67-23.26,3.69-4.12,10.97-6.13,21.61-6.13h136.15c6.86-13.45,13.29-27.31,19.09-38.69v-.1h-195.7c-38.96,0-58.41,26.36-58.41,67.47v115.43c0,41.14,19.45,68.61,58.41,68.61h176.14c5.99-11.7,12.69-24.78,19.81-38.71h-108.84Z"/>
+            <path class="tc-logo-path" fill="#1e3666" d="M567.15,339.02c-3.75-4.09-5.65-11.86-5.65-23.36v-41.61h233.35v-80.07c0-41.07-19.51-61.66-58.4-61.66h-188.12c-38.96,0-58.38,20.59-58.38,61.7v121.2c0,41.14,19.42,67.46,58.38,67.46h227.54c5.82-11.34,12.28-23.97,19.15-37.42v-.13s-206.26,0-206.26,0c-10.64,0-17.85-2.08-21.6-6.11M561.5,199.27c0-11.48,1.89-19.24,5.65-23.25,3.75-4.12,10.96-6.11,21.6-6.11h107.46c10.5,0,17.61,1.99,21.32,6.11,3.78,4.01,5.63,11.77,5.63,23.25v42.93h-161.66v-42.93Z"/>
+          </g>
+        </svg>
+      </span>
+    </a>
+  </div>
+  <div class="header-banner">
+    <span class="doc-type-badge" data-i18n="badge">TECH LOG — SPECIAL EDITION</span>
+    <h1 class="doc-title" data-i18n-html="title">Galaxy S25 vs S26<br>On-Device AI Benchmark</h1>
+    <p class="doc-subtitle" data-i18n="subtitle">Same chipset family, different performance profiles — measuring how the Snapdragon 8 Elite Gen 2 changes real AI inference on-device.</p>
+    <div class="doc-meta">
+      <div class="doc-meta-item"><strong data-i18n="meta1_label">Models Tested</strong><br><span data-i18n="meta1_val">Gemma3 1B (INT4) · Qwen2.5 1.5B (Q8)</span></div>
+      <div class="doc-meta-item"><strong data-i18n="meta2_label">Total Runs</strong><br><span data-i18n="meta2_val">108 (2 devices × 2 models × 27 prompts)</span></div>
+      <div class="doc-meta-item"><strong data-i18n="meta3_label">Categories</strong><br><span data-i18n="meta3_val">11</span></div>
+      <div class="doc-meta-item"><strong data-i18n="meta4_label">Date</strong><br><span data-i18n="meta4_val">March 2026</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="doc-body">
+
+  <!-- 01 -->
+  <section class="section reveal">
+    <div class="section-label" data-i18n="s1_label">01 — Overview</div>
+    <h2 class="section-title" data-i18n="s1_title">Overall Performance Summary</h2>
+    <p class="section-desc" data-i18n="s1_desc">S25 leads on end-to-end latency and decode throughput. S26 wins on time-to-first-token and prefill speed.</p>
+    <div class="card" style="margin-bottom:16px;">
+      <table class="data-table">
+        <thead><tr>
+          <th data-i18n="th0">Metric</th>
+          <th data-i18n="th1">S25 · Gemma3</th>
+          <th data-i18n="th2">S25 · Qwen2.5</th>
+          <th data-i18n="th3">S26 · Gemma3</th>
+          <th data-i18n="th4">S26 · Qwen2.5</th>
+        </tr></thead>
+        <tbody>
+          <tr><td data-i18n="r1c0">Avg Latency</td><td class="td-p">5.4s <span class="td-badge">WIN</span></td><td class="td-p">6.5s <span class="td-badge">WIN</span></td><td>7.4s</td><td>7.6s</td></tr>
+          <tr><td data-i18n="r2c0">TTFT</td><td>280ms</td><td>670ms</td><td class="td-a">238ms <span class="td-badge acc">WIN</span></td><td class="td-a">375ms <span class="td-badge acc">WIN</span></td></tr>
+          <tr><td data-i18n="r3c0">Decode TPS</td><td class="td-p">66.5 tok/s <span class="td-badge">WIN</span></td><td class="td-p">34.7 tok/s <span class="td-badge">WIN</span></td><td>49.6 tok/s</td><td>31.6 tok/s</td></tr>
+          <tr><td data-i18n="r4c0">Prefill TPS</td><td>83.0 tok/s</td><td>36.9 tok/s</td><td class="td-a">97.3 tok/s <span class="td-badge acc">WIN</span></td><td class="td-a">60.6 tok/s <span class="td-badge acc">WIN</span></td></tr>
+          <tr><td data-i18n="r5c0">Peak Memory</td><td class="td-p">391 MB <span class="td-badge">WIN</span></td><td class="td-p">403 MB <span class="td-badge">WIN</span></td><td>393 MB</td><td>413 MB</td></tr>
+          <tr><td data-i18n="r6c0">Init Time</td><td class="td-p">1,932ms <span class="td-badge">WIN</span></td><td class="td-p">2,139ms <span class="td-badge">WIN</span></td><td>2,028ms</td><td>2,235ms</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="insight">
+      <div class="insight-title" data-i18n="insight1_title">Key Observation</div>
+      <div class="insight-body" data-i18n="insight1_body">S25 leads on overall latency and decode speed. S26 wins on TTFT and prefill throughput. Each generation has a distinct profile.</div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- 02 -->
+  <section class="section reveal">
+    <div class="section-label" data-i18n="s2_label">02 — Token Processing</div>
+    <h2 class="section-title" data-i18n="s2_title">Decode TPS vs Prefill TPS</h2>
+    <p class="section-desc" data-i18n="s2_desc">Decode TPS governs how fast text appears on screen. Prefill TPS determines how quickly the model processes the input prompt.</p>
+    <div class="grid-2" style="gap:24px;">
+      <div>
+        <div class="bar-group-title" data-i18n="decode_title">Decode TPS — higher is faster</div>
+        <div class="bar-group-sub" data-i18n="decode_sub">How fast text is generated token by token</div>
+        <div class="bar-row"><span class="bar-label">S25 · Gemma3 1B</span><div class="bar-track"><div class="bar-fill blue" style="width:100%"></div></div><span class="bar-val blue">66.5</span></div>
+        <div class="bar-row"><span class="bar-label">S26 · Gemma3 1B</span><div class="bar-track"><div class="bar-fill blue" style="width:74.6%"></div></div><span class="bar-val blue">49.6</span></div>
+        <div class="bar-row"><span class="bar-label">S25 · Qwen2.5 1.5B</span><div class="bar-track"><div class="bar-fill blue" style="width:52.2%"></div></div><span class="bar-val blue">34.7</span></div>
+        <div class="bar-row"><span class="bar-label">S26 · Qwen2.5 1.5B</span><div class="bar-track"><div class="bar-fill blue" style="width:47.5%"></div></div><span class="bar-val blue">31.6</span></div>
+      </div>
+      <div>
+        <div class="bar-group-title" data-i18n="prefill_title">Prefill TPS — higher is faster</div>
+        <div class="bar-group-sub" data-i18n="prefill_sub">How fast the input prompt is processed</div>
+        <div class="bar-row"><span class="bar-label">S26 · Gemma3 1B</span><div class="bar-track"><div class="bar-fill acc" style="width:100%"></div></div><span class="bar-val acc">97.3</span></div>
+        <div class="bar-row"><span class="bar-label">S25 · Gemma3 1B</span><div class="bar-track"><div class="bar-fill acc" style="width:85.3%"></div></div><span class="bar-val acc">83.0</span></div>
+        <div class="bar-row"><span class="bar-label">S26 · Qwen2.5 1.5B</span><div class="bar-track"><div class="bar-fill acc" style="width:62.3%"></div></div><span class="bar-val acc">60.6</span></div>
+        <div class="bar-row"><span class="bar-label">S25 · Qwen2.5 1.5B</span><div class="bar-track"><div class="bar-fill acc" style="width:37.9%"></div></div><span class="bar-val acc">36.9</span></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- 03 -->
+  <section class="section reveal">
+    <div class="section-label" data-i18n="s3_label">03 — Responsiveness</div>
+    <h2 class="section-title" data-i18n="s3_title">Time to First Token (TTFT)</h2>
+    <p class="section-desc" data-i18n="s3_desc">TTFT is the most impactful metric for chatbot user experience. Lower values feel more responsive.</p>
+    <div class="card" style="margin-bottom:20px;">
+      <div class="bar-group-title" style="margin-bottom:16px;" data-i18n="ttft_title">TTFT Comparison — lower is faster</div>
+      <div class="bar-row"><span class="bar-label">S26 · Gemma3 1B</span><div class="bar-track"><div class="bar-fill acc" style="width:35.5%"></div></div><span class="bar-val acc">238ms</span></div>
+      <div class="bar-row"><span class="bar-label">S25 · Gemma3 1B</span><div class="bar-track"><div class="bar-fill acc" style="width:41.8%"></div></div><span class="bar-val acc">280ms</span></div>
+      <div class="bar-row"><span class="bar-label">S26 · Qwen2.5 1.5B</span><div class="bar-track"><div class="bar-fill blue" style="width:56%"></div></div><span class="bar-val blue">375ms</span></div>
+      <div class="bar-row"><span class="bar-label">S25 · Qwen2.5 1.5B</span><div class="bar-track"><div class="bar-fill red" style="width:100%"></div></div><span class="bar-val red">670ms</span></div>
+    </div>
+    <div class="insight acc">
+      <div class="insight-title" data-i18n="insight3_title">Qwen2.5 TTFT Improvement on S26</div>
+      <div class="insight-body" data-i18n="insight3_body">670ms → 375ms — a 44.0% reduction. Gen 2's accelerated prefill directly translates to faster responsiveness.</div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- 04 -->
+  <section class="section reveal">
+    <div class="section-label" data-i18n="s4_label">04 — Delta Analysis</div>
+    <h2 class="section-title" data-i18n="s4_title">Performance Delta: S25 → S26</h2>
+    <p class="section-desc" data-i18n="s4_desc">Percentage change per metric when moving from S25 to S26.</p>
+    <div class="card">
+      <div class="bar-row"><span class="bar-label" style="font-weight:600;" data-i18n="d1">Avg Latency · Gemma3</span><div class="bar-track"><div class="bar-fill red" style="width:75%"></div></div><span class="bar-val red">−37.4%</span></div>
+      <div class="bar-row"><span class="bar-label" style="font-weight:600;" data-i18n="d2">Avg Latency · Qwen2.5</span><div class="bar-track"><div class="bar-fill red" style="width:35%"></div></div><span class="bar-val red">−17.2%</span></div>
+      <div class="bar-row"><span class="bar-label" style="font-weight:600;" data-i18n="d3">Decode TPS · Gemma3</span><div class="bar-track"><div class="bar-fill red" style="width:52%"></div></div><span class="bar-val red">−25.4%</span></div>
+      <div class="bar-row"><span class="bar-label" style="font-weight:600;" data-i18n="d4">Decode TPS · Qwen2.5</span><div class="bar-track"><div class="bar-fill red" style="width:18%"></div></div><span class="bar-val red">−8.9%</span></div>
+      <div class="bar-row"><span class="bar-label" style="font-weight:600;" data-i18n="d5">Prefill TPS · Gemma3</span><div class="bar-track"><div class="bar-fill green" style="width:26.8%"></div></div><span class="bar-val green">+17.2%</span></div>
+      <div class="bar-row"><span class="bar-label" style="font-weight:600;" data-i18n="d6">Prefill TPS · Qwen2.5</span><div class="bar-track"><div class="bar-fill green" style="width:100%"></div></div><span class="bar-val green">+64.2%</span></div>
+      <div class="bar-row"><span class="bar-label" style="font-weight:600;" data-i18n="d7">TTFT · Gemma3</span><div class="bar-track"><div class="bar-fill green" style="width:23.4%"></div></div><span class="bar-val green">+15.0%</span></div>
+      <div class="bar-row"><span class="bar-label" style="font-weight:600;" data-i18n="d8">TTFT · Qwen2.5</span><div class="bar-track"><div class="bar-fill green" style="width:68.5%"></div></div><span class="bar-val green">+44.0%</span></div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- 05 -->
+  <section class="section reveal">
+    <div class="section-label" data-i18n="s5_label">05 — Resource Usage</div>
+    <h2 class="section-title" data-i18n="s5_title">Memory &amp; Initialization</h2>
+    <p class="section-desc" data-i18n="s5_desc">Memory consumption and initialization time affect battery life and cold-start UX. S25 holds a marginal edge in both.</p>
+    <div class="grid-4" style="margin-bottom:20px;">
+      <div class="stat-card"><div class="stat-label" data-i18n="stat1_label">Peak Memory · Gemma3</div><div class="stat-value">391<span class="stat-unit">MB</span></div><div class="stat-sub" data-i18n="stat1_sub">S25 baseline · S26: 393 MB (+0.5%)</div></div>
+      <div class="stat-card"><div class="stat-label" data-i18n="stat2_label">Init Time · Gemma3</div><div class="stat-value">1,932<span class="stat-unit">ms</span></div><div class="stat-sub" data-i18n="stat2_sub">S25 baseline · S26: 2,028ms (+5.0%)</div></div>
+      <div class="stat-card"><div class="stat-label" data-i18n="stat3_label">Peak Memory · Qwen2.5</div><div class="stat-value">403<span class="stat-unit">MB</span></div><div class="stat-sub" data-i18n="stat3_sub">S25 baseline · S26: 413 MB (+2.5%)</div></div>
+      <div class="stat-card"><div class="stat-label" data-i18n="stat4_label">Init Time · Qwen2.5</div><div class="stat-value">2,139<span class="stat-unit">ms</span></div><div class="stat-sub" data-i18n="stat4_sub">S25 baseline · S26: 2,235ms (+4.5%)</div></div>
+    </div>
+    <div class="insight">
+      <div class="insight-title" data-i18n="insight5_title">Memory delta is negligible</div>
+      <div class="insight-body" data-i18n="insight5_body">Gemma3: +2 MB, Qwen2.5: +10 MB on S26. Init time ~4–5% slower on S26.</div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- 06 -->
+  <section class="section reveal">
+    <div class="section-label" data-i18n="s6_label">06 — Key Insights</div>
+    <h2 class="section-title" data-i18n="s6_title">Findings &amp; Conclusions</h2>
+    <div class="finding">
+      <div class="finding-num" data-i18n="f1_num">Finding 01</div>
+      <div class="finding-title" data-i18n="f1_title">New generation ≠ across-the-board gains</div>
+      <div class="finding-body" data-i18n="f1_body">S26 does not universally outperform the S25. S25 leads on latency for both models.</div>
+    </div>
+    <div class="finding">
+      <div class="finding-num" data-i18n="f2_num">Finding 02</div>
+      <div class="finding-title" data-i18n="f2_title">S26's real strength is input processing</div>
+      <div class="finding-body" data-i18n="f2_body">S26 shows a generational leap in Prefill TPS and TTFT — ideal for RAG and document Q&amp;A pipelines.</div>
+    </div>
+    <div class="insight acc" style="margin-top:24px;">
+      <div class="insight-title" data-i18n="conclusion_title">Core Conclusion</div>
+      <div class="insight-body" data-i18n="conclusion_body">The S26 is not a "faster S25." It is faster at understanding prompts, slower at generating output. Match device and model to the use case.</div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- 07 -->
+  <section class="section reveal">
+    <div class="section-label" data-i18n="s7_label">07 — Recommendations</div>
+    <h2 class="section-title" data-i18n="s7_title">Practical Use Case Guide</h2>
+    <div class="card">
+      <table class="data-table">
+        <thead><tr>
+          <th data-i18n="rec_th1">Scenario</th>
+          <th data-i18n="rec_th2">Recommendation</th>
+          <th data-i18n="rec_th3">Rationale</th>
+        </tr></thead>
+        <tbody>
+          <tr><td data-i18n="rec1_s">Interactive chatbot (fast response)</td><td><span class="td-badge">S25 + Gemma3</span></td><td style="font-size:12px;" data-i18n="rec1_r">Best end-to-end latency for conversational UX</td></tr>
+          <tr><td data-i18n="rec2_s">Quality-focused offline processing</td><td><span class="td-badge acc">S26 + Qwen2.5</span></td><td style="font-size:12px;" data-i18n="rec2_r">Best TTFT and prefill for long-context pipelines</td></tr>
+          <tr><td data-i18n="rec3_s">RAG / Document Q&amp;A</td><td><span class="td-badge acc">S26</span></td><td style="font-size:12px;" data-i18n="rec3_r">S26 prefill advantage dominates on long input contexts</td></tr>
+          <tr><td data-i18n="rec4_s">Long-form text generation</td><td><span class="td-badge">S25</span></td><td style="font-size:12px;" data-i18n="rec4_r">S25 decode TPS advantage accumulates over long outputs</td></tr>
+          <tr><td data-i18n="rec5_s">Cost-sensitive deployment</td><td><span data-i18n="rec5_rec">Either</span></td><td style="font-size:12px;" data-i18n="rec5_r">Memory delta is negligible; choose based on task profile</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="next-box">
+      <div class="next-box-label" data-i18n="next_title">Next Steps</div>
+      <div class="next-box-body" data-i18n-html="next_body">Future benchmarks will expand to include <strong>Gemma-3n E2B, Phi-4-mini, and DeepSeek-R1</strong>, along with GPU/NPU accelerated backends. Results based on 108 test runs, March 2026.</div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="doc-footer">
+  <span class="footer-left">tecace.com</span>
+  <span class="footer-right" data-i18n="footer_right">CONFIDENTIAL | © 2026 TECACE</span>
+</footer>
+
+<script>
+// ── 언어 데이터 ──────────────────────────────────────────────
+var LANG = {
+  en: {
+    nav_title:'Tech Log — Special Edition', lang_btn:'한국어', pdf_btn:'PDF Download',
+    badge:'TECH LOG — SPECIAL EDITION',
+    title:'Galaxy S25 vs S26<br>On-Device AI Benchmark',
+    subtitle:'Same chipset family, different performance profiles — measuring how the Snapdragon 8 Elite Gen 2 changes real AI inference on-device.',
+    meta1_label:'Models Tested', meta1_val:'Gemma3 1B (INT4) · Qwen2.5 1.5B (Q8)',
+    meta2_label:'Total Runs', meta2_val:'108 (2 devices × 2 models × 27 prompts)',
+    meta3_label:'Categories', meta3_val:'11',
+    meta4_label:'Date', meta4_val:'March 2026',
+    s1_label:'01 — Overview', s1_title:'Overall Performance Summary',
+    s1_desc:'S25 leads on end-to-end latency and decode throughput. S26 wins on time-to-first-token and prefill speed. Each generation has a distinct performance profile — neither is simply "faster" across the board.',
+    th0:'Metric', th1:'S25 · Gemma3', th2:'S25 · Qwen2.5', th3:'S26 · Gemma3', th4:'S26 · Qwen2.5',
+    r1c0:'Avg Latency', r2c0:'TTFT', r3c0:'Decode TPS', r4c0:'Prefill TPS', r5c0:'Peak Memory', r6c0:'Init Time',
+    insight1_title:'Key Observation',
+    insight1_body:'S25 leads on overall latency and decode speed. S26 wins on TTFT and prefill throughput. Each generation has a distinct profile — neither dominates across all metrics.',
+    s2_label:'02 — Token Processing', s2_title:'Decode TPS vs Prefill TPS',
+    s2_desc:'Decode TPS governs how fast text appears on screen. Prefill TPS determines how quickly the model processes the input prompt. These two metrics point in opposite directions across generations.',
+    decode_title:'Decode TPS — higher is faster', decode_sub:'How fast text is generated token by token',
+    prefill_title:'Prefill TPS — higher is faster', prefill_sub:'How fast the input prompt is processed',
+    s3_label:'03 — Responsiveness', s3_title:'Time to First Token (TTFT)',
+    s3_desc:'TTFT is the most impactful metric for chatbot user experience — the perceived "thinking time" before the first word appears. Lower values feel more responsive.',
+    ttft_title:'TTFT Comparison — lower is faster',
+    insight3_title:'Qwen2.5 TTFT Improvement on S26',
+    insight3_body:'670ms → 375ms — a 44.0% reduction. Gen 2\'s accelerated prefill processing directly translates into faster perceived responsiveness for prompt-heavy workloads.',
+    s4_label:'04 — Delta Analysis', s4_title:'Performance Delta: S25 → S26',
+    s4_desc:'Percentage change per metric when moving from S25 to S26. Green indicates S26 improvement; red indicates regression vs S25.',
+    d1:'Avg Latency · Gemma3', d2:'Avg Latency · Qwen2.5', d3:'Decode TPS · Gemma3', d4:'Decode TPS · Qwen2.5',
+    d5:'Prefill TPS · Gemma3', d6:'Prefill TPS · Qwen2.5', d7:'TTFT · Gemma3', d8:'TTFT · Qwen2.5',
+    s5_label:'05 — Resource Usage', s5_title:'Memory & Initialization',
+    s5_desc:'Memory consumption and model initialization time affect battery life and cold-start UX. S25 holds a marginal edge in both categories.',
+    stat1_label:'Peak Memory · Gemma3', stat1_sub:'S25 baseline · S26: 393 MB (+0.5%)',
+    stat2_label:'Init Time · Gemma3', stat2_sub:'S25 baseline · S26: 2,028ms (+5.0%)',
+    stat3_label:'Peak Memory · Qwen2.5', stat3_sub:'S25 baseline · S26: 413 MB (+2.5%)',
+    stat4_label:'Init Time · Qwen2.5', stat4_sub:'S25 baseline · S26: 2,235ms (+4.5%)',
+    insight5_title:'Memory delta is negligible',
+    insight5_body:'Gemma3: +2 MB, Qwen2.5: +10 MB on S26. Init time is consistently ~4–5% slower on S26, giving S25 a marginal cold-start advantage.',
+    s6_label:'06 — Key Insights', s6_title:'Findings & Conclusions',
+    f1_num:'Finding 01', f1_title:'New generation ≠ across-the-board gains',
+    f1_body:'Contrary to expectations, S26 does not universally outperform the S25. S25 leads on Gemma3 (5.4s vs 7.4s — S26 is 37.4% slower) and Qwen2.5 (6.5s vs 7.6s — 17.2% behind).',
+    f2_num:'Finding 02', f2_title:"S26's real strength is input processing",
+    f2_body:'S26 shows a generational leap in Prefill TPS (+64.2% for Qwen2.5) and TTFT (−44%). S26 understands prompts faster but generates output more slowly — ideal for RAG and document Q&A pipelines.',
+    conclusion_title:'Core Conclusion',
+    conclusion_body:'The S26 is not a "faster S25." It is faster at understanding prompts, slower at generating output. Matching device and model to the specific use case is critical.',
+    s7_label:'07 — Recommendations', s7_title:'Practical Use Case Guide',
+    rec_th1:'Scenario', rec_th2:'Recommendation', rec_th3:'Rationale',
+    rec1_s:'Interactive chatbot (fast response)', rec1_r:'Best end-to-end latency for conversational UX',
+    rec2_s:'Quality-focused offline processing', rec2_r:'Best TTFT and prefill for long-context pipelines',
+    rec3_s:'RAG / Document Q&A', rec3_r:'S26 prefill advantage dominates on long input contexts',
+    rec4_s:'Long-form text generation', rec4_r:'S25 decode TPS advantage accumulates over long outputs',
+    rec5_s:'Cost-sensitive deployment', rec5_rec:'Either', rec5_r:'Memory delta is negligible; choose based on task profile',
+    next_title:'Next Steps',
+    next_body:'Future benchmarks will expand to include <strong>Gemma-3n E2B, Phi-4-mini, and DeepSeek-R1</strong>, along with GPU/NPU accelerated backends. Results based on 108 test runs, March 2026.',
+    footer_right:'CONFIDENTIAL | © 2026 TECACE'
+  },
+  ko: {
+    nav_title:'Tech Log — 특별판', lang_btn:'English', pdf_btn:'PDF 다운로드',
+    badge:'TECH LOG — 특별판',
+    title:'Galaxy S25 vs S26<br>온디바이스 AI 벤치마크',
+    subtitle:'동일 칩셋 플랫폼, 다른 성능 프로파일 — Snapdragon 8 Elite Gen 2가 실제 AI 추론에 미치는 영향을 측정했습니다.',
+    meta1_label:'테스트 모델', meta1_val:'Gemma3 1B (INT4) · Qwen2.5 1.5B (Q8)',
+    meta2_label:'총 실행 횟수', meta2_val:'108회 (2기기 × 2모델 × 27프롬프트)',
+    meta3_label:'카테고리', meta3_val:'11개',
+    meta4_label:'테스트 날짜', meta4_val:'2026년 3월',
+    s1_label:'01 — 개요', s1_title:'전체 성능 요약',
+    s1_desc:'S25는 전체 레이턴시와 디코드 처리량에서 앞섭니다. S26는 첫 토큰 응답 시간(TTFT)과 프리필 속도에서 우위를 보입니다. 각 세대는 서로 다른 성능 프로파일을 가지며, 어느 쪽도 모든 지표에서 압도하지 않습니다.',
+    th0:'지표', th1:'S25 · Gemma3', th2:'S25 · Qwen2.5', th3:'S26 · Gemma3', th4:'S26 · Qwen2.5',
+    r1c0:'평균 레이턴시', r2c0:'TTFT', r3c0:'디코드 TPS', r4c0:'프리필 TPS', r5c0:'최대 메모리', r6c0:'초기화 시간',
+    insight1_title:'핵심 관찰',
+    insight1_body:'S25는 전체 레이턴시와 디코드 속도에서 앞서고, S26는 TTFT와 프리필 처리량에서 우위를 보입니다. 각 세대는 독자적인 성능 프로파일을 가집니다.',
+    s2_label:'02 — 토큰 처리', s2_title:'디코드 TPS vs 프리필 TPS',
+    s2_desc:'디코드 TPS는 텍스트가 화면에 나타나는 속도를 결정합니다. 프리필 TPS는 모델이 입력 프롬프트를 처리하는 속도를 반영합니다. 이 두 지표는 세대 간에 서로 반대 방향을 가리킵니다.',
+    decode_title:'디코드 TPS — 높을수록 빠름', decode_sub:'토큰이 생성되는 속도 (출력 속도)',
+    prefill_title:'프리필 TPS — 높을수록 빠름', prefill_sub:'입력 프롬프트를 처리하는 속도',
+    s3_label:'03 — 반응성', s3_title:'첫 토큰까지의 시간 (TTFT)',
+    s3_desc:'TTFT는 챗봇 사용자 경험에서 가장 중요한 지표입니다 — 첫 단어가 나타나기 전의 체감 "생각 시간"으로 반응성에 직접적인 영향을 줍니다.',
+    ttft_title:'TTFT 비교 — 낮을수록 빠름',
+    insight3_title:'S26에서 Qwen2.5의 TTFT 개선',
+    insight3_body:'670ms → 375ms — 44.0% 감소. Gen 2의 가속된 프리필 처리가 긴 프롬프트 워크로드에서 체감 반응성 향상으로 직접 이어집니다.',
+    s4_label:'04 — 델타 분석', s4_title:'성능 변화량: S25 → S26',
+    s4_desc:'S25에서 S26로 이동 시 각 지표의 변화율입니다. 초록색은 S26 개선, 빨간색은 S25 대비 퇴보를 나타냅니다.',
+    d1:'평균 레이턴시 · Gemma3', d2:'평균 레이턴시 · Qwen2.5', d3:'디코드 TPS · Gemma3', d4:'디코드 TPS · Qwen2.5',
+    d5:'프리필 TPS · Gemma3', d6:'프리필 TPS · Qwen2.5', d7:'TTFT · Gemma3', d8:'TTFT · Qwen2.5',
+    s5_label:'05 — 리소스 사용', s5_title:'메모리 & 초기화 시간',
+    s5_desc:'메모리 사용량과 모델 초기화 시간은 배터리 수명과 콜드 스타트 UX에 영향을 줍니다. S25가 두 항목 모두에서 소폭 우위를 보입니다.',
+    stat1_label:'최대 메모리 · Gemma3', stat1_sub:'S25 기준 · S26: 393 MB (+0.5%)',
+    stat2_label:'초기화 시간 · Gemma3', stat2_sub:'S25 기준 · S26: 2,028ms (+5.0%)',
+    stat3_label:'최대 메모리 · Qwen2.5', stat3_sub:'S25 기준 · S26: 413 MB (+2.5%)',
+    stat4_label:'초기화 시간 · Qwen2.5', stat4_sub:'S25 기준 · S26: 2,235ms (+4.5%)',
+    insight5_title:'메모리 차이는 무시할 수준',
+    insight5_body:'Gemma3: +2 MB, Qwen2.5: +10 MB (S26 기준). 초기화 시간은 S26에서 일관적으로 약 4–5% 느리며, 콜드 스타트에서 S25가 소폭 유리합니다.',
+    s6_label:'06 — 핵심 인사이트', s6_title:'발견 사항 및 결론',
+    f1_num:'발견 01', f1_title:'신세대 = 전면적 성능 향상이 아님',
+    f1_body:'예상과 달리 S26는 S25를 전반적으로 능가하지 않습니다. S25가 Gemma3 (5.4s vs 7.4s — S26이 37.4% 느림)와 Qwen2.5 (6.5s vs 7.6s — 17.2% 뒤처짐) 모두에서 전체 레이턴시 기준 앞섭니다.',
+    f2_num:'발견 02', f2_title:'S26의 진짜 강점은 입력 처리',
+    f2_body:'S26는 프리필 TPS (+64.2%, Qwen2.5 기준)와 TTFT (−44%)에서 세대 도약을 보여줍니다. S26는 프롬프트 이해는 빠르지만 출력 생성은 느립니다 — RAG 및 문서 Q&A 파이프라인에 이상적입니다.',
+    conclusion_title:'핵심 결론',
+    conclusion_body:'S26는 "더 빠른 S25"가 아닙니다. 프롬프트 이해는 빠르고 출력 생성은 느린, 명확히 다른 성능 프로파일을 가진 기기입니다. 사용 사례에 맞는 기기와 모델 조합 선택이 핵심입니다.',
+    s7_label:'07 — 활용 추천', s7_title:'실용적 사용 사례 가이드',
+    rec_th1:'시나리오', rec_th2:'추천', rec_th3:'근거',
+    rec1_s:'대화형 챗봇 (빠른 응답)', rec1_r:'대화형 UX에서 최고의 전체 레이턴시',
+    rec2_s:'품질 중심 오프라인 처리', rec2_r:'긴 컨텍스트 파이프라인에서 최고 TTFT·프리필',
+    rec3_s:'RAG / 문서 Q&A', rec3_r:'긴 입력 컨텍스트에서 S26 프리필 우위가 지배적',
+    rec4_s:'장문 텍스트 생성', rec4_r:'긴 출력에서 S25 디코드 TPS 우위가 누적',
+    rec5_s:'비용 효율 배포', rec5_rec:'상황에 따라', rec5_r:'메모리 차이 무시할 수준 — 태스크 프로파일 기준 선택',
+    next_title:'다음 단계',
+    next_body:'향후 벤치마크는 <strong>Gemma-3n E2B, Phi-4-mini, DeepSeek-R1</strong>과 GPU/NPU 가속 백엔드를 포함한 종합 비교로 확장될 예정입니다. 결과는 2026년 3월 108회 테스트 기반입니다.',
+    footer_right:'기밀 | © 2026 TECACE'
+  }
+};
+
+// ── 현재 언어 (기본 영어) ──
+var curLang = localStorage.getItem('tecace-lang') || 'en';
+var curTheme = localStorage.getItem('tecace-theme') || 'light';
+
+// ── 언어 적용 ──────────────────────────────────────────────
+function applyLang(lang) {
+  var d = LANG[lang];
+  curLang = lang;
+  localStorage.setItem('tecace-lang', lang);
+  document.documentElement.lang = lang;
+
+  // 텍스트 교체
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n');
+    if (d[key] !== undefined) el.textContent = d[key];
+  });
+  // HTML 교체 (innerHTML 허용 요소)
+  document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n-html');
+    if (d[key] !== undefined) el.innerHTML = d[key];
+  });
+
+  // 언어 버튼 텍스트
+  document.getElementById('langBtn').textContent = d.lang_btn;
+}
+
+function toggleLang() {
+  applyLang(curLang === 'en' ? 'ko' : 'en');
+}
+
+// ── 테마 ──────────────────────────────────────────────────
+function applyTheme(t) {
+  document.documentElement.className = 'theme-' + t;
+  document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
+  localStorage.setItem('tecace-theme', t);
+  curTheme = t;
+}
+function cycleTheme() { applyTheme(curTheme === 'dark' ? 'light' : 'dark'); }
+
+// ── PDF ──────────────────────────────────────────────────
+async function downloadPDF() {
+  var btn = document.getElementById('pdfBtn');
+  var origHTML = btn.innerHTML;
+  btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Generating...';
+  btn.disabled = true;
+  document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('visible'); });
+  var fname = curLang === 'ko' ? 'TecAce_S25vsS26_벤치마크_KO.pdf' : 'TecAce_S25vsS26_Benchmark_EN.pdf';
+  try {
+    await html2pdf().set({
+      margin: 0, filename: fname,
+      image: { type: 'jpeg', quality: 0.96 },
+      html2canvas: { scale: 2, useCORS: true, letterRendering: true, logging: false },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['css', 'legacy'] }
+    }).from(document.body).save();
+  } finally {
+    btn.innerHTML = origHTML;
+    btn.disabled = false;
+  }
+}
+
+// ── 스크롤 reveal ──────────────────────────────────────────
+var obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(function(el){ obs.observe(el); });
+
+// ── 초기화 ────────────────────────────────────────────────
+applyTheme(curTheme);
+applyLang(curLang);
+</script>
+</body>
+</html>
