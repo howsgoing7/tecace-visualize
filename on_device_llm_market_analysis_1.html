@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="ko" class="theme-light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>On-Device LLM 시장 분석 — TecAce</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html.theme-light {
+  --color-primary: #1550FC; --color-accent: #E700DB;
+  --color-heading: #101828; --color-body: #364153;
+  --color-bg: #FFFFFF; --color-card-bg: #F9FAFB;
+  --color-card-border: #E5E7EB; --color-muted: #667085;
+  --surface: #F9FAFB; --surface-hover: #F3F4F6; --border: #E5E7EB;
+}
+html.theme-dark {
+  --color-primary: #4B7BFF; --color-accent: #F040E8;
+  --color-heading: #F9FAFB; --color-body: #D1D5DB;
+  --color-bg: #0D0D0D; --color-card-bg: #1A1A1A;
+  --color-card-border: #2D2D2D; --color-muted: #9CA3AF;
+  --surface: #1A1A1A; --surface-hover: #242424; --border: #2D2D2D;
+}
+
+body { font-family: 'Poppins', 'Pretendard', sans-serif; background: var(--color-bg); color: var(--color-body); transition: background 0.3s, color 0.3s; }
+
+/* TOP NAV */
+.top-nav {
+  position: sticky; top: 0; z-index: 300;
+  background: var(--color-bg); border-bottom: 1px solid var(--color-card-border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px; height: 46px; transition: background 0.3s, border-color 0.3s;
+}
+.nav-left { display: flex; align-items: center; gap: 12px; }
+.nav-logo { font-size: 13px; font-weight: 700; color: var(--color-primary); }
+.nav-sep { width: 1px; height: 14px; background: var(--color-card-border); }
+.nav-title { font-size: 12px; color: var(--color-muted); }
+.nav-right { display: flex; gap: 6px; }
+.nav-btn {
+  padding: 4px 12px; border-radius: 5px; border: 1px solid var(--color-card-border);
+  background: transparent; cursor: pointer; font-size: 11px; font-weight: 600;
+  color: var(--color-muted); font-family: 'Poppins', 'Pretendard', sans-serif;
+  transition: all 0.15s; letter-spacing: 0.3px;
+}
+.nav-btn:hover { background: var(--surface-hover); color: var(--color-heading); }
+.nav-btn.primary { background: var(--color-primary); color: white; border-color: var(--color-primary); }
+.nav-btn.primary:hover { opacity: 0.88; }
+.nav-btn.lang-btn { background: rgba(21,80,252,0.07); color: var(--color-primary); border-color: rgba(21,80,252,0.2); }
+html.theme-dark .nav-btn.lang-btn { background: rgba(75,123,255,0.12); color: #93C5FD; border-color: rgba(75,123,255,0.3); }
+.nav-btn:disabled { opacity: 0.5; cursor: default; }
+
+/* HEADER BANNER */
+.header-banner {
+  padding: 60px 64px 52px;
+  background: linear-gradient(135deg, #0f1142 0%, #1a0a2e 30%, #0d1a5c 60%, #1a0038 100%);
+  position: relative; overflow: hidden;
+}
+html.theme-dark .header-banner { background: linear-gradient(135deg, #0a0a1a 0%, #0d1040 100%); }
+.header-banner::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 20% 50%, rgba(21,80,252,0.3) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 30%, rgba(231,0,219,0.2) 0%, transparent 55%);
+  pointer-events: none;
+}
+.header-banner > * { position: relative; z-index: 1; }
+.doc-type-badge {
+  display: inline-block; background: var(--color-primary); color: white;
+  border-radius: 5px; padding: 4px 12px; font-size: 11px; font-weight: 600;
+  letter-spacing: 0.7px; text-transform: uppercase; margin-bottom: 16px;
+}
+.doc-title { font-size: clamp(24px, 4vw, 44px); font-weight: 700; color: #fff; margin-bottom: 12px; line-height: 1.2; }
+.doc-subtitle { font-size: 15px; color: rgba(255,255,255,0.72); max-width: 640px; line-height: 1.65; }
+.doc-meta { display: flex; gap: 28px; margin-top: 24px; flex-wrap: wrap; }
+.doc-meta-item { font-size: 12px; color: rgba(255,255,255,0.5); }
+.doc-meta-item strong { color: rgba(255,255,255,0.85); font-weight: 600; }
+
+/* MAIN CONTENT */
+.content { max-width: 960px; margin: 0 auto; padding: 52px 64px; }
+@media (max-width: 768px) { .content { padding: 32px 20px; } .top-nav { padding: 0 20px; } .header-banner { padding: 40px 20px; } }
+
+/* SECTION HEADERS */
+.sec-num { font-size: 72px; font-weight: 300; color: var(--color-primary); opacity: 0.12; line-height: 1; letter-spacing: -2px; margin-bottom: -14px; }
+.sec-title { font-size: 22px; font-weight: 700; color: var(--color-heading); margin-bottom: 6px; }
+.sec-sub { font-size: 13px; color: var(--color-muted); margin-bottom: 28px; }
+.section { margin-bottom: 56px; }
+
+/* CARDS */
+.card { background: var(--color-card-bg); border: 1px solid var(--color-card-border); border-radius: 12px; padding: 24px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+@media (max-width: 640px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+/* TABLES */
+.tbl-wrap { overflow-x: auto; margin-bottom: 20px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th { background: var(--color-primary); color: white; padding: 10px 14px; font-weight: 600; font-size: 11px; text-align: left; }
+tbody td { padding: 10px 14px; border-bottom: 1px solid var(--color-card-border); color: var(--color-body); }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--surface-hover); }
+tbody td:first-child { font-weight: 600; color: var(--color-heading); }
+
+/* INSIGHT / CALLOUT */
+.insight { border-left: 3px solid var(--color-primary); padding: 13px 18px; background: rgba(21,80,252,0.04); border-radius: 0 10px 10px 0; margin-bottom: 14px; }
+html.theme-dark .insight { background: rgba(75,123,255,0.06); }
+.insight.warn { border-color: #f43f5e; background: rgba(244,63,94,0.04); }
+.insight.green { border-color: #10b981; background: rgba(16,185,129,0.04); }
+.insight-title { font-size: 13px; font-weight: 700; color: var(--color-primary); margin-bottom: 5px; }
+.insight.warn .insight-title { color: #f43f5e; }
+.insight.green .insight-title { color: #10b981; }
+.insight-body { font-size: 13px; color: var(--color-body); line-height: 1.65; }
+
+/* BAR CHARTS */
+.bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+.bar-label { font-size: 12px; font-weight: 500; color: var(--color-body); width: 140px; flex-shrink: 0; line-height: 1.3; }
+.bar-track { flex: 1; height: 7px; background: var(--color-card-border); border-radius: 4px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
+.bar-fill.primary { background: var(--color-primary); }
+.bar-fill.accent { background: var(--color-accent); }
+.bar-fill.green { background: #10b981; }
+.bar-fill.orange { background: #f59e0b; }
+.bar-val { font-size: 12px; font-weight: 700; width: 80px; text-align: right; flex-shrink: 0; color: var(--color-heading); }
+
+/* STAT CARDS */
+.stat-card { background: var(--color-card-bg); border: 1px solid var(--color-card-border); border-radius: 12px; padding: 20px 24px; }
+.stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--color-muted); margin-bottom: 8px; }
+.stat-value { font-size: 28px; font-weight: 700; color: var(--color-heading); line-height: 1; margin-bottom: 4px; }
+.stat-value span { font-size: 14px; font-weight: 500; color: var(--color-muted); }
+.stat-note { font-size: 12px; color: var(--color-muted); margin-top: 6px; }
+.stat-cagr { font-size: 13px; font-weight: 700; color: #10b981; }
+
+/* PHASE STEPS */
+.phase-row { display: flex; gap: 0; margin-bottom: 16px; }
+.phase-num { width: 36px; height: 36px; border-radius: 50%; background: var(--color-primary); color: white; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+.phase-content { flex: 1; padding-left: 16px; }
+.phase-title { font-size: 14px; font-weight: 700; color: var(--color-heading); margin-bottom: 3px; }
+.phase-desc { font-size: 13px; color: var(--color-body); line-height: 1.6; }
+.phase-meta { font-size: 11px; color: var(--color-primary); font-weight: 600; margin-top: 3px; }
+
+/* ROADMAP */
+.roadmap-item { display: flex; gap: 16px; margin-bottom: 0; position: relative; }
+.roadmap-item:not(:last-child)::before { content:''; position: absolute; left: 17px; top: 34px; bottom: -1px; width: 2px; background: var(--color-card-border); }
+.roadmap-dot { width: 34px; height: 34px; border-radius: 50%; background: var(--color-primary); color: white; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0; }
+.roadmap-dot.warn { background: #f59e0b; }
+.roadmap-body { flex: 1; padding: 0 0 24px 0; }
+.roadmap-week { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--color-primary); margin-bottom: 3px; }
+.roadmap-week.warn { color: #f59e0b; }
+.roadmap-task { font-size: 13px; font-weight: 600; color: var(--color-heading); margin-bottom: 3px; }
+.roadmap-out { font-size: 12px; color: var(--color-muted); }
+
+/* COMPETITOR MATRIX */
+.matrix-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.matrix-table th { background: var(--color-primary); color: white; padding: 8px 12px; font-weight: 600; font-size: 10px; text-align: center; }
+.matrix-table th:first-child { text-align: left; }
+.matrix-table td { padding: 9px 12px; border-bottom: 1px solid var(--color-card-border); text-align: center; }
+.matrix-table td:first-child { font-weight: 700; text-align: left; color: var(--color-heading); }
+.matrix-table tr:last-child td { border-bottom: none; }
+.matrix-table tr.highlight td { background: rgba(21,80,252,0.05); }
+.stars { color: var(--color-primary); font-weight: 700; font-size: 13px; }
+.stars.hi { color: #10b981; }
+.stars.lo { color: var(--color-muted); }
+
+/* TAGS */
+.tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+.tag.primary { background: rgba(21,80,252,0.1); color: var(--color-primary); }
+.tag.accent { background: rgba(231,0,219,0.1); color: var(--color-accent); }
+.tag.green { background: rgba(16,185,129,0.1); color: #10b981; }
+.tag.warn { background: rgba(245,158,11,0.1); color: #d97706; }
+.tag.red { background: rgba(244,63,94,0.1); color: #f43f5e; }
+
+/* CHANNEL LIST */
+.channel-item { display: flex; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--color-card-border); align-items: flex-start; }
+.channel-item:last-child { border-bottom: none; }
+.channel-rank { width: 24px; height: 24px; border-radius: 50%; background: var(--color-primary); color: white; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.channel-rank.sec { background: rgba(21,80,252,0.15); color: var(--color-primary); }
+.channel-body .ch-title { font-size: 13px; font-weight: 700; color: var(--color-heading); margin-bottom: 3px; }
+.channel-body .ch-desc { font-size: 12px; color: var(--color-body); line-height: 1.5; }
+
+/* RISK CARDS */
+.risk-card { border: 1px solid var(--color-card-border); border-radius: 10px; padding: 16px 20px; margin-bottom: 12px; display: flex; gap: 14px; align-items: flex-start; }
+.risk-icon { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+.risk-icon.red { background: #f43f5e; }
+.risk-icon.orange { background: #f59e0b; }
+.risk-title { font-size: 13px; font-weight: 700; color: var(--color-heading); margin-bottom: 3px; }
+.risk-desc { font-size: 12px; color: var(--color-body); line-height: 1.55; }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(14px); transition: opacity 0.5s ease, transform 0.5s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* FOOTER */
+.doc-footer {
+  background: #0D0D0F; height: 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px;
+}
+.footer-left { font-size: 11px; color: #667085; }
+.footer-right { font-size: 11px; font-weight: 600; color: #E700DB; letter-spacing: 0.3px; text-transform: uppercase; }
+
+/* DIVIDER */
+.divider { height: 1px; background: var(--color-card-border); margin: 28px 0; }
+
+/* BODY TEXT */
+p { font-size: 14px; line-height: 1.75; color: var(--color-body); margin-bottom: 14px; }
+.highlight-box { background: var(--color-card-bg); border: 1px solid var(--color-card-border); border-radius: 10px; padding: 18px 22px; margin-bottom: 16px; font-size: 13px; line-height: 1.7; color: var(--color-body); }
+.highlight-box strong { color: var(--color-heading); }
+
+/* DEFINITION TABLE */
+.def-table { width: 100%; border-collapse: collapse; }
+.def-table td { padding: 10px 14px; border-bottom: 1px solid var(--color-card-border); font-size: 13px; vertical-align: top; }
+.def-table td:first-child { font-weight: 700; color: var(--color-heading); width: 38%; }
+.def-table td:nth-child(2) { color: var(--color-muted); }
+.def-table td:last-child { color: var(--color-body); }
+.def-table tr:last-child td { border-bottom: none; }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div class="nav-left">
+    <span class="nav-logo">TecAce</span>
+    <span class="nav-sep"></span>
+    <span class="nav-title" data-i18n="nav_title">On-Device LLM 시장 분석</span>
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn lang-btn" id="langBtn" onclick="toggleLang()">English</button>
+    <button class="nav-btn" onclick="cycleTheme()"><span id="themeLabel">Light</span></button>
+    <button class="nav-btn primary" id="pdfBtn" onclick="downloadPDF()">PDF Download</button>
+  </div>
+</nav>
+
+<!-- HEADER BANNER -->
+<div class="header-banner">
+  <span class="doc-type-badge" data-i18n="badge">INTERNAL STRATEGY DOCUMENT · REVISED v2</span>
+  <h1 class="doc-title" data-i18n-html="title">On-Device LLM 시장 분석 및 4P 전략</h1>
+  <p class="doc-subtitle" data-i18n="subtitle">Mobile On-Device RAG 기반 — TecAce Software 실행 전략</p>
+  <div class="doc-meta">
+    <div class="doc-meta-item"><strong data-i18n="meta_date_label">Date</strong><br><span>March 2026</span></div>
+    <div class="doc-meta-item"><strong data-i18n="meta_status_label">Status</strong><br><span data-i18n="meta_status">CONFIDENTIAL</span></div>
+    <div class="doc-meta-item"><strong data-i18n="meta_focus_label">Focus</strong><br><span data-i18n="meta_focus">Mobile On-Device RAG</span></div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="content">
+
+  <!-- SECTION 1: 역량 재정의 -->
+  <div class="section reveal">
+    <div class="sec-num">01</div>
+    <div class="sec-title" data-i18n="s1_title">현실 보정: TecAce의 실제 역량 재정의</div>
+    <div class="sec-sub" data-i18n="s1_sub">이전 버전의 가정을 수정하고 실제 역량 기반으로 전략을 재설계합니다</div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th data-i18n="t1_h1">항목</th>
+            <th data-i18n="t1_h2">이전 가정</th>
+            <th data-i18n="t1_h3">실제 현황</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-i18n="t1_r1c1">모델</td>
+            <td data-i18n="t1_r1c2">자체 모델 또는 고도화된 SLM</td>
+            <td data-i18n="t1_r1c3">Gemma 3 등 오픈소스 SLM 활용</td>
+          </tr>
+          <tr>
+            <td data-i18n="t1_r2c1">Samsung 관계</td>
+            <td data-i18n="t1_r2c2">외부 고객으로 활용 가능</td>
+            <td data-i18n="t1_r2c3">Samsung은 이미 자체 LLM 탑재 중. 고객 대상 아님</td>
+          </tr>
+          <tr>
+            <td data-i18n="t1_r3c1">기술 수준</td>
+            <td data-i18n="t1_r3c2">SLM 최적화/배포 전문가</td>
+            <td data-i18n="t1_r3c3">모바일 디바이스에서 On-Device RAG 구축/테스트 완료</td>
+          </tr>
+          <tr>
+            <td data-i18n="t1_r4c1">디바이스 LLM 탑재</td>
+            <td data-i18n="t1_r4c2">직접 배포 경험</td>
+            <td data-i18n="t1_r4c3">Size/Quality/Update 등 난제로 배포보다 RAG 중심으로 전환</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="insight">
+      <div class="insight-title" data-i18n="s1_kd_title">핵심 재정의</div>
+      <div class="insight-body" data-i18n="s1_kd_body">TecAce의 on-device 리드 제품/서비스는 <strong>"모바일 디바이스에서 동작하는 On-Device RAG 솔루션"</strong>입니다. LLM 자체를 디바이스에 탑재하는 것이 아니라, 오픈소스 SLM을 활용하여 모바일에서 로컬 데이터를 검색하고 AI 응답을 생성하는 것입니다.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: 시장 재분석 -->
+  <div class="section reveal">
+    <div class="sec-num">02</div>
+    <div class="sec-title" data-i18n="s2_title">시장 재분석: On-Device RAG 시장</div>
+    <div class="sec-sub" data-i18n="s2_sub">관련 시장 규모 및 CAGR — TecAce의 SAM은 교차 시장에 위치</div>
+
+    <div class="grid-3" style="margin-bottom:24px">
+      <div class="stat-card reveal">
+        <div class="stat-label">Enterprise RAG</div>
+        <div class="stat-value">$1.96<span>B</span></div>
+        <div class="stat-cagr">CAGR ~35%</div>
+        <div class="stat-note">2025 기준 / 2030 $40.3B 전망</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-label">Mobile On-Device LLM</div>
+        <div class="stat-value">~$2.5<span>B</span></div>
+        <div class="stat-cagr">CAGR 27.4%</div>
+        <div class="stat-note">2025 기준 / 2030 $10B+ 전망</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-label">SLM 시장</div>
+        <div class="stat-value">~$10<span>B</span></div>
+        <div class="stat-cagr">CAGR 15.1%</div>
+        <div class="stat-note">2025 기준 / 2030 $20.7B 전망</div>
+      </div>
+    </div>
+
+    <div class="card reveal" style="margin-bottom:16px">
+      <div style="font-size:13px;font-weight:700;color:var(--color-heading);margin-bottom:8px" data-i18n="s2_bar_title">시장 성장률 비교 (CAGR)</div>
+      <div class="bar-row">
+        <span class="bar-label">Enterprise RAG</span>
+        <div class="bar-track"><div class="bar-fill primary" style="width:100%"></div></div>
+        <span class="bar-val" style="color:var(--color-primary)">~35%</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Mobile On-Device LLM</span>
+        <div class="bar-track"><div class="bar-fill accent" style="width:78%"></div></div>
+        <span class="bar-val" style="color:var(--color-accent)">27.4%</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">SLM 시장</span>
+        <div class="bar-track"><div class="bar-fill green" style="width:43%"></div></div>
+        <span class="bar-val" style="color:#10b981">15.1%</span>
+      </div>
+    </div>
+
+    <div class="insight green reveal">
+      <div class="insight-title" data-i18n="s2_google_title">Google AI Edge의 On-Device RAG 공식 지원</div>
+      <div class="insight-body" data-i18n="s2_google_body">Google은 2025년 I/O에서 Gemma 3n과 함께 on-device RAG 라이브러리를 공식 발표했습니다. Google이 플랫폼을 제공하고, TecAce같은 SI가 그 위에서 구체적인 업무별 솔루션을 구축하는 구조입니다. 예시 유즈케이스: 필드 기술자가 서비스 없는 환경에서 부품 사진을 찍고 질문하는 것, 창고/주방 작업자가 음성으로 재고를 업데이트하는 것.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: 타겟 고객 -->
+  <div class="section reveal">
+    <div class="sec-num">03</div>
+    <div class="sec-title" data-i18n="s3_title">타겟 고객 및 유즈케이스</div>
+    <div class="sec-sub" data-i18n="s3_sub">"네트워크가 불안정하거나 없는 환경에서 일하는 사람" — 3단계 타겟 우선순위</div>
+
+    <div class="card reveal" style="margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <span class="tag primary">1차 타겟</span>
+        <span style="font-size:14px;font-weight:700;color:var(--color-heading)" data-i18n="t3_p1_title">필드 서비스 / 외근직 — 최우선</span>
+      </div>
+      <p style="margin-bottom:10px" data-i18n="t3_p1_buyer"><strong data-i18n="t3_buyer">바이어:</strong> 제조업, 유틸리티, 석유/가스, 통신, 건설 분야의 필드 오퍼레이션 리더</p>
+      <p style="margin-bottom:10px" data-i18n="t3_p1_uc"><strong data-i18n="t3_uc">유즈케이스:</strong> 기술자가 현장에서 스마트폰/태블릿으로 장비 매뉴얼, 수리 매뉴얼, 안전 절차, 기술 스펙을 검색하고 AI 응답을 받음. 네트워크 없는 현장(지하, 오지, 밀림 지역)에서 완전 로컬로 동작.</p>
+      <div class="insight" style="margin-bottom:0">
+        <div class="insight-body" data-i18n="t3_p1_roi">구매 동기: 기술자 1인당 연간 $50K+ 의 다운타임/오류 비용 절감, 안전사고 예방, 신입 기술자 온보딩 시간 단축</div>
+      </div>
+    </div>
+
+    <div class="grid-2 reveal">
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+          <span class="tag accent">2차 타겟</span>
+          <span style="font-size:13px;font-weight:700;color:var(--color-heading)" data-i18n="t3_p2_title">헬스케어 / 임상 현장</span>
+        </div>
+        <p style="font-size:13px;margin-bottom:8px" data-i18n="t3_p2_buyer"><strong>바이어:</strong> 병원 시스템, 디지털 헬스 플랫폼, 의료기기 회사</p>
+        <p style="font-size:13px;margin-bottom:8px" data-i18n="t3_p2_uc"><strong>유즈케이스:</strong> 의료진이 태블릿에서 진료 가이드라인, 약물 상호작용, 치료 프로토콜을 로컬에서 검색. HIPAA 준수.</p>
+        <div class="tag green" data-i18n="t3_p2_tag">BAA 불필요 · 오진 감소</div>
+      </div>
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+          <span class="tag warn">3차 타겟</span>
+          <span style="font-size:13px;font-weight:700;color:var(--color-heading)" data-i18n="t3_p3_title">보안/정부 분야</span>
+        </div>
+        <p style="font-size:13px;margin-bottom:8px" data-i18n="t3_p3_buyer"><strong>바이어:</strong> 방산/정부 계약자, Air-gapped 환경 운영 조직</p>
+        <p style="font-size:13px;margin-bottom:8px" data-i18n="t3_p3_uc"><strong>유즈케이스:</strong> 보안 등급이 높은 문서를 현장에서 검색/참조. 네트워크 연결 자체가 불가능한 환경에서 AI 활용.</p>
+        <div class="tag red" data-i18n="t3_p3_tag">Air-gapped 특화</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: 4P 전략 -->
+  <div class="section reveal">
+    <div class="sec-num">04</div>
+    <div class="sec-title" data-i18n="s4_title">4P 전략</div>
+    <div class="sec-sub" data-i18n="s4_sub">Product · Price · Place · Promotion</div>
+
+    <!-- 4.1 Product -->
+    <div class="card reveal" style="margin-bottom:20px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--color-primary);margin-bottom:8px" data-i18n="s4_product_badge">4.1 Product</div>
+      <div style="font-size:17px;font-weight:700;color:var(--color-heading);margin-bottom:6px" data-i18n="s4_product_name">TecAce On-Device AI Assistant (가칭)</div>
+      <p style="font-size:13px;margin-bottom:16px" data-i18n="s4_product_desc">모바일 디바이스(Android 스마트폰/태블릿)에서 완전히 로컬로 동작하는 AI 문서 검색/응답 시스템. 클라우드 연결 없이 고객사의 기술 문서/매뉴얼/프로토콜을 디바이스에 저장하고, 자연어 질문으로 검색하며, AI가 관련 답변을 생성합니다.</p>
+
+      <div style="font-size:12px;font-weight:700;color:var(--color-heading);margin-bottom:10px" data-i18n="s4_tech_title">기술 스택</div>
+      <div class="grid-2" style="margin-bottom:16px">
+        <div style="font-size:12px;color:var(--color-body);line-height:1.7">
+          <div>• <strong data-i18n="s4_t1">SLM:</strong> <span data-i18n="s4_t1v">Gemma 3/3n 등 오픈소스 (고객 요구에 따라 모델 교체 가능)</span></div>
+          <div>• <strong data-i18n="s4_t2">RAG:</strong> <span data-i18n="s4_t2v">Google AI Edge RAG 라이브러리 + 카스텀 벡터 DB</span></div>
+        </div>
+        <div style="font-size:12px;color:var(--color-body);line-height:1.7">
+          <div>• <strong data-i18n="s4_t3">디바이스:</strong> <span data-i18n="s4_t3v">Android 스마트폰/태블릿 (플래그십급 이상)</span></div>
+          <div>• <strong data-i18n="s4_t4">상품 형태:</strong> <span data-i18n="s4_t4v">커스텀 개발 SI 프로젝트 + 선택적 월 유지보수</span></div>
+        </div>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--color-heading);margin-bottom:12px" data-i18n="s4_phase_title">제공 단계</div>
+      <div class="phase-row"><div class="phase-num">1</div><div class="phase-content"><div class="phase-title" data-i18n="s4_ph1_t">Discovery</div><div class="phase-desc" data-i18n="s4_ph1_d">고객사 유즈케이스 분석, 데이터 스코프, 기술 환경 조사</div><div class="phase-meta" data-i18n="s4_ph1_m">기간: 2주</div></div></div>
+      <div class="phase-row"><div class="phase-num">2</div><div class="phase-content"><div class="phase-title" data-i18n="s4_ph2_t">PoC</div><div class="phase-desc" data-i18n="s4_ph2_d">샘플 문서로 모바일 RAG 데모 구축, 성능 검증</div><div class="phase-meta" data-i18n="s4_ph2_m">기간: 4주</div></div></div>
+      <div class="phase-row"><div class="phase-num">3</div><div class="phase-content"><div class="phase-title" data-i18n="s4_ph3_t">개발/통합</div><div class="phase-desc" data-i18n="s4_ph3_d">실제 데이터 입력, UI 카스터마이즈, 기존 시스템 연동</div><div class="phase-meta" data-i18n="s4_ph3_m">기간: 6-8주</div></div></div>
+      <div class="phase-row"><div class="phase-num">4</div><div class="phase-content"><div class="phase-title" data-i18n="s4_ph4_t">배포/운영</div><div class="phase-desc" data-i18n="s4_ph4_d">디바이스 배포, 사용자 교육, 모델/데이터 업데이트 지원</div><div class="phase-meta" data-i18n="s4_ph4_m">월 단위 리테이너</div></div></div>
+    </div>
+
+    <!-- 4.2 Price -->
+    <div class="card reveal" style="margin-bottom:20px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--color-accent);margin-bottom:8px" data-i18n="s4_price_badge">4.2 Price</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th data-i18n="p_h1">항목</th>
+              <th data-i18n="p_h2">Starter PoC</th>
+              <th data-i18n="p_h3">Standard</th>
+              <th data-i18n="p_h4">Enterprise</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-i18n="p_r1">초기 개발비</td>
+              <td>$30K–50K</td>
+              <td>$80K–150K</td>
+              <td>$150K–300K+</td>
+            </tr>
+            <tr>
+              <td data-i18n="p_r2">범위</td>
+              <td data-i18n="p_r2_a">Discovery + PoC (데모 검증)</td>
+              <td data-i18n="p_r2_b">PoC + 개발/배포 (1개 유즈케이스)</td>
+              <td data-i18n="p_r2_c">다수 유즈케이스 + 시스템 통합</td>
+            </tr>
+            <tr>
+              <td data-i18n="p_r3">월 유지보수</td>
+              <td>—</td>
+              <td>$5K–10K/월</td>
+              <td>$10K–25K/월</td>
+            </tr>
+            <tr>
+              <td data-i18n="p_r4">타겟</td>
+              <td data-i18n="p_r4_a">신규 고객 유치용 (low barrier)</td>
+              <td data-i18n="p_r4_b">중견기업 (500–5K명)</td>
+              <td data-i18n="p_r4_c">대기업 (5K+명)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight" style="margin-top:14px;margin-bottom:0">
+        <div class="insight-title" data-i18n="price_strat_title">가격 전략 핵심: Land & Expand</div>
+        <div class="insight-body" data-i18n="price_strat_body">Starter PoC($30K-50K)를 "훅(Hook)"으로 사용합니다. 고객이 작은 투자로 실제 동작을 확인한 후, Standard로 확대하는 Land & Expand 모델입니다. PoC 비용은 본 계약 체결 시 50% 크레딧 적용.</div>
+      </div>
+    </div>
+
+    <!-- 4.3 Place -->
+    <div class="card reveal" style="margin-bottom:20px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--color-primary);margin-bottom:12px" data-i18n="s4_place_badge">4.3 Place — 채널/유통</div>
+      <div class="channel-item">
+        <div class="channel-rank">1</div>
+        <div class="channel-body"><div class="ch-title" data-i18n="ch1_t">LinkedIn Content-Led Outbound</div><div class="ch-desc" data-i18n="ch1_d">이전에 설계한 24명 타겟 리스트 + DM 시퀀스. 필드 서비스 리더들을 타겟.</div></div>
+      </div>
+      <div class="channel-item">
+        <div class="channel-rank sec">2</div>
+        <div class="channel-body"><div class="ch-title" data-i18n="ch2_t">Samsung Alumni 네트워크</div><div class="ch-desc" data-i18n="ch2_d">Samsung에서 나와 제조/헬스케어/IT 분야로 간 사람들 대상 Warm Intro.</div></div>
+      </div>
+      <div class="channel-item">
+        <div class="channel-rank sec">3</div>
+        <div class="channel-body"><div class="ch-title" data-i18n="ch3_t">테크 파트너/이벤트</div><div class="ch-desc" data-i18n="ch3_d">AWS/Google 파트너 이벤트, 업종별 실무 커뮤니티 참여 (Field Service 포럼 등).</div></div>
+      </div>
+      <div class="channel-item" style="border-bottom:none">
+        <div class="channel-rank sec">4</div>
+        <div class="channel-body"><div class="ch-title" data-i18n="ch4_t">레퍼럴</div><div class="ch-desc" data-i18n="ch4_d">첫 PoC 성공 후 고객사 내부 확산 + 타 부서/계열사 소개.</div></div>
+      </div>
+    </div>
+
+    <!-- 4.4 Promotion -->
+    <div class="card reveal" style="margin-bottom:0">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--color-accent);margin-bottom:8px" data-i18n="s4_promo_badge">4.4 Promotion</div>
+      <div class="highlight-box" style="margin-bottom:16px">
+        <strong data-i18n="s4_promo_msg_label">핵심 메시지:</strong> <span data-i18n="s4_promo_msg">"네트워크 없이도, 현장에서 AI가 동작합니다"</span>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th data-i18n="promo_h1">콘텐츠 유형</th>
+              <th data-i18n="promo_h2">제목 방향</th>
+              <th data-i18n="promo_h3">역할</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-i18n="promo_r1c1">LinkedIn 포스트</td>
+              <td data-i18n="promo_r1c2">"Your field techs are Googling repair manuals. There's a better way."</td>
+              <td><span class="tag primary" data-i18n="promo_awareness">Awareness</span></td>
+            </tr>
+            <tr>
+              <td data-i18n="promo_r2c1">블로그</td>
+              <td data-i18n="promo_r2c2">"On-Device RAG for Field Service: How to Put AI in Your Technician's Pocket — No Cloud Required"</td>
+              <td><span class="tag green" data-i18n="promo_education">Education</span></td>
+            </tr>
+            <tr>
+              <td data-i18n="promo_r3c1">Case Study</td>
+              <td data-i18n="promo_r3c2">"How a Fortune 50 Device Maker Built On-Device AI for 200M+ Devices" (익명화)</td>
+              <td><span class="tag warn" data-i18n="promo_trust">Trust</span></td>
+            </tr>
+            <tr>
+              <td data-i18n="promo_r4c1">Solution Brief</td>
+              <td data-i18n="promo_r4c2">1-pager: What We Do → How It Works → Why TecAce → Next Step</td>
+              <td><span class="tag accent" data-i18n="promo_conversion">Conversion</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight" style="margin-top:14px;margin-bottom:0">
+        <div class="insight-title" data-i18n="demo_strat_title">데모 전략</div>
+        <div class="insight-body" data-i18n="demo_strat_body">LinkedIn/블로그에서 관심을 끌어들인 후, "여러분 회사의 매뉴얼 PDF 5개로 30분 데모를 만들어 드립니다"라는 제안으로 미팅 전환. 가장 강력한 세일즈 도구는 데모입니다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: 경쟁 환경 -->
+  <div class="section reveal">
+    <div class="sec-num">05</div>
+    <div class="sec-title" data-i18n="s5_title">경쟁 환경 및 포지셔닝</div>
+    <div class="sec-sub" data-i18n="s5_sub">"모바일 On-Device RAG for Enterprise"를 정확히 하는 회사는 거의 없습니다 — 선점 기회</div>
+
+    <div class="card reveal" style="margin-bottom:20px">
+      <div style="font-size:13px;font-weight:700;color:var(--color-heading);margin-bottom:6px" data-i18n="s5_abots_title">유형 1 주요 경쟁사: A-Bots.com (★ 가장 직접적)</div>
+      <div class="grid-2" style="gap:12px">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#10b981;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.4px" data-i18n="s5_strength">강점</div>
+          <div style="font-size:12px;color:var(--color-body);line-height:1.6" data-i18n="s5_abots_str">"4GB Llama-3 앱을 12주 만에 앱스토어 출시" 등 구체적 딜리버리 프레임워크 제시. 항공, 해양, 의료, 농업, 제조 등 다양한 산업 시나리오 콘텐츠 보유. SEO/콘텐츠 마케팅 매우 공격적.</div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#f43f5e;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.4px" data-i18n="s5_weakness">약점</div>
+          <div style="font-size:12px;color:var(--color-body);line-height:1.6" data-i18n="s5_abots_weak">Samsung급 대형 OEM 레퍼런스 없음. 플래그십 디바이스 NPU 최적화 경험 불분명. 상대적으로 작은 규모의 팀으로 추정됨.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card reveal" style="margin-bottom:20px">
+      <div style="font-size:13px;font-weight:700;color:var(--color-heading);margin-bottom:12px" data-i18n="s5_matrix_title">경쟁 환경 종합 평가 매트릭스</div>
+      <div class="tbl-wrap">
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th data-i18n="mx_h0">평가 기준</th>
+              <th>A-Bots.com</th>
+              <th data-i18n="mx_h2">클라우드 RAG</th>
+              <th data-i18n="mx_h3">LLM 컨설팅 SI</th>
+              <th data-i18n="mx_h4">칩 SDK</th>
+              <th>TecAce</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-i18n="mx_r1">On-device RAG</td>
+              <td><span class="stars">★★★★</span></td>
+              <td><span class="stars lo">★</span></td>
+              <td><span class="stars lo">★</span></td>
+              <td><span class="stars">★★★</span></td>
+              <td><span class="stars hi">★★★★</span></td>
+            </tr>
+            <tr>
+              <td data-i18n="mx_r2">모바일 NPU 최적화</td>
+              <td><span class="stars">★★</span></td>
+              <td><span class="stars lo">—</span></td>
+              <td><span class="stars lo">★</span></td>
+              <td><span class="stars">★★★★★</span></td>
+              <td><span class="stars hi">★★★★</span></td>
+            </tr>
+            <tr>
+              <td data-i18n="mx_r3">엔터프라이즈 레퍼런스</td>
+              <td><span class="stars">★★</span></td>
+              <td><span class="stars">★★★★★</span></td>
+              <td><span class="stars">★★★</span></td>
+              <td><span class="stars">★★★★★</span></td>
+              <td><span class="stars hi">★★★★</span></td>
+            </tr>
+            <tr>
+              <td data-i18n="mx_r4">콘텐츠/마케팅 선점</td>
+              <td><span class="stars hi">★★★★★</span></td>
+              <td><span class="stars">★★★★</span></td>
+              <td><span class="stars">★★★</span></td>
+              <td><span class="stars">★★★★</span></td>
+              <td><span class="stars lo">★★</span></td>
+            </tr>
+            <tr>
+              <td data-i18n="mx_r5">오프라인 특화</td>
+              <td><span class="stars">★★★★</span></td>
+              <td><span class="stars lo">★</span></td>
+              <td><span class="stars lo">★</span></td>
+              <td><span class="stars">★★★</span></td>
+              <td><span class="stars hi">★★★★</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid-3 reveal" style="margin-bottom:16px">
+      <div class="insight warn" style="margin-bottom:0">
+        <div class="insight-title" data-i18n="s5_ins1_t">A-Bots.com 콘텐츠 선점</div>
+        <div class="insight-body" data-i18n="s5_ins1_d">A-Bots.com은 이미 "오프라인 AI 어시스턴트" 등의 키워드로 SEO 콘텐츠를 대량 생산 중. TecAce가 콘텐츠와 데모를 빨리 만들지 않으면 포지션을 빼앗길 수 있습니다.</div>
+      </div>
+      <div class="insight warn" style="margin-bottom:0">
+        <div class="insight-title" data-i18n="s5_ins2_t">클라우드 RAG가 진짜 대체재</div>
+        <div class="insight-body" data-i18n="s5_ins2_d">바이어가 "문서 AI 검색"을 찾으면 Vectara, Glean 등을 먼저 발견합니다. "클라우드 RAG로는 안 되는 상황 — 네트워크가 없는 현장"을 먼저 짚어줘야 합니다.</div>
+      </div>
+      <div class="insight green" style="margin-bottom:0">
+        <div class="insight-title" data-i18n="s5_ins3_t">TecAce 차별화 자산</div>
+        <div class="insight-body" data-i18n="s5_ins3_d">Fortune 50 디바이스 OEM에서 실제 배포한 경험, 25년간의 모바일 생태계 이해, US 기반 한국어 능통 개발팀. Case Study와 데모로 증명해야 합니다.</div>
+      </div>
+    </div>
+
+    <div class="insight reveal" style="border-color:var(--color-primary)">
+      <div class="insight-title" data-i18n="s5_pos_title">TecAce 포지셔닝 선언</div>
+      <div class="insight-body" data-i18n="s5_pos_body">"클라우드가 닿지 않는 곳에서 AI를 돌리는 SI — Fortune 50 OEM 레퍼런스로 증명된 모바일 AI 전문성." Google AI Edge 플랫폼 위에서, 고객사의 데이터로 맞춤형 모바일 RAG를 구축/배포/운영합니다.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: 90일 로드맵 -->
+  <div class="section reveal">
+    <div class="sec-num">06</div>
+    <div class="sec-title" data-i18n="s6_title">90일 실행 로드맵</div>
+    <div class="sec-sub" data-i18n="s6_sub">데모를 먼저 — 콘텐츠 쓰고 DM 보내기 전에 실제로 보여줄 수 있는 데모가 있어야 합니다</div>
+
+    <div class="card reveal">
+      <div class="roadmap-item">
+        <div class="roadmap-dot">W1-2</div>
+        <div class="roadmap-body">
+          <div class="roadmap-week" data-i18n="rm_w1_week">Week 1–2</div>
+          <div class="roadmap-task" data-i18n="rm_w1_task">PoC 데모 완성</div>
+          <div class="roadmap-out" data-i18n="rm_w1_out">산출물: 데모 APK + 30초 데모 동영상. 샘플 기술 매뉴얼 PDF로 On-Device RAG 데모 제작. 이것이 영업 도구.</div>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-dot">W2-3</div>
+        <div class="roadmap-body">
+          <div class="roadmap-week" data-i18n="rm_w2_week">Week 2–3</div>
+          <div class="roadmap-task" data-i18n="rm_w2_task">콘텐츠 4종 제작 (Field Service 특화)</div>
+          <div class="roadmap-out" data-i18n="rm_w2_out">산출물: LinkedIn 포스트, 블로그, Case Study, 1-pager</div>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-dot">W3-4</div>
+        <div class="roadmap-body">
+          <div class="roadmap-week" data-i18n="rm_w3_week">Week 3–4</div>
+          <div class="roadmap-task" data-i18n="rm_w3_task">타겟 24명 리서치 + LinkedIn DM 시작</div>
+          <div class="roadmap-out" data-i18n="rm_w3_out">산출물: 타겟 시트 완성, DM 1차 발송</div>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-dot">W5-8</div>
+        <div class="roadmap-body">
+          <div class="roadmap-week" data-i18n="rm_w4_week">Week 5–8</div>
+          <div class="roadmap-task" data-i18n="rm_w4_task">DM 시퀀스 실행 + 반응자 대상 데모 제안</div>
+          <div class="roadmap-out" data-i18n="rm_w4_out">목표: 미팅 2–3건</div>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-dot warn">W8</div>
+        <div class="roadmap-body">
+          <div class="roadmap-week warn" data-i18n="rm_cp_week">Week 8 — CHECKPOINT</div>
+          <div class="roadmap-task" data-i18n="rm_cp_task">산업별 반응률 비교 → 집중 산업 결정</div>
+          <div class="roadmap-out" data-i18n="rm_cp_out">산출물: 데이터 기반 피봇 결정</div>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-dot">W9-12</div>
+        <div class="roadmap-body" style="padding-bottom:0">
+          <div class="roadmap-week" data-i18n="rm_w5_week">Week 9–12</div>
+          <div class="roadmap-task" data-i18n="rm_w5_task">PoC 전환 시도 + 집중 산업 2차 캠페인</div>
+          <div class="roadmap-out" data-i18n="rm_w5_out">목표: PoC 계약 1–2건</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight" style="margin-top:16px">
+      <div class="insight-title" data-i18n="rm_key_title">가장 중요한 변화</div>
+      <div class="insight-body" data-i18n="rm_key_body">데모를 먼저 만듭니다. "여러분 회사의 매뉴얼 PDF 5개를 주시면, 스마트폰에서 돌아가는 AI 어시스턴트를 30분 내에 만들어 드립니다" — 이것이 가장 강력한 영업 도구입니다.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: 리스크 -->
+  <div class="section reveal">
+    <div class="sec-num">07</div>
+    <div class="sec-title" data-i18n="s7_title">리스크 및 열린 질문</div>
+    <div class="sec-sub" data-i18n="s7_sub">인지하고 관리해야 할 제약 사항</div>
+
+    <div class="grid-2" style="margin-bottom:20px">
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--color-heading);margin-bottom:12px" data-i18n="s7_risk_title">리스크</div>
+        <div class="risk-card">
+          <div class="risk-icon red"></div>
+          <div><div class="risk-title" data-i18n="r1_t">시장 교육 비용</div><div class="risk-desc" data-i18n="r1_d">"모바일에서 로컬 RAG"라는 개념이 아직 널리 알려져 있지 않아, 바이어 교육에 시간이 걸림</div></div>
+        </div>
+        <div class="risk-card">
+          <div class="risk-icon red"></div>
+          <div><div class="risk-title" data-i18n="r2_t">SLM 성능 한계</div><div class="risk-desc" data-i18n="r2_d">1B–8B 모델의 응답 품질이 바이어 기대에 못 미칠 수 있음. 유즈케이스를 잘 좁혀야 함</div></div>
+        </div>
+        <div class="risk-card">
+          <div class="risk-icon orange"></div>
+          <div><div class="risk-title" data-i18n="r3_t">모델 업데이트 난제</div><div class="risk-desc" data-i18n="r3_d">디바이스에 데이터/모델 업데이트하는 운영 프로세스가 별도로 필요</div></div>
+        </div>
+        <div class="risk-card" style="margin-bottom:0">
+          <div class="risk-icon orange"></div>
+          <div><div class="risk-title" data-i18n="r4_t">1인 BD 병목</div><div class="risk-desc" data-i18n="r4_d">모든 활동을 상무님 혼자 해야 하는 제약. PoC 데모 제작에 개발팀 지원 필수</div></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--color-heading);margin-bottom:12px" data-i18n="s7_q_title">열린 질문 (다음 단계 결정 필요)</div>
+        <div class="card" style="margin-bottom:12px">
+          <div style="font-size:12px;font-weight:700;color:var(--color-heading);margin-bottom:4px" data-i18n="q1_t">데모 제작 리소스</div>
+          <div style="font-size:12px;color:var(--color-body);line-height:1.55" data-i18n="q1_d">개발팀에서 PoC 데모 제작에 몇 시간을 투입할 수 있는가?</div>
+        </div>
+        <div class="card" style="margin-bottom:12px">
+          <div style="font-size:12px;font-weight:700;color:var(--color-heading);margin-bottom:4px" data-i18n="q2_t">첫 타겟 산업 확정</div>
+          <div style="font-size:12px;color:var(--color-body);line-height:1.55" data-i18n="q2_d">Field Service를 1차 타겟으로 확정할 것인가, 아니면 헬스케어 등 다른 산업을 선호하는가?</div>
+        </div>
+        <div class="card" style="margin-bottom:12px">
+          <div style="font-size:12px;font-weight:700;color:var(--color-heading);margin-bottom:4px" data-i18n="q3_t">제품화 방향</div>
+          <div style="font-size:12px;color:var(--color-body);line-height:1.55" data-i18n="q3_d">커스텀 SI로 남을 것인가, 아니면 장기적으로 제품화(세미 SaaS)로 방향을 잡을 것인가?</div>
+        </div>
+        <div class="card">
+          <div style="font-size:12px;font-weight:700;color:var(--color-heading);margin-bottom:4px" data-i18n="q4_t">Cloud Ops + AI 별도 운영</div>
+          <div style="font-size:12px;color:var(--color-body);line-height:1.55" data-i18n="q4_d">On-device AI는 기존 Cloud Ops 사업과 별도로 운영할 것인가?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="doc-footer">
+  <span class="footer-left">tecace.com · March 2026</span>
+  <span class="footer-right">CONFIDENTIAL | &copy; 2026 TECACE</span>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+// ── THEME ──────────────────────────────────────────────
+var currentTheme = localStorage.getItem('tecace-theme') || 'light';
+function applyTheme(t) {
+  document.documentElement.className = 'theme-' + t;
+  document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
+  localStorage.setItem('tecace-theme', t);
+  currentTheme = t;
+}
+function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
+applyTheme(currentTheme);
+
+// ── i18n ──────────────────────────────────────────────
+var LANG = {
+  ko: {
+    lang_btn:'English', nav_title:'On-Device LLM 시장 분석', badge:'내부 전략 문서 · 개정판 v2',
+    title:'On-Device LLM 시장 분석 및 4P 전략', subtitle:'Mobile On-Device RAG 기반 — TecAce Software 실행 전략',
+    meta_date_label:'날짜', meta_status_label:'상태', meta_status:'기밀', meta_focus_label:'핵심 주제', meta_focus:'Mobile On-Device RAG',
+    s1_title:'현실 보정: TecAce의 실제 역량 재정의', s1_sub:'이전 버전의 가정을 수정하고 실제 역량 기반으로 전략을 재설계합니다',
+    t1_h1:'항목', t1_h2:'이전 가정', t1_h3:'실제 현황',
+    t1_r1c1:'모델', t1_r1c2:'자체 모델 또는 고도화된 SLM', t1_r1c3:'Gemma 3 등 오픈소스 SLM 활용',
+    t1_r2c1:'Samsung 관계', t1_r2c2:'외부 고객으로 활용 가능', t1_r2c3:'Samsung은 이미 자체 LLM 탑재 중. 고객 대상 아님',
+    t1_r3c1:'기술 수준', t1_r3c2:'SLM 최적화/배포 전문가', t1_r3c3:'모바일 디바이스에서 On-Device RAG 구축/테스트 완료',
+    t1_r4c1:'디바이스 LLM 탑재', t1_r4c2:'직접 배포 경험', t1_r4c3:'Size/Quality/Update 등 난제로 배포보다 RAG 중심으로 전환',
+    s1_kd_title:'핵심 재정의', s1_kd_body:'TecAce의 on-device 리드 제품/서비스는 <strong>"모바일 디바이스에서 동작하는 On-Device RAG 솔루션"</strong>입니다.',
+    s2_title:'시장 재분석: On-Device RAG 시장', s2_sub:'관련 시장 규모 및 CAGR — TecAce의 SAM은 교차 시장에 위치',
+    s2_bar_title:'시장 성장률 비교 (CAGR)', s2_google_title:'Google AI Edge의 On-Device RAG 공식 지원',
+    s2_google_body:'Google은 2025년 I/O에서 Gemma 3n과 함께 on-device RAG 라이브러리를 공식 발표했습니다. Google이 플랫폼을 제공하고, TecAce같은 SI가 그 위에서 구체적인 업무별 솔루션을 구축하는 구조입니다.',
+    s3_title:'타겟 고객 및 유즈케이스', s3_sub:'"네트워크가 불안정하거나 없는 환경에서 일하는 사람" — 3단계 타겟 우선순위',
+    t3_p1_title:'필드 서비스 / 외근직 — 최우선', t3_buyer:'바이어:', t3_uc:'유즈케이스:',
+    t3_p1_buyer:'<strong>바이어:</strong> 제조업, 유틸리티, 석유/가스, 통신, 건설 분야의 필드 오퍼레이션 리더',
+    t3_p1_uc:'<strong>유즈케이스:</strong> 기술자가 현장에서 장비 매뉴얼, 수리 매뉴얼, 안전 절차를 검색. 네트워크 없는 현장에서 완전 로컬로 동작.',
+    t3_p1_roi:'구매 동기: 기술자 1인당 연간 $50K+ 의 다운타임/오류 비용 절감, 안전사고 예방',
+    t3_p2_title:'헬스케어 / 임상 현장', t3_p2_buyer:'<strong>바이어:</strong> 병원 시스템, 디지털 헬스 플랫폼, 의료기기 회사',
+    t3_p2_uc:'<strong>유즈케이스:</strong> 의료진이 태블릿에서 진료 가이드라인을 로컬에서 검색. HIPAA 준수.',
+    t3_p2_tag:'BAA 불필요 · 오진 감소',
+    t3_p3_title:'보안/정부 분야', t3_p3_buyer:'<strong>바이어:</strong> 방산/정부 계약자, Air-gapped 환경 운영 조직',
+    t3_p3_uc:'<strong>유즈케이스:</strong> 보안 등급이 높은 문서를 현장에서 검색/참조. 네트워크 연결 자체가 불가능한 환경.',
+    t3_p3_tag:'Air-gapped 특화',
+    s4_title:'4P 전략', s4_sub:'Product · Price · Place · Promotion',
+    s4_product_badge:'4.1 Product', s4_product_name:'TecAce On-Device AI Assistant (가칭)',
+    s4_product_desc:'모바일 디바이스(Android 스마트폰/태블릿)에서 완전히 로컬로 동작하는 AI 문서 검색/응답 시스템.',
+    s4_tech_title:'기술 스택',
+    s4_t1:'SLM:', s4_t1v:'Gemma 3/3n 등 오픈소스', s4_t2:'RAG:', s4_t2v:'Google AI Edge + 카스텀 벡터 DB',
+    s4_t3:'디바이스:', s4_t3v:'Android 스마트폰/태블릿 (플래그십급 이상)', s4_t4:'상품 형태:', s4_t4v:'커스텀 개발 SI 프로젝트',
+    s4_phase_title:'제공 단계',
+    s4_ph1_t:'Discovery', s4_ph1_d:'고객사 유즈케이스 분석, 데이터 스코프, 기술 환경 조사', s4_ph1_m:'기간: 2주',
+    s4_ph2_t:'PoC', s4_ph2_d:'샘플 문서로 모바일 RAG 데모 구축, 성능 검증', s4_ph2_m:'기간: 4주',
+    s4_ph3_t:'개발/통합', s4_ph3_d:'실제 데이터 입력, UI 카스터마이즈, 기존 시스템 연동', s4_ph3_m:'기간: 6-8주',
+    s4_ph4_t:'배포/운영', s4_ph4_d:'디바이스 배포, 사용자 교육, 모델/데이터 업데이트 지원', s4_ph4_m:'월 단위 리테이너',
+    s4_price_badge:'4.2 Price',
+    p_h1:'항목', p_h2:'Starter PoC', p_h3:'Standard', p_h4:'Enterprise',
+    p_r1:'초기 개발비', p_r2:'범위', p_r2_a:'Discovery + PoC (데모 검증)', p_r2_b:'PoC + 개발/배포', p_r2_c:'다수 유즈케이스 + 시스템 통합',
+    p_r3:'월 유지보수', p_r4:'타겟', p_r4_a:'신규 고객 유치용', p_r4_b:'중견기업 (500–5K명)', p_r4_c:'대기업 (5K+명)',
+    price_strat_title:'가격 전략 핵심: Land & Expand',
+    price_strat_body:'Starter PoC($30K-50K)를 "훅(Hook)"으로 사용합니다. PoC 비용은 본 계약 체결 시 50% 크레딧 적용.',
+    s4_place_badge:'4.3 Place — 채널/유통',
+    ch1_t:'LinkedIn Content-Led Outbound', ch1_d:'이전에 설계한 24명 타겟 리스트 + DM 시퀀스. 필드 서비스 리더들을 타겟.',
+    ch2_t:'Samsung Alumni 네트워크', ch2_d:'Samsung에서 나와 제조/헬스케어/IT 분야로 간 사람들 대상 Warm Intro.',
+    ch3_t:'테크 파트너/이벤트', ch3_d:'AWS/Google 파트너 이벤트, 업종별 실무 커뮤니티 참여.',
+    ch4_t:'레퍼럴', ch4_d:'첫 PoC 성공 후 고객사 내부 확산 + 타 부서/계열사 소개.',
+    s4_promo_badge:'4.4 Promotion',
+    s4_promo_msg_label:'핵심 메시지:', s4_promo_msg:'"네트워크 없이도, 현장에서 AI가 동작합니다"',
+    promo_h1:'콘텐츠 유형', promo_h2:'제목 방향', promo_h3:'역할',
+    promo_r1c1:'LinkedIn 포스트', promo_r1c2:'"Your field techs are Googling repair manuals. There\'s a better way."', promo_awareness:'인지도',
+    promo_r2c1:'블로그', promo_r2c2:'"On-Device RAG for Field Service: How to Put AI in Your Technician\'s Pocket"', promo_education:'교육',
+    promo_r3c1:'Case Study', promo_r3c2:'"How a Fortune 50 Device Maker Built On-Device AI for 200M+ Devices" (익명화)', promo_trust:'신뢰',
+    promo_r4c1:'Solution Brief', promo_r4c2:'1-pager: What We Do → How It Works → Why TecAce → Next Step', promo_conversion:'전환',
+    demo_strat_title:'데모 전략', demo_strat_body:'LinkedIn/블로그에서 관심을 끌어들인 후, "여러분 회사의 매뉴얼 PDF 5개로 30분 데모를 만들어 드립니다"라는 제안으로 미팅 전환.',
+    s5_title:'경쟁 환경 및 포지셔닝', s5_sub:'"모바일 On-Device RAG for Enterprise"를 정확히 하는 회사는 거의 없습니다 — 선점 기회',
+    s5_abots_title:'유형 1 주요 경쟁사: A-Bots.com (★ 가장 직접적)', s5_strength:'강점', s5_weakness:'약점',
+    s5_abots_str:'"4GB Llama-3 앱을 12주 만에 앱스토어 출시" 등 구체적 딜리버리 프레임워크 제시. SEO/콘텐츠 마케팅 매우 공격적.',
+    s5_abots_weak:'Samsung급 대형 OEM 레퍼런스 없음. 플래그십 디바이스 NPU 최적화 경험 불분명.',
+    s5_matrix_title:'경쟁 환경 종합 평가 매트릭스',
+    mx_h0:'평가 기준', mx_h2:'클라우드 RAG', mx_h3:'LLM 컨설팅 SI', mx_h4:'칩 SDK',
+    mx_r1:'On-device RAG', mx_r2:'모바일 NPU 최적화', mx_r3:'엔터프라이즈 레퍼런스', mx_r4:'콘텐츠/마케팅 선점', mx_r5:'오프라인 특화',
+    s5_ins1_t:'A-Bots.com 콘텐츠 선점', s5_ins1_d:'A-Bots.com은 이미 "오프라인 AI 어시스턴트" 등의 키워드로 SEO 콘텐츠를 대량 생산 중.',
+    s5_ins2_t:'클라우드 RAG가 진짜 대체재', s5_ins2_d:'바이어가 "문서 AI 검색"을 찾으면 Vectara, Glean 등을 먼저 발견합니다.',
+    s5_ins3_t:'TecAce 차별화 자산', s5_ins3_d:'Fortune 50 OEM 실전 배포 경험, 25년간의 모바일 생태계 이해, US 기반 한국어 능통 개발팀.',
+    s5_pos_title:'TecAce 포지셔닝 선언', s5_pos_body:'"클라우드가 닿지 않는 곳에서 AI를 돌리는 SI — Fortune 50 OEM 레퍼런스로 증명된 모바일 AI 전문성."',
+    s6_title:'90일 실행 로드맵', s6_sub:'데모를 먼저 — 콘텐츠 쓰고 DM 보내기 전에 실제로 보여줄 수 있는 데모가 있어야 합니다',
+    rm_w1_week:'Week 1–2', rm_w1_task:'PoC 데모 완성', rm_w1_out:'산출물: 데모 APK + 30초 데모 동영상',
+    rm_w2_week:'Week 2–3', rm_w2_task:'콘텐츠 4종 제작 (Field Service 특화)', rm_w2_out:'산출물: LinkedIn 포스트, 블로그, Case Study, 1-pager',
+    rm_w3_week:'Week 3–4', rm_w3_task:'타겟 24명 리서치 + LinkedIn DM 시작', rm_w3_out:'산출물: 타겟 시트 완성, DM 1차 발송',
+    rm_w4_week:'Week 5–8', rm_w4_task:'DM 시퀀스 실행 + 반응자 대상 데모 제안', rm_w4_out:'목표: 미팅 2–3건',
+    rm_cp_week:'Week 8 — CHECKPOINT', rm_cp_task:'산업별 반응률 비교 → 집중 산업 결정', rm_cp_out:'산출물: 데이터 기반 피봇 결정',
+    rm_w5_week:'Week 9–12', rm_w5_task:'PoC 전환 시도 + 집중 산업 2차 캠페인', rm_w5_out:'목표: PoC 계약 1–2건',
+    rm_key_title:'가장 중요한 변화', rm_key_body:'데모를 먼저 만듭니다. "여러분 회사의 매뉴얼 PDF 5개를 주시면, 스마트폰에서 돌아가는 AI 어시스턴트를 30분 내에 만들어 드립니다"',
+    s7_title:'리스크 및 열린 질문', s7_sub:'인지하고 관리해야 할 제약 사항',
+    s7_risk_title:'리스크', s7_q_title:'열린 질문 (다음 단계 결정 필요)',
+    r1_t:'시장 교육 비용', r1_d:'"모바일에서 로컬 RAG"라는 개념이 아직 널리 알려져 있지 않아, 바이어 교육에 시간이 걸림',
+    r2_t:'SLM 성능 한계', r2_d:'1B–8B 모델의 응답 품질이 바이어 기대에 못 미칠 수 있음. 유즈케이스를 잘 좁혀야 함',
+    r3_t:'모델 업데이트 난제', r3_d:'디바이스에 데이터/모델 업데이트하는 운영 프로세스가 별도로 필요',
+    r4_t:'1인 BD 병목', r4_d:'모든 활동을 상무님 혼자 해야 하는 제약. PoC 데모 제작에 개발팀 지원 필수',
+    q1_t:'데모 제작 리소스', q1_d:'개발팀에서 PoC 데모 제작에 몇 시간을 투입할 수 있는가?',
+    q2_t:'첫 타겟 산업 확정', q2_d:'Field Service를 1차 타겟으로 확정할 것인가, 아니면 헬스케어 등 다른 산업을 선호하는가?',
+    q3_t:'제품화 방향', q3_d:'커스텀 SI로 남을 것인가, 아니면 장기적으로 제품화(세미 SaaS)로 방향을 잡을 것인가?',
+    q4_t:'Cloud Ops + AI 별도 운영', q4_d:'On-device AI는 기존 Cloud Ops 사업과 별도로 운영할 것인가?'
+  },
+  en: {
+    lang_btn:'한국어', nav_title:'On-Device LLM Market Analysis', badge:'INTERNAL STRATEGY DOCUMENT · REVISED v2',
+    title:'On-Device LLM Market Analysis &amp; 4P Strategy', subtitle:'Mobile On-Device RAG Based — TecAce Software Execution Strategy',
+    meta_date_label:'Date', meta_status_label:'Status', meta_status:'CONFIDENTIAL', meta_focus_label:'Focus', meta_focus:'Mobile On-Device RAG',
+    s1_title:'Reality Check: Redefining TecAce\'s Actual Capabilities', s1_sub:'Correcting previous assumptions and redesigning strategy based on actual capabilities',
+    t1_h1:'Item', t1_h2:'Previous Assumption', t1_h3:'Actual Status',
+    t1_r1c1:'Model', t1_r1c2:'Proprietary model or advanced SLM', t1_r1c3:'Leveraging open-source SLMs like Gemma 3',
+    t1_r2c1:'Samsung Relationship', t1_r2c2:'Potential external customer', t1_r2c3:'Samsung already has its own LLM. Not a customer target.',
+    t1_r3c1:'Technical Level', t1_r3c2:'SLM optimization/deployment specialist', t1_r3c3:'On-Device RAG built and tested on mobile devices',
+    t1_r4c1:'Device LLM Deployment', t1_r4c2:'Direct deployment experience', t1_r4c3:'Pivoted to RAG-centric approach due to size/quality/update challenges',
+    s1_kd_title:'Core Redefinition', s1_kd_body:'TecAce\'s on-device lead product/service is <strong>"An On-Device RAG Solution running on mobile devices."</strong> Not embedding LLMs directly, but using open-source SLMs to retrieve local data and generate AI responses on mobile.',
+    s2_title:'Market Reanalysis: On-Device RAG Market', s2_sub:'Related market sizes and CAGR — TecAce\'s SAM sits at the intersection',
+    s2_bar_title:'Market Growth Rate Comparison (CAGR)', s2_google_title:'Google AI Edge Official On-Device RAG Support',
+    s2_google_body:'Google officially announced on-device RAG libraries with Gemma 3n at Google I/O 2025. Google provides the platform, and SIs like TecAce build domain-specific solutions on top. Use cases: field technicians querying parts in offline environments, warehouse workers updating inventory by voice.',
+    s3_title:'Target Customers & Use Cases', s3_sub:'"People who work in unstable or absent network environments" — 3-tier target priority',
+    t3_p1_title:'Field Service / Field Workers — Top Priority', t3_buyer:'Buyer:', t3_uc:'Use Case:',
+    t3_p1_buyer:'<strong>Buyer:</strong> Field Operations Leaders in Manufacturing, Utilities, Oil/Gas, Telecom, Construction',
+    t3_p1_uc:'<strong>Use Case:</strong> Technicians searching equipment manuals, repair guides, safety procedures via smartphone/tablet. Fully local operation in offline environments (underground, remote sites).',
+    t3_p1_roi:'Purchase Motivation: $50K+ annual downtime/error cost reduction per technician, safety incident prevention, faster onboarding',
+    t3_p2_title:'Healthcare / Clinical Settings', t3_p2_buyer:'<strong>Buyer:</strong> Hospital systems, digital health platforms, medical device companies',
+    t3_p2_uc:'<strong>Use Case:</strong> Clinicians searching treatment guidelines locally on tablets. HIPAA compliant — patient data never leaves device.',
+    t3_p2_tag:'No BAA Required · Reduce Misdiagnosis',
+    t3_p3_title:'Security / Government Sector', t3_p3_buyer:'<strong>Buyer:</strong> Defense/government contractors, air-gapped environment operators',
+    t3_p3_uc:'<strong>Use Case:</strong> Searching high-security documents in the field. Environments where network connection is impossible.',
+    t3_p3_tag:'Air-gapped Specialized',
+    s4_title:'4P Strategy', s4_sub:'Product · Price · Place · Promotion',
+    s4_product_badge:'4.1 Product', s4_product_name:'TecAce On-Device AI Assistant (Working Title)',
+    s4_product_desc:'AI document search/response system running entirely locally on mobile devices (Android smartphones/tablets). Stores customer technical documents/manuals/protocols on device, enables natural language search, and generates AI-based answers.',
+    s4_tech_title:'Tech Stack',
+    s4_t1:'SLM:', s4_t1v:'Gemma 3/3n and other open-source (model swappable per customer)', s4_t2:'RAG:', s4_t2v:'Google AI Edge RAG Library + Custom Vector DB',
+    s4_t3:'Device:', s4_t3v:'Android smartphone/tablet (flagship-class or above)', s4_t4:'Product Form:', s4_t4v:'Custom development SI project + optional monthly maintenance',
+    s4_phase_title:'Delivery Phases',
+    s4_ph1_t:'Discovery', s4_ph1_d:'Customer use case analysis, data scope, technical environment assessment', s4_ph1_m:'Duration: 2 weeks',
+    s4_ph2_t:'PoC', s4_ph2_d:'Build mobile RAG demo with sample documents, validate performance', s4_ph2_m:'Duration: 4 weeks',
+    s4_ph3_t:'Dev/Integration', s4_ph3_d:'Actual data ingestion, UI customization, legacy system integration', s4_ph3_m:'Duration: 6–8 weeks',
+    s4_ph4_t:'Deploy/Operate', s4_ph4_d:'Device rollout, user training, model/data update support', s4_ph4_m:'Monthly retainer',
+    s4_price_badge:'4.2 Price',
+    p_h1:'Item', p_h2:'Starter PoC', p_h3:'Standard', p_h4:'Enterprise',
+    p_r1:'Initial Dev Cost', p_r2:'Scope', p_r2_a:'Discovery + PoC (demo validation)', p_r2_b:'PoC + Dev/Deploy (1 use case)', p_r2_c:'Multiple use cases + system integration',
+    p_r3:'Monthly Maintenance', p_r4:'Target', p_r4_a:'New customer acquisition (low barrier)', p_r4_b:'Mid-market (500–5K employees)', p_r4_c:'Enterprise (5K+ employees)',
+    price_strat_title:'Pricing Strategy: Land & Expand',
+    price_strat_body:'Use Starter PoC ($30K–50K) as a hook. After customers validate with a small investment, expand to Standard. PoC costs applied as 50% credit upon full contract.',
+    s4_place_badge:'4.3 Place — Channel/Distribution',
+    ch1_t:'LinkedIn Content-Led Outbound', ch1_d:'24-person target list + DM sequence designed previously. Targeting field service leaders.',
+    ch2_t:'Samsung Alumni Network', ch2_d:'Warm intros to people from Samsung who moved into manufacturing/healthcare/IT.',
+    ch3_t:'Tech Partner Events', ch3_d:'AWS/Google partner events, industry practitioner community participation (Field Service forums, etc.).',
+    ch4_t:'Referral', ch4_d:'Internal expansion after first successful PoC + introductions to other divisions/subsidiaries.',
+    s4_promo_badge:'4.4 Promotion',
+    s4_promo_msg_label:'Core Message:', s4_promo_msg:'"AI that works on-site, even without a network."',
+    promo_h1:'Content Type', promo_h2:'Headline Direction', promo_h3:'Role',
+    promo_r1c1:'LinkedIn Post', promo_r1c2:'"Your field techs are Googling repair manuals. There\'s a better way."', promo_awareness:'Awareness',
+    promo_r2c1:'Blog', promo_r2c2:'"On-Device RAG for Field Service: How to Put AI in Your Technician\'s Pocket — No Cloud Required"', promo_education:'Education',
+    promo_r3c1:'Case Study', promo_r3c2:'"How a Fortune 50 Device Maker Built On-Device AI for 200M+ Devices" (anonymized)', promo_trust:'Trust',
+    promo_r4c1:'Solution Brief', promo_r4c2:'1-pager: What We Do → How It Works → Why TecAce → Next Step', promo_conversion:'Conversion',
+    demo_strat_title:'Demo Strategy', demo_strat_body:'Draw interest via LinkedIn/blog, then convert to meetings with the offer: "Give us 5 PDF manuals from your company and we\'ll build a working AI assistant demo in 30 minutes."',
+    s5_title:'Competitive Landscape & Positioning', s5_sub:'Almost no one is doing "Mobile On-Device RAG for Enterprise" exactly — a first-mover opportunity',
+    s5_abots_title:'Type 1 Key Competitor: A-Bots.com (★ Most Direct)', s5_strength:'Strengths', s5_weakness:'Weaknesses',
+    s5_abots_str:'"Ship a 4GB Llama-3 app to the App Store in 12 weeks" — concrete delivery framework. Coverage across aviation, maritime, medical, agriculture, manufacturing. Very aggressive SEO/content marketing.',
+    s5_abots_weak:'No Samsung-class Fortune 50 OEM references. Flagship device NPU optimization experience unclear. Estimated to be a smaller team.',
+    s5_matrix_title:'Competitive Landscape Evaluation Matrix',
+    mx_h0:'Evaluation Criteria', mx_h2:'Cloud RAG', mx_h3:'LLM Consulting SI', mx_h4:'Chip SDK',
+    mx_r1:'On-device RAG', mx_r2:'Mobile NPU Optimization', mx_r3:'Enterprise References', mx_r4:'Content/Marketing', mx_r5:'Offline Specialization',
+    s5_ins1_t:'A-Bots.com Has Content Lead', s5_ins1_d:'A-Bots.com is already producing heavy SEO content around "offline AI assistant" keywords. TecAce must produce content and demos quickly.',
+    s5_ins2_t:'Cloud RAG Is the Real Substitute', s5_ins2_d:'When buyers search "document AI search," they find Vectara, Glean first. TecAce must lead with "situations where cloud RAG won\'t work."',
+    s5_ins3_t:'TecAce\'s Differentiation Assets', s5_ins3_d:'Fortune 50 device OEM real deployment experience, 25 years of mobile ecosystem understanding, US-based Korean-fluent dev team.',
+    s5_pos_title:'TecAce Positioning Statement', s5_pos_body:'"The SI that runs AI where cloud can\'t reach — mobile AI expertise proven by Fortune 50 OEM references." Building custom mobile RAG on Google AI Edge, with customer data.',
+    s6_title:'90-Day Execution Roadmap', s6_sub:'Demo first — the demo must exist before writing content or sending DMs',
+    rm_w1_week:'Week 1–2', rm_w1_task:'Complete PoC Demo', rm_w1_out:'Output: Demo APK + 30-second demo video',
+    rm_w2_week:'Week 2–3', rm_w2_task:'Produce 4 Content Pieces (Field Service focused)', rm_w2_out:'Output: LinkedIn post, blog, case study, 1-pager',
+    rm_w3_week:'Week 3–4', rm_w3_task:'Research 24 targets + Start LinkedIn DMs', rm_w3_out:'Output: Target sheet complete, 1st DM batch sent',
+    rm_w4_week:'Week 5–8', rm_w4_task:'Execute DM sequence + Offer demos to respondents', rm_w4_out:'Goal: 2–3 meetings',
+    rm_cp_week:'Week 8 — CHECKPOINT', rm_cp_task:'Compare response rates by industry → Decide focus industry', rm_cp_out:'Output: Data-driven pivot decision',
+    rm_w5_week:'Week 9–12', rm_w5_task:'PoC conversion attempts + 2nd campaign for focus industry', rm_w5_out:'Goal: 1–2 PoC contracts',
+    rm_key_title:'Most Important Change', rm_key_body:'Build the demo first. "Give us 5 of your company\'s PDF manuals and we\'ll have an AI assistant running on a smartphone in 30 minutes" — this is the most powerful sales tool.',
+    s7_title:'Risks & Open Questions', s7_sub:'Constraints to be aware of and managed',
+    s7_risk_title:'Risks', s7_q_title:'Open Questions (Decisions needed next)',
+    r1_t:'Market Education Cost', r1_d:'"Mobile local RAG" is not yet widely known — buyer education will take time',
+    r2_t:'SLM Performance Limits', r2_d:'1B–8B model response quality may not meet buyer expectations. Use cases must be carefully scoped.',
+    r3_t:'Model Update Challenges', r3_d:'A separate operational process is needed to update data/models on devices',
+    r4_t:'1-Person BD Bottleneck', r4_d:'All activities depend on one person. Dev team support is essential for PoC demo production.',
+    q1_t:'Demo Production Resources', q1_d:'How many hours can the dev team invest in building the PoC demo?',
+    q2_t:'First Target Industry', q2_d:'Confirm Field Service as primary target, or prefer healthcare or another industry?',
+    q3_t:'Productization Direction', q3_d:'Stay as custom SI, or set a long-term direction toward productization (semi-SaaS)?',
+    q4_t:'Cloud Ops + AI Separate Operations', q4_d:'Should On-device AI be operated separately from the existing Cloud Ops business?'
+  }
+};
+
+var curLang = localStorage.getItem('tecace-lang') || 'ko';
+function applyLang(lang) {
+  var d = LANG[lang]; curLang = lang;
+  localStorage.setItem('tecace-lang', lang);
+  document.documentElement.lang = lang === 'ko' ? 'ko' : 'en';
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var k = el.getAttribute('data-i18n');
+    if (d[k] !== undefined) el.textContent = d[k];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
+    var k = el.getAttribute('data-i18n-html');
+    if (d[k] !== undefined) el.innerHTML = d[k];
+  });
+  document.getElementById('langBtn').textContent = d.lang_btn;
+}
+function toggleLang() { applyLang(curLang === 'ko' ? 'en' : 'ko'); }
+applyLang(curLang);
+
+// ── SCROLL REVEAL ──────────────────────────────────────
+var obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.06 });
+document.querySelectorAll('.reveal').forEach(function(el){ obs.observe(el); });
+
+// ── PDF ────────────────────────────────────────────────
+async function downloadPDF() {
+  var btn = document.getElementById('pdfBtn');
+  var orig = btn.innerHTML; btn.textContent = 'Generating...'; btn.disabled = true;
+  document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('visible'); });
+  var fname = curLang === 'ko' ? 'TecAce_OnDevice_LLM_분석_KO.pdf' : 'TecAce_OnDevice_LLM_Analysis_EN.pdf';
+  try {
+    await html2pdf().set({
+      margin: 0, filename: fname,
+      image: { type: 'jpeg', quality: 0.96 },
+      html2canvas: { scale: 2, useCORS: true, letterRendering: true, logging: false },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['css', 'legacy'] }
+    }).from(document.body).save();
+  } finally { btn.innerHTML = orig; btn.disabled = false; }
+}
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════
+     VISUAL EDITOR v2 — TecAce (Inline CSS + Text editing)
+     ═══════════════════════════════════════════════════════════ -->
+<style>
+#ve-fab{position:fixed;bottom:24px;left:24px;z-index:9999;background:var(--color-primary);color:#fff;border:none;border-radius:6px;padding:8px 14px;font-size:12px;font-weight:700;font-family:'Poppins','Pretendard',sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.18);letter-spacing:0.3px;transition:opacity 0.15s}
+#ve-fab:hover{opacity:0.88}
+#ve-panel{position:fixed;bottom:64px;left:24px;z-index:9998;width:280px;background:var(--color-card-bg);border:1px solid var(--color-card-border);border-radius:12px;padding:18px;box-shadow:0 8px 32px rgba(0,0,0,0.18);display:none;font-family:'Poppins','Pretendard',sans-serif}
+#ve-panel.open{display:block}
+.ve-title{font-size:12px;font-weight:700;color:var(--color-heading);margin-bottom:14px;letter-spacing:0.3px}
+.ve-row{margin-bottom:12px}
+.ve-label{font-size:11px;color:var(--color-muted);font-weight:500;margin-bottom:5px;display:block}
+.ve-row input[type=color]{width:36px;height:24px;border:none;border-radius:4px;cursor:pointer;padding:0;background:none}
+.ve-row input[type=range]{width:100%;accent-color:var(--color-primary)}
+.ve-row select{width:100%;padding:4px 8px;border-radius:5px;border:1px solid var(--color-card-border);background:var(--color-card-bg);color:var(--color-body);font-size:12px;font-family:'Poppins','Pretendard',sans-serif}
+.ve-btn{width:100%;padding:7px;border-radius:6px;border:none;background:var(--color-primary);color:#fff;font-size:12px;font-weight:600;font-family:'Poppins','Pretendard',sans-serif;cursor:pointer;margin-top:4px;letter-spacing:0.2px}
+.ve-btn:hover{opacity:0.88}
+.ve-btn.sec{background:var(--color-card-border);color:var(--color-body);margin-top:6px}
+.ve-sep{height:1px;background:var(--color-card-border);margin:12px 0}
+#ve-edit-hint{font-size:10px;color:var(--color-muted);margin-top:8px;line-height:1.5}
+</style>
+<button id="ve-fab" onclick="veToggle()">편집 모드</button>
+<div id="ve-panel">
+  <div class="ve-title">Visual Editor</div>
+  <div class="ve-row">
+    <label class="ve-label">Primary Color</label>
+    <input type="color" id="ve-primary" value="#1550FC" oninput="veApply()">
+    <input type="range" id="ve-primary-op" min="50" max="100" value="100" oninput="veApply()">
+  </div>
+  <div class="ve-row">
+    <label class="ve-label">Accent Color</label>
+    <input type="color" id="ve-accent" value="#E700DB" oninput="veApply()">
+  </div>
+  <div class="ve-row">
+    <label class="ve-label">Font Size (body)</label>
+    <input type="range" id="ve-fontsize" min="12" max="20" value="14" oninput="veApply()">
+    <span id="ve-fs-val" style="font-size:11px;color:var(--color-muted)">14px</span>
+  </div>
+  <div class="ve-row">
+    <label class="ve-label">Card Border Radius</label>
+    <input type="range" id="ve-radius" min="0" max="24" value="12" oninput="veApply()">
+  </div>
+  <div class="ve-sep"></div>
+  <button class="ve-btn" onclick="veDownload()">HTML 다운로드</button>
+  <button class="ve-btn sec" onclick="veReset()">초기화</button>
+  <div id="ve-edit-hint">텍스트를 클릭하면 직접 편집할 수 있습니다</div>
+</div>
+<script>
+var veOpen=false, veEditMode=false;
+function veToggle(){
+  veOpen=!veOpen;
+  document.getElementById('ve-panel').classList.toggle('open',veOpen);
+  if(veOpen && !veEditMode){ veEditMode=true; veEnableEditing(); document.getElementById('ve-fab').textContent='편집 중'; }
+  else if(!veOpen){ document.getElementById('ve-fab').textContent='편집 모드'; }
+}
+function veApply(){
+  var p=document.getElementById('ve-primary').value;
+  var a=document.getElementById('ve-accent').value;
+  var fs=document.getElementById('ve-fontsize').value;
+  var r=document.getElementById('ve-radius').value;
+  document.getElementById('ve-fs-val').textContent=fs+'px';
+  var root=document.documentElement;
+  root.style.setProperty('--color-primary',p);
+  root.style.setProperty('--color-accent',a);
+  document.querySelectorAll('p,td,li,.insight-body,.phase-desc,.channel-body .ch-desc,.risk-desc').forEach(function(el){ el.style.fontSize=fs+'px'; });
+  document.querySelectorAll('.card,.stat-card,.risk-card').forEach(function(el){ el.style.borderRadius=r+'px'; });
+}
+function veEnableEditing(){
+  document.querySelectorAll('h1,h2,h3,.sec-title,.doc-title,.stat-value,.insight-title,.phase-title,.roadmap-task,.ch-title,.risk-title,p,.insight-body,.phase-desc,.ch-desc,.risk-desc,td,th').forEach(function(el){
+    if(!el.closest('#ve-panel') && !el.closest('#ve-fab')){
+      el.setAttribute('contenteditable','true');
+      el.style.outline='none';
+      el.style.cursor='text';
+    }
+  });
+}
+function veReset(){
+  document.documentElement.style.removeProperty('--color-primary');
+  document.documentElement.style.removeProperty('--color-accent');
+  document.getElementById('ve-primary').value='#1550FC';
+  document.getElementById('ve-accent').value='#E700DB';
+  document.getElementById('ve-fontsize').value='14';
+  document.getElementById('ve-radius').value='12';
+  document.getElementById('ve-fs-val').textContent='14px';
+  document.querySelectorAll('p,td,li,.insight-body,.phase-desc,.channel-body .ch-desc,.risk-desc').forEach(function(el){ el.style.fontSize=''; });
+  document.querySelectorAll('.card,.stat-card,.risk-card').forEach(function(el){ el.style.borderRadius=''; });
+}
+function veDownload(){
+  var html='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
+  var blob=new Blob([html],{type:'text/html'});
+  var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='TecAce_OnDevice_LLM_Analysis.html'; a.click();
+}
+</script>
+</body>
+</html>
