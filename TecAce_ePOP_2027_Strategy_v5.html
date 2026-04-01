@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="ko" class="theme-light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TecAce ePOP 2027 전략 기획서</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html.theme-light {
+  --color-primary: #1550FC; --color-accent: #E700DB;
+  --color-heading: #101828; --color-body: #364153;
+  --color-bg: #FFFFFF; --color-card-bg: #F9FAFB;
+  --color-card-border: #E5E7EB; --color-muted: #667085;
+  --surface: #F9FAFB; --surface-hover: #F3F4F6; --border: #E5E7EB;
+}
+html.theme-dark {
+  --color-primary: #4B7BFF; --color-accent: #F040E8;
+  --color-heading: #F9FAFB; --color-body: #D1D5DB;
+  --color-bg: #0D0D0D; --color-card-bg: #1A1A1A;
+  --color-card-border: #2D2D2D; --color-muted: #9CA3AF;
+  --surface: #1A1A1A; --surface-hover: #242424; --border: #2D2D2D;
+}
+
+body {
+  font-family: 'Poppins', 'Pretendard', sans-serif;
+  background: var(--color-bg); color: var(--color-body);
+  font-size: 15px; line-height: 1.7;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* TOP NAV */
+.top-nav {
+  position: sticky; top: 0; z-index: 300;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-card-border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px; height: 46px;
+  transition: background 0.3s, border-color 0.3s;
+}
+.nav-left { display: flex; align-items: center; gap: 12px; }
+.nav-logo { font-size: 13px; font-weight: 700; color: var(--color-primary); }
+.nav-sep { width: 1px; height: 14px; background: var(--color-card-border); }
+.nav-title { font-size: 12px; color: var(--color-muted); }
+.nav-right { display: flex; gap: 6px; }
+.nav-btn {
+  padding: 4px 12px; border-radius: 5px;
+  border: 1px solid var(--color-card-border);
+  background: transparent; cursor: pointer;
+  font-size: 11px; font-weight: 600;
+  color: var(--color-muted);
+  font-family: 'Poppins', 'Pretendard', sans-serif;
+  transition: all 0.15s; letter-spacing: 0.3px;
+}
+.nav-btn:hover { background: var(--surface-hover); color: var(--color-heading); }
+.nav-btn.primary { background: var(--color-primary); color: white; border-color: var(--color-primary); }
+.nav-btn.primary:hover { opacity: 0.88; }
+.nav-btn.lang-btn { background: rgba(21,80,252,0.07); color: var(--color-primary); border-color: rgba(21,80,252,0.2); }
+html.theme-dark .nav-btn.lang-btn { background: rgba(75,123,255,0.12); color: #93C5FD; border-color: rgba(75,123,255,0.3); }
+.nav-btn:disabled { opacity: 0.5; cursor: default; }
+
+/* HEADER BANNER */
+.header-banner {
+  padding: 60px 64px 52px;
+  background: linear-gradient(135deg, #0f1142 0%, #1a0a2e 30%, #0d1a5c 60%, #1a0038 100%);
+  position: relative; overflow: hidden;
+}
+html.theme-dark .header-banner { background: linear-gradient(135deg, #0a0a1a 0%, #0d1040 100%); }
+.header-banner::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 20% 50%, rgba(21,80,252,0.3) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 30%, rgba(231,0,219,0.2) 0%, transparent 55%);
+  pointer-events: none;
+}
+.doc-type-badge {
+  display: inline-block;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 4px;
+  color: rgba(255,255,255,0.75);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.7px; text-transform: uppercase;
+  padding: 3px 10px; margin-bottom: 20px;
+  position: relative; z-index: 1;
+}
+.doc-title {
+  font-size: 48px; font-weight: 300; letter-spacing: 0.4px;
+  color: #fff; line-height: 1.2; margin-bottom: 14px;
+  position: relative; z-index: 1;
+}
+.doc-subtitle {
+  font-size: 16px; color: rgba(255,255,255,0.65);
+  margin-bottom: 32px; font-weight: 400;
+  position: relative; z-index: 1;
+}
+.doc-meta {
+  display: flex; gap: 32px; flex-wrap: wrap;
+  position: relative; z-index: 1;
+}
+.doc-meta-item {
+  font-size: 12px; color: rgba(255,255,255,0.5);
+}
+.doc-meta-item strong {
+  display: block; color: rgba(255,255,255,0.75); font-size: 11px;
+  letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 2px;
+}
+.doc-meta-item span { font-size: 13px; color: rgba(255,255,255,0.9); font-weight: 500; }
+
+/* MAIN CONTENT */
+.main { max-width: 960px; margin: 0 auto; padding: 52px 64px; }
+
+/* SECTION */
+.section { margin-bottom: 52px; }
+.section-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.7px;
+  text-transform: uppercase; color: var(--color-primary);
+  margin-bottom: 8px;
+}
+.section-title {
+  font-size: 28px; font-weight: 300; letter-spacing: 0.5px;
+  color: var(--color-heading); margin-bottom: 20px;
+  border-bottom: 1px solid var(--color-card-border); padding-bottom: 14px;
+}
+
+/* CARDS */
+.card {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: 12px; padding: 24px;
+}
+.card-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.card-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.card-title { font-size: 13px; font-weight: 700; color: var(--color-heading); margin-bottom: 8px; }
+.card-body { font-size: 13px; color: var(--color-body); line-height: 1.65; }
+
+/* INSIGHT / CALLOUT */
+.insight { border-left: 3px solid var(--color-primary); padding: 13px 18px; background: rgba(21,80,252,0.04); border-radius: 0 10px 10px 0; margin-bottom: 14px; }
+html.theme-dark .insight { background: rgba(75,123,255,0.06); }
+.insight.accent { border-color: var(--color-accent); background: rgba(231,0,219,0.04); }
+.insight.warn { border-color: #f43f5e; background: rgba(244,63,94,0.04); }
+.insight.success { border-color: #10b981; background: rgba(16,185,129,0.04); }
+.insight-title { font-size: 13px; font-weight: 700; color: var(--color-primary); margin-bottom: 5px; }
+.insight.accent .insight-title { color: var(--color-accent); }
+.insight.warn .insight-title { color: #f43f5e; }
+.insight.success .insight-title { color: #10b981; }
+.insight-body { font-size: 13px; color: var(--color-body); line-height: 1.65; }
+
+/* BADGE */
+.badge {
+  display: inline-block;
+  background: var(--color-primary); color: white;
+  border-radius: 5px; padding: 3px 10px;
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.5px; text-transform: uppercase;
+}
+.badge.accent { background: var(--color-accent); }
+.badge.success { background: #10b981; }
+.badge.warn { background: #f43f5e; }
+.badge.muted { background: var(--color-muted); }
+
+/* TABLE */
+.tbl-wrap { overflow-x: auto; margin-bottom: 20px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th {
+  background: var(--color-primary); color: white;
+  padding: 10px 14px; text-align: left;
+  font-weight: 600; font-size: 12px; letter-spacing: 0.3px;
+}
+td { padding: 9px 14px; border-bottom: 1px solid var(--color-card-border); color: var(--color-body); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--surface-hover); }
+td strong { color: var(--color-heading); }
+
+/* COMPARISON TABLE */
+.compare-table th:first-child { background: var(--color-muted); }
+.compare-table th:nth-child(2) { background: #c0392b; }
+.compare-table th:nth-child(3) { background: var(--color-primary); }
+
+/* LAYER CARD */
+.layer-card {
+  border: 1px solid var(--color-card-border);
+  border-radius: 16px; overflow: hidden; margin-bottom: 24px;
+}
+.layer-header {
+  padding: 20px 28px;
+  background: linear-gradient(90deg, rgba(21,80,252,0.08), rgba(21,80,252,0.02));
+  border-bottom: 1px solid var(--color-card-border);
+  display: flex; align-items: center; gap: 14px;
+}
+html.theme-dark .layer-header { background: rgba(75,123,255,0.07); }
+.layer-num {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--color-primary); color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; flex-shrink: 0;
+}
+.layer-title-wrap .layer-label { font-size: 11px; color: var(--color-muted); font-weight: 500; letter-spacing: 0.4px; text-transform: uppercase; }
+.layer-title-wrap .layer-name { font-size: 16px; font-weight: 600; color: var(--color-heading); }
+.layer-body { padding: 24px 28px; background: var(--color-card-bg); }
+
+/* PHASE CARDS */
+.phase-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+.phase-card {
+  border: 1px solid var(--color-card-border);
+  border-radius: 10px; padding: 16px;
+  background: var(--color-bg);
+}
+.phase-card.now { border-color: rgba(21,80,252,0.3); background: rgba(21,80,252,0.03); }
+html.theme-dark .phase-card.now { background: rgba(75,123,255,0.06); }
+.phase-label { font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--color-muted); margin-bottom: 6px; }
+.phase-card.now .phase-label { color: var(--color-primary); }
+.phase-timing { font-size: 12px; font-weight: 600; color: var(--color-heading); margin-bottom: 8px; }
+.phase-desc { font-size: 12px; color: var(--color-body); line-height: 1.55; }
+
+/* TIMELINE */
+.timeline { position: relative; padding-left: 24px; }
+.timeline::before { content:''; position:absolute; left:7px; top:0; bottom:0; width:2px; background:var(--color-card-border); }
+.tl-item { position: relative; margin-bottom: 20px; }
+.tl-dot { position:absolute; left:-22px; top:3px; width:14px; height:14px; border-radius:50%; background:var(--color-primary); border:2px solid var(--color-bg); }
+.tl-time { font-size: 11px; font-weight: 700; color: var(--color-primary); letter-spacing: 0.4px; margin-bottom: 3px; }
+.tl-title { font-size: 14px; font-weight: 600; color: var(--color-heading); margin-bottom: 4px; }
+.tl-body { font-size: 13px; color: var(--color-body); line-height: 1.55; }
+
+/* TRACK CARDS */
+.track-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.track-card {
+  border-radius: 12px; padding: 22px;
+  border: 1px solid var(--color-card-border);
+}
+.track-card.a { border-top: 3px solid var(--color-primary); background: rgba(21,80,252,0.02); }
+.track-card.b { border-top: 3px solid var(--color-accent); background: rgba(231,0,219,0.02); }
+html.theme-dark .track-card.a { background: rgba(75,123,255,0.04); }
+html.theme-dark .track-card.b { background: rgba(240,64,232,0.04); }
+.track-label { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+.track-card.a .track-label { color: var(--color-primary); }
+.track-card.b .track-label { color: var(--color-accent); }
+.track-name { font-size: 15px; font-weight: 600; color: var(--color-heading); margin-bottom: 12px; }
+.track-goal { font-size: 12px; font-weight: 600; color: var(--color-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.4px; }
+.track-item { font-size: 13px; color: var(--color-body); line-height: 1.6; padding-left: 12px; border-left: 2px solid var(--color-card-border); margin-bottom: 8px; }
+.track-msg { margin-top: 14px; padding: 10px 14px; border-radius: 8px; font-size: 12px; font-style: italic; }
+.track-card.a .track-msg { background: rgba(21,80,252,0.06); color: var(--color-primary); }
+.track-card.b .track-msg { background: rgba(231,0,219,0.06); color: var(--color-accent); }
+
+/* BENCHMARK TABLE — color coded */
+.no-qr { color: #f43f5e; font-weight: 700; }
+.partial { color: var(--color-muted); }
+.full { color: #10b981; font-weight: 600; }
+
+/* RISK CARDS */
+.risk-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+.risk-card { border: 1px solid var(--color-card-border); border-radius: 10px; padding: 18px 22px; display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: start; }
+.risk-num { width: 32px; height: 32px; border-radius: 50%; background: rgba(244,63,94,0.1); color: #f43f5e; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+.risk-title { font-size: 13px; font-weight: 700; color: var(--color-heading); margin-bottom: 5px; }
+.risk-body { font-size: 13px; color: var(--color-body); line-height: 1.6; }
+.risk-response { margin-top: 8px; padding: 8px 12px; background: rgba(16,185,129,0.06); border-radius: 6px; border-left: 2px solid #10b981; font-size: 12px; color: var(--color-body); }
+.risk-response strong { color: #10b981; }
+
+/* SUMMARY BANNER */
+.summary-banner {
+  padding: 36px 40px;
+  background: linear-gradient(135deg, #0f1142 0%, #1a0a2e 40%, #1a0038 100%);
+  border-radius: 16px; position: relative; overflow: hidden;
+  margin-bottom: 20px;
+}
+.summary-banner::after {
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(ellipse at 30% 50%, rgba(21,80,252,0.25) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 30%, rgba(231,0,219,0.2) 0%, transparent 55%);
+  pointer-events:none;
+}
+.summary-text {
+  font-size: 17px; font-weight: 300; color: #fff; line-height: 1.65;
+  position: relative; z-index: 1;
+}
+.summary-text strong { font-weight: 700; color: #93C5FD; }
+.summary-text em { font-style: normal; color: #f9a8d4; }
+
+/* FOOTER */
+.footer {
+  border-top: 1px solid var(--color-card-border);
+  padding: 20px 64px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 11px; color: var(--color-muted);
+}
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(14px); transition: opacity 0.5s ease, transform 0.5s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* CONFIDENTIAL CHIP */
+.conf-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.3);
+  border-radius: 4px; padding: 3px 10px;
+  font-size: 11px; font-weight: 600; color: #f43f5e;
+  letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 16px;
+  position: relative; z-index: 1;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .top-nav { padding: 0 20px; }
+  .header-banner { padding: 40px 20px 36px; }
+  .doc-title { font-size: 30px; }
+  .main { padding: 32px 20px; }
+  .card-grid-2, .card-grid-3, .phase-cards, .track-grid { grid-template-columns: 1fr; }
+}
+
+/* VISUAL EDITOR */
+.ve-fab {
+  position: fixed; bottom: 24px; left: 24px; z-index: 9999;
+  background: var(--color-primary); color: white;
+  border: none; border-radius: 8px; padding: 10px 18px;
+  font-family: 'Poppins','Pretendard',sans-serif;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  box-shadow: 0 4px 16px rgba(21,80,252,0.35);
+  transition: all 0.2s;
+}
+.ve-fab:hover { opacity: 0.88; transform: translateY(-1px); }
+.ve-panel {
+  position: fixed; bottom: 70px; left: 24px; z-index: 9998;
+  background: var(--color-card-bg); border: 1px solid var(--color-card-border);
+  border-radius: 12px; padding: 20px; width: 280px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  display: none;
+}
+.ve-panel.open { display: block; }
+.ve-panel h4 { font-size: 12px; font-weight: 700; color: var(--color-heading); margin-bottom: 14px; letter-spacing: 0.3px; }
+.ve-row { margin-bottom: 12px; }
+.ve-label { font-size: 11px; color: var(--color-muted); margin-bottom: 4px; font-weight: 500; }
+.ve-row input[type=color] { width: 100%; height: 32px; border: 1px solid var(--color-card-border); border-radius: 6px; cursor: pointer; padding: 2px; background: var(--color-bg); }
+.ve-row input[type=range] { width: 100%; accent-color: var(--color-primary); }
+.ve-row select { width: 100%; padding: 6px 10px; border: 1px solid var(--color-card-border); border-radius: 6px; background: var(--color-bg); color: var(--color-body); font-size: 12px; font-family: 'Poppins','Pretendard',sans-serif; }
+.ve-btn { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid var(--color-card-border); background: var(--color-primary); color: white; font-size: 11px; font-weight: 600; cursor: pointer; font-family: 'Poppins','Pretendard',sans-serif; margin-top: 8px; }
+.ve-btn:hover { opacity: 0.88; }
+.ve-edit-mode * { outline: 1px dashed rgba(21,80,252,0.3) !important; }
+.ve-edit-mode *:hover { outline: 2px solid var(--color-primary) !important; background: rgba(21,80,252,0.04) !important; cursor: text !important; }
+
+/* ── EVOLUTION BLOCKS ─────────────────────────────── */
+.evo-block { margin-bottom: 48px; }
+.evo-block-label {
+  font-size: 11px; font-weight: 700; color: var(--color-primary);
+  text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 18px;
+  display: flex; align-items: center; gap: 10px;
+}
+.evo-block-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--color-card-border);
+}
+.evo-steps {
+  display: grid; grid-template-columns: 1fr 36px 1fr 36px 1fr;
+  gap: 10px; align-items: start;
+}
+.evo-arrow {
+  display: flex; align-items: center; justify-content: center;
+  padding-top: 28px; color: var(--color-muted); font-size: 22px;
+}
+.evo-step {
+  border-radius: 14px; padding: 22px 18px;
+  border: 1px solid var(--color-card-border);
+  background: var(--color-card-bg);
+}
+.evo-icon { font-size: 26px; margin-bottom: 10px; }
+.evo-step-title {
+  font-size: 12px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.5px; margin-bottom: 10px;
+}
+.evo-step-body { font-size: 12px; color: var(--color-body); line-height: 1.7; }
+/* idea */
+.evo-step.idea .evo-step-title { color: var(--color-muted); }
+/* attack */
+.evo-step.attack {
+  background: rgba(244,63,94,0.04);
+  border-color: rgba(244,63,94,0.35);
+  border-top: 3px solid #f43f5e;
+}
+.evo-step.attack .evo-step-title { color: #f43f5e; }
+/* solution */
+.evo-step.solution {
+  background: rgba(16,185,129,0.04);
+  border-color: rgba(16,185,129,0.35);
+  border-top: 3px solid #10b981;
+}
+.evo-step.solution .evo-step-title { color: #10b981; }
+@keyframes attackPop {
+  0%   { transform: scale(0.92) rotate(-1deg); opacity: 0; }
+  60%  { transform: scale(1.03) rotate(0.5deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+.evo-step.attack[data-aos].aos-animate { animation: attackPop 0.55s cubic-bezier(.36,.07,.19,.97) both; }
+@media (max-width: 768px) {
+  .evo-steps { grid-template-columns: 1fr; }
+  .evo-arrow { display: none; }
+}
+
+/* ── MAESTRO DIAGRAM ──────────────────────────────── */
+.maestro-diagram { margin: 24px 0 28px; position: relative; }
+.maestro-layer {
+  border-radius: 14px; padding: 18px 24px;
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 18px;
+  border: 1px solid var(--color-card-border);
+  position: relative; overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.maestro-layer:hover { transform: translateX(4px); box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+.maestro-layer::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+}
+.maestro-layer.bg-l  { background: var(--color-card-bg); }
+.maestro-layer.bg-l::before { background: #6B7280; }
+.maestro-layer.fg-l  { background: rgba(21,80,252,0.04); }
+.maestro-layer.fg-l::before { background: var(--color-primary); }
+.maestro-layer.ai-l  { background: rgba(231,0,219,0.04); }
+.maestro-layer.ai-l::before { background: var(--color-accent); }
+.mlayer-chip {
+  font-size: 10px; font-weight: 800; letter-spacing: 0.7px;
+  text-transform: uppercase; padding: 4px 10px; border-radius: 5px;
+  flex-shrink: 0; min-width: 100px; text-align: center;
+}
+.bg-l .mlayer-chip  { background: rgba(107,114,128,0.12); color: #6B7280; }
+.fg-l .mlayer-chip  { background: rgba(21,80,252,0.1);   color: var(--color-primary); }
+.ai-l .mlayer-chip  { background: rgba(231,0,219,0.1);   color: var(--color-accent); }
+.mlayer-info { flex: 1; }
+.mlayer-brand { font-size: 14px; font-weight: 700; color: var(--color-heading); display: block; margin-bottom: 2px; }
+.mlayer-desc  { font-size: 12px; color: var(--color-muted); }
+.mlayer-mock {
+  font-size: 11px; padding: 7px 12px; border-radius: 8px;
+  background: var(--color-bg); border: 1px solid var(--color-card-border);
+  color: var(--color-body); flex-shrink: 0; max-width: 220px; text-align: center;
+  line-height: 1.7;
+}
+.maestro-connector {
+  text-align: center; color: var(--color-muted); font-size: 14px;
+  margin: -2px 0 2px 24px; letter-spacing: 1px;
+}
+
+/* ── AOS section enhancement ─────────────────────── */
+[data-aos] { will-change: transform, opacity; }
+
+/* ── EVO STEP HEADERS (replaces emoji) ──────────────── */
+.evo-step-header {
+  display: inline-block;
+  font-size: 10px; font-weight: 800; letter-spacing: 1px;
+  text-transform: uppercase; padding: 4px 12px;
+  border-radius: 4px; margin-bottom: 12px;
+}
+.idea-header    { background: rgba(107,114,128,0.12); color: #6B7280; }
+.attack-header  { background: rgba(244,63,94,0.12);   color: #f43f5e; }
+.solution-header{ background: rgba(16,185,129,0.12);  color: #10b981; }
+
+/* ── REFINED AOS ANIMATION: attack card custom pop ──── */
+@keyframes attackReveal {
+  0%   { transform: scale(0.88) translateY(12px); opacity: 0; }
+  55%  { transform: scale(1.04) translateY(-2px); opacity: 1; }
+  100% { transform: scale(1)    translateY(0);    opacity: 1; }
+}
+.evo-step.attack[data-aos].aos-animate {
+  animation: attackReveal 0.5s cubic-bezier(.175,.885,.32,1.275) both;
+}
+
+/* ── MAESTRO DIAGRAM: stagger + subtle scale ─────────── */
+.maestro-layer[data-aos].aos-animate {
+  transition: box-shadow 0.3s;
+}
+.maestro-layer:hover {
+  transform: translateX(6px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.09);
+}
+
+/* ── SECTION TITLE UNDERLINE ANIMATE ────────────────── */
+.section-title[data-aos].aos-animate {
+  border-bottom-color: var(--color-primary);
+  transition: border-bottom-color 0.6s ease 0.3s;
+}
+
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div class="nav-left">
+    <span class="nav-logo">TecAce</span>
+    <span class="nav-sep"></span>
+    <span class="nav-title" data-i18n="nav_title">ePOP 2027 전략 기획서</span>
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn lang-btn" id="langBtn" onclick="toggleLang()">English</button>
+    <button class="nav-btn" onclick="cycleTheme()"><span id="themeLabel">Light</span></button>
+    <button class="nav-btn primary" id="pdfBtn" onclick="downloadPDF()">PDF Download</button>
+  </div>
+</nav>
+
+<!-- HEADER BANNER -->
+<div class="header-banner">
+  <div class="conf-chip">CONFIDENTIAL — Internal Strategy Review</div>
+  <div class="doc-type-badge" data-i18n="badge">STRATEGY BRIEF</div>
+  <h1 class="doc-title" data-i18n-html="title">Next ePOP 주도권 확보<br><span style="color:rgba(255,255,255,0.5);font-size:0.65em;font-weight:300;">제일기획이 풀지 못한 벽을 우회하라</span></h1>
+  <p class="doc-subtitle" data-i18n="subtitle">TecAce ePOP 2027 경영진 전략 리뷰 | New ePOP 기술 파트너 선점 전략</p>
+  <div class="doc-meta">
+    <div class="doc-meta-item"><strong data-i18n="meta_date">Date</strong><span>2026. 03. 31</span></div>
+    <div class="doc-meta-item"><strong data-i18n="meta_status">Status</strong><span data-i18n="meta_status_val">내부 경영진 전략 리뷰용</span></div>
+    <div class="doc-meta-item"><strong data-i18n="meta_bid">비딩 일정</strong><span data-i18n="meta_bid_val">8~9월 예정</span></div>
+    <div class="doc-meta-item"><strong data-i18n="meta_window">기회 창</strong><span data-i18n="meta_window_val">결정적 타이밍 — 지금</span></div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- SECTION 1: SITUATION -->
+  <div class="section reveal">
+    <div class="section-label" data-aos="fade-up" data-i18n="s1_label">01 — Situation Assessment</div>
+    <h2 class="section-title" data-aos="fade-up" data-aos-delay="80" data-i18n="s1_title">상황 인식</h2>
+
+    <div class="card-grid-2">
+      <div class="card">
+        <div class="card-title" data-i18n="s1_know">우리가 아는 것</div>
+        <div class="card-body">
+          삼성은 27년형 ePOP부터 USB 수동 설치를 <strong>네트워크 업데이트로 전환</strong>하려 한다. 동시에 "New ePOP"라는 이름으로 법인이 직접 Feature와 번역 문구를 적용하는 <strong>CMS 기반 시스템</strong>을 연구 중이며, 이 프로젝트는 제일기획이 테스트하고 있다.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" data-i18n="s1_intel">핵심 인텔</div>
+        <div class="card-body" style="font-size:13px;line-height:1.7;">
+          <div style="margin-bottom:8px;">
+            <span class="badge warn" style="font-size:10px;margin-right:6px;" data-i18n="intel_bad">문제 발생</span>
+            제일기획 테스트 순조롭지 않음 — TV 인터널 메모리 한계 + 전체 화면 해상도 문제
+          </div>
+          <div style="margin-bottom:8px;">
+            <span class="badge" style="font-size:10px;margin-right:6px;" data-i18n="intel_bid">비딩</span>
+            8~9월 예정 (해외법인 대상 4월 런칭 타겟)
+          </div>
+          <div style="margin-bottom:8px;">
+            <span class="badge muted" style="font-size:10px;margin-right:6px;" data-i18n="intel_last">마지막</span>
+            27년형 ePOP = 기존 embedding 방식의 마지막 버전 가능성
+          </div>
+          <div>
+            <span class="badge success" style="font-size:10px;margin-right:6px;" data-i18n="intel_align">유사</span>
+            1월 TecAce 제안 내용과 현재 테스트 내용 — 큰 틀 유사, 접근 방식만 다름
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight">
+      <div class="insight-title" data-i18n="s1_impl_title">이것이 의미하는 바</div>
+      <div class="insight-body" data-i18n="s1_impl">제일기획이 구조적 기술 한계에 부딪힌 상태에서 비딩이 5개월 앞으로 다가왔다. 이 창(window)은 TecAce가 4년간 쌓은 FW 역량 + AI 기술 차별화로 <strong>"New ePOP의 기술 파트너"를 선점할 수 있는 결정적 타이밍</strong>이다.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: COMPETITOR WEAKNESS -->
+  <div class="section reveal">
+    <div class="section-label" data-aos="fade-up" data-i18n="s2_label">02 — Competitor Analysis</div>
+    <h2 class="section-title" data-aos="fade-up" data-aos-delay="80" data-i18n="s2_title">제일기획의 구조적 약점 분석</h2>
+
+    <div class="insight warn" style="margin-bottom:20px;">
+      <div class="insight-title" data-i18n="s2_core_title">문제의 근본 원인</div>
+      <div class="insight-body" data-i18n="s2_core">제일기획의 접근 = "완성된 4K 콘텐츠(영상/이미지)를 CMS에서 TV로 전송" → 이 방식은 구조적으로 해결 불가능한 3가지 문제를 내포한다.</div>
+    </div>
+
+    <div class="card-grid-3" style="margin-bottom:20px;">
+      <div class="card" style="border-top:3px solid #f43f5e;">
+        <div class="card-title" style="color:#f43f5e;" data-i18n="weak1_t">메모리 과부하</div>
+        <div class="card-body" data-i18n="weak1">고해상도 영상/이미지를 TV 인터널 스토리지에 저장 필요. TV 내장 메모리(8~16GB, 가용 2~4GB)로는 다수의 ePOP 콘텐츠 수용 불가.</div>
+      </div>
+      <div class="card" style="border-top:3px solid #f97316;">
+        <div class="card-title" style="color:#f97316;" data-i18n="weak2_t">해상도 깨짐</div>
+        <div class="card-body" data-i18n="weak2">FHD/4K/8K 패널 대응 시 해상도별 리소스 각각 필요. CMS 단일 리소스 → 스케일링 과정 화질 열화 발생.</div>
+      </div>
+      <div class="card" style="border-top:3px solid #eab308;">
+        <div class="card-title" style="color:#eab308;" data-i18n="weak3_t">배포 속도 제약</div>
+        <div class="card-body" data-i18n="weak3">콘텐츠 용량 大 → 네트워크 전송 시간 증가. 매장 Wi-Fi 환경에서 안정적 전송 보장 불가.</div>
+      </div>
+    </div>
+
+    <div class="insight accent">
+      <div class="insight-title" data-i18n="s2_why_title">왜 에이전시로서는 풀 수 없는가</div>
+      <div class="insight-body" data-i18n="s2_why">제일기획은 "콘텐츠를 만드는 회사"이지, "TV 펌웨어를 다루는 회사"가 아니다. 메모리 최적화, 네이티브 렌더링, TV 하드웨어 자원 관리는 펌웨어 레벨의 역량이 필요하다. <strong>이것이 TecAce만의 영역이다.</strong></div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: STRATEGY LAYERS -->
+  <div class="section reveal">
+    <div class="section-label" data-aos="fade-up" data-i18n="s3_label">03 — Asymmetric Strategy</div>
+    <h2 class="section-title" data-aos="fade-up" data-aos-delay="80" data-i18n="s3_title">TecAce의 비대칭 전략 — 3개 Layer</h2>
+
+    <!-- LAYER 1 -->
+    <div class="layer-card" style="margin-bottom:24px;">
+      <div class="layer-header">
+        <div class="layer-num">1</div>
+        <div class="layer-title-wrap">
+          <div class="layer-label" data-i18n="l1_label">Hybrid AI Rendering</div>
+          <div class="layer-name" data-i18n="l1_name">하이브리드 AI 렌더링</div>
+        </div>
+        <div style="margin-left:auto;">
+          <span class="badge" data-i18n="l1_badge">영상 대신 데이터를 전송</span>
+        </div>
+      </div>
+      <div class="layer-body">
+        <p style="margin-bottom:16px;font-size:13px;" data-i18n="l1_desc">서버에서 초경량 데이터(JSON 구조체 + 텍스트 + 에셋 참조)만 전송하고, TV 내부에서 이를 해석하여 화면을 실시간 렌더링. TV에 탑재된 경량 언어 모델(SLM)이 수신 데이터를 해석하여 최적 레이아웃과 문구 배치를 결정, 네이티브 UI로 렌더링한다.</p>
+        
+        <div class="phase-cards">
+          <div class="phase-card now">
+            <div class="phase-label">Phase A</div>
+            <div class="phase-timing" data-i18n="ph_a_t">즉시 가능</div>
+            <div class="phase-desc" data-i18n="ph_a">JSON 기반 템플릿 렌더링 엔진. LLM 없이도 현재 FW 역량으로 구현. <strong>이것만으로도 메모리/해상도 문제 해결.</strong></div>
+          </div>
+          <div class="phase-card">
+            <div class="phase-label">Phase B</div>
+            <div class="phase-timing" data-i18n="ph_b_t">3~6개월</div>
+            <div class="phase-desc" data-i18n="ph_b">SLM 기반 지능형 렌더링. 경량 모델이 레이아웃 자동 최적화, 문구 자동 현지화, 컨텍스트 기반 UI 배치 수행.</div>
+          </div>
+          <div class="phase-card">
+            <div class="phase-label">Phase C</div>
+            <div class="phase-timing" data-i18n="ph_c_t">6~12개월</div>
+            <div class="phase-desc" data-i18n="ph_c">완전 자율 렌더링. 온디바이스 LLM이 매장 환경, 시간대, 고객 행동 패턴까지 반영한 동적 콘텐츠 생성.</div>
+          </div>
+        </div>
+
+        <div class="tbl-wrap">
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th data-i18n="cmp_item">항목</th>
+                <th data-i18n="cmp_cheil">제일기획 (콘텐츠 전송)</th>
+                <th data-i18n="cmp_tecace">TecAce (데이터 전송 + 렌더링)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td data-i18n="cmp_r1">전송 데이터</td><td>4K 이미지/영상 (수십 MB)</td><td><strong>JSON + 텍스트 (~2KB)</strong></td></tr>
+              <tr><td data-i18n="cmp_r2">TV 메모리 점유</td><td>높음 (콘텐츠 수 비례 증가)</td><td><strong>최소 (렌더링 엔진만 상주)</strong></td></tr>
+              <tr><td data-i18n="cmp_r3">해상도 대응</td><td>패널별 리소스 필요</td><td><strong>네이티브 렌더링으로 자동 대응</strong></td></tr>
+              <tr><td data-i18n="cmp_r4">매장 Wi-Fi 의존도</td><td>높음 (대용량 전송)</td><td><strong>극히 낮음 (초경량 데이터)</strong></td></tr>
+              <tr><td data-i18n="cmp_r5">오프라인 동작</td><td>불안정</td><td><strong>엔진 탑재 후 독립 동작 가능</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- LAYER 2 -->
+    <div class="layer-card" style="margin-bottom:24px;">
+      <div class="layer-header" style="background:linear-gradient(90deg,rgba(231,0,219,0.06),rgba(231,0,219,0.01));">
+        <div class="layer-num" style="background:var(--color-accent);">2</div>
+        <div class="layer-title-wrap">
+          <div class="layer-label" data-i18n="l2_label">Semantic ePOP Assembly</div>
+          <div class="layer-name" data-i18n="l2_name">세일즈 지식 그래프 기반 동적 조립</div>
+        </div>
+        <div style="margin-left:auto;">
+          <span class="badge accent" data-i18n="l2_badge">온톨로지 기반 추론</span>
+        </div>
+      </div>
+      <div class="layer-body">
+        <p style="margin-bottom:16px;font-size:13px;" data-i18n="l2_desc">제품 스펙, 타겟 고객 프로필, 매장 위치, 프로모션 조건, 시간대 등의 관계를 지식 그래프로 구축. 이 관계망을 기반으로 시스템이 스스로 추론하여 "지금, 이 매장에서, 이 고객에게, 가장 효과적인 화면"을 자동 조립.</p>
+        
+        <div class="card" style="background:rgba(21,80,252,0.02);border-color:rgba(21,80,252,0.15);margin-bottom:16px;font-family:'Poppins','Pretendard',monospace;font-size:12px;line-height:1.8;">
+          <div style="font-size:11px;font-weight:700;color:var(--color-primary);margin-bottom:10px;letter-spacing:0.4px;text-transform:uppercase;" data-i18n="scenario_label">구체적 시나리오</div>
+          <div style="color:var(--color-muted);" data-i18n="scenario_input">입력: 토요일 오후 3시 + 코스트코 시애틀점 + Neo QLED 85인치 진열대</div>
+          <div style="margin:8px 0;color:var(--color-heading);font-weight:500;" data-i18n="scenario_logic">온톨로지 추론: 주말 오후 → 가족 단위 방문 높음 + 코스트코 → 번들 딜 선호 + Neo QLED 85 → 프리미엄 세그먼트</div>
+          <div style="color:#10b981;font-weight:600;" data-i18n="scenario_out">출력: 가족 시청 시나리오 배너 + 사운드바 번들 프로모션 + 24개월 무이자 QR코드</div>
+        </div>
+
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th data-i18n="impl_step">단계</th><th data-i18n="impl_content">내용</th><th data-i18n="impl_timing">시점</th></tr></thead>
+            <tbody>
+              <tr><td><strong data-i18n="impl_1">1단계 — 룰 기반 매칭</strong></td><td data-i18n="impl_1d">사전 정의된 조건-결과 매핑 테이블. "매장 유형 × 제품 카테고리 × 프로모션 유형" 조합 세팅</td><td><span class="badge success" style="font-size:10px;" data-i18n="now">즉시 가능</span></td></tr>
+              <tr><td><strong data-i18n="impl_2">2단계 — 지식 그래프 기반 추론</strong></td><td data-i18n="impl_2d">제품-고객-매장 관계를 그래프 DB로 구축. 새로운 조건 조합에도 추론 기반 콘텐츠 조립</td><td>6개월</td></tr>
+              <tr><td><strong data-i18n="impl_3">3단계 — 학습 기반 최적화</strong></td><td data-i18n="impl_3d">배포 후 성과 데이터(QR 스캔율, 체류 시간)를 피드백하여 조립 로직 자동 개선</td><td>12개월</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- LAYER 3 -->
+    <div class="layer-card">
+      <div class="layer-header" style="background:linear-gradient(90deg,rgba(16,185,129,0.06),rgba(16,185,129,0.01));">
+        <div class="layer-num" style="background:#10b981;">3</div>
+        <div class="layer-title-wrap">
+          <div class="layer-label">O2O Purchase Conversion</div>
+          <div class="layer-name" data-i18n="l3_name">O2O 구매 전환</div>
+        </div>
+        <div style="margin-left:auto;">
+          <span class="badge success" data-i18n="l3_badge">업계 최초</span>
+        </div>
+      </div>
+      <div class="layer-body">
+        <p style="margin-bottom:16px;font-size:13px;" data-i18n="l3_desc">Best Buy와 Costco에서 5개 브랜드 현장 조사 결과 — 전 브랜드에 구매 전환 장치가 전무하다. TecAce는 업계 최초로 매장 TV에서 직접 구매 전환을 만든다.</p>
+        
+        <div class="tbl-wrap" style="margin-bottom:16px;">
+          <table>
+            <thead><tr><th data-i18n="brand_col">브랜드</th><th data-i18n="epop_col">ePOP 화면 활용</th><th data-i18n="qr_col">QR 코드</th><th data-i18n="mobile_col">모바일 연동</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Samsung</strong></td><td class="partial" data-i18n="partial">일부 활용</td><td class="no-qr" data-i18n="none">없음</td><td class="no-qr" data-i18n="none2">없음</td></tr>
+              <tr><td><strong>LG</strong></td><td class="partial" data-i18n="partial2">일부 활용</td><td class="no-qr" data-i18n="none3">없음</td><td class="no-qr" data-i18n="none4">없음</td></tr>
+              <tr><td><strong>Sony</strong></td><td class="partial" data-i18n="partial3">일부 활용</td><td class="no-qr" data-i18n="none5">없음</td><td class="no-qr" data-i18n="none6">없음</td></tr>
+              <tr><td><strong>TCL</strong></td><td class="full" data-i18n="full">전체 활용</td><td class="no-qr" data-i18n="none7">없음</td><td class="no-qr" data-i18n="none8">없음</td></tr>
+              <tr><td><strong>Hisense</strong></td><td class="full" data-i18n="full2">전체 활용</td><td class="no-qr" data-i18n="none9">없음</td><td class="no-qr" data-i18n="none10">없음</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="insight success" style="margin-bottom:16px;" data-aos="fade-up">
+          <div class="insight-title">비즈니스 임팩트 — Retailer-Aligned</div>
+          <div class="insight-body">
+            ePOP을 단순한 "콘텐츠 디스플레이"에서 <strong>"유통사 상생형(Retailer-Aligned) 구매 전환 플랫폼"</strong>으로 재정의합니다.
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;">
+              <div style="padding:12px;background:rgba(16,185,129,0.06);border-radius:8px;border:1px solid rgba(16,185,129,0.2);">
+                <div style="font-size:11px;font-weight:700;color:#10b981;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:6px;">Samsung 이점</div>
+                <div style="font-size:12px;line-height:1.65;">리테일 매장 내 전환율(QR 스캔 · 구매 행동)을 <strong>사상 최초로 데이터화</strong>하여 측정 가능. 향후 리테일 광고 플랫폼으로 확장하는 기반.</div>
+              </div>
+              <div style="padding:12px;background:rgba(16,185,129,0.06);border-radius:8px;border:1px solid rgba(16,185,129,0.2);">
+                <div style="font-size:11px;font-weight:700;color:#10b981;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:6px;">Best Buy / Costco 이점</div>
+                <div style="font-size:12px;line-height:1.65;">QR 스캔 시 삼성닷컴(D2C)이 아닌 <strong>해당 유통사 장바구니 또는 매장 POS 바코드로 직결</strong> → 오프라인 매출 직접 견인.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- SECTION BRAND-SAFE: BRAND-SAFE AI LOCALIZER -->
+  <div class="section">
+    <div class="section-label" data-aos="fade-up">03★ — Brand-Safe AI</div>
+    <h2 class="section-title" data-aos="fade-up" data-aos-delay="80">Brand-Safe AI Localizer — 메인 무기</h2>
+
+    <!-- Core Problem -->
+    <div class="insight warn" data-aos="fade-up" data-aos-delay="120" style="margin-bottom:24px;">
+      <div class="insight-title">삼성이 AI 도입을 꺼리는 이유</div>
+      <div class="insight-body">글로벌 대기업이 AI를 도입할 때 가장 두려워하는 건 두 가지입니다. <strong>할루시네이션(허위 정보 생성)</strong>과 <strong>브랜드 톤&amp;매너 훼손</strong>. "AI가 '화질이 1억 픽셀, 오늘 사면 공짜나 다름없음' 같은 말을 만들어내면?" — 브랜드 부서가 생성형 AI 전면 차단을 요청하는 이유가 바로 이것입니다.</div>
+    </div>
+
+    <!-- 1 Global Video + 100 Localized UI -->
+    <div class="card" data-aos="fade-up" data-aos-delay="160" style="margin-bottom:24px;border-top:3px solid var(--color-primary);">
+      <div class="card-title" style="font-size:16px;color:var(--color-primary);">1 Global Video + 100 Localized UI</div>
+      <div class="card-body" style="margin-top:12px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+          <div style="padding:16px;background:rgba(107,114,128,0.06);border-radius:10px;border:1px solid var(--color-card-border);">
+            <div style="font-size:11px;font-weight:800;color:#6B7280;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">제일기획의 역할 (1)</div>
+            <div style="font-size:13px;color:var(--color-heading);font-weight:600;margin-bottom:6px;">텍스트 없는 마스터 영상 1개</div>
+            <div style="font-size:12px;color:var(--color-body);line-height:1.65;">수십억을 들인 웅장한 글로벌 브랜드 필름. 언어·텍스트 없이 감성만. 전 세계 어느 매장에서도 동일하게 재생.</div>
+          </div>
+          <div style="padding:16px;background:rgba(21,80,252,0.04);border-radius:10px;border:1px solid rgba(21,80,252,0.2);">
+            <div style="font-size:11px;font-weight:800;color:var(--color-primary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">TecAce의 역할 (100)</div>
+            <div style="font-size:13px;color:var(--color-heading);font-weight:600;margin-bottom:6px;">온톨로지 기반 현지화 UI × 100개국</div>
+            <div style="font-size:12px;color:var(--color-body);line-height:1.65;">멕시코 매장엔 스페인어 특가 문구, 프랑스 매장엔 프랑스어 스펙 설명 — 모두 <strong>삼성 공식 단어장 안에서만</strong> 자동 조립·번역.</div>
+          </div>
+        </div>
+        <div class="insight success" style="margin:0;">
+          <div class="insight-title">비용 임팩트</div>
+          <div class="insight-body">지금까지 해외법인별 번역 에이전시 고용 → 국가수 × 제품수 × 시즌수만큼 반복 비용 발생. TecAce 시스템 도입 시 <strong>번역·문구 제작 비용 구조 자체가 소멸</strong>합니다.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ontology Guardrail -->
+    <div data-aos="fade-up" data-aos-delay="180">
+      <div class="section-label" style="margin-bottom:14px;">온톨로지 가드레일 (Ontology Guardrail) — 할루시네이션 원천 차단</div>
+      <div style="display:grid;grid-template-columns:1fr 48px 1fr;gap:16px;align-items:center;margin-bottom:24px;">
+
+        <!-- General AI (BAD) -->
+        <div style="border-radius:12px;padding:20px;border:2px dashed rgba(244,63,94,0.4);background:rgba(244,63,94,0.03);">
+          <div style="font-size:11px;font-weight:800;color:#f43f5e;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:10px;">일반 생성형 AI (리스크)</div>
+          <div style="font-size:12px;color:var(--color-body);line-height:1.75;font-style:italic;border-left:2px solid rgba(244,63,94,0.4);padding-left:10px;">
+            "이 TV 짱 좋아요!<br>화질이 1억 픽셀이고요,<br>오늘 사면 공짜나 다름없음!"
+          </div>
+          <div style="margin-top:10px;font-size:11px;color:#f43f5e;font-weight:600;">→ 브랜드 이미지 붕괴 리스크</div>
+        </div>
+
+        <!-- VS arrow -->
+        <div style="text-align:center;font-size:13px;font-weight:800;color:var(--color-muted);">VS</div>
+
+        <!-- TecAce AI (GOOD) -->
+        <div style="border-radius:12px;padding:20px;border:2px solid rgba(16,185,129,0.4);background:rgba(16,185,129,0.03);">
+          <div style="font-size:11px;font-weight:800;color:#10b981;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:10px;">TecAce AI + 온톨로지 (안전)</div>
+          <div style="font-size:12px;color:var(--color-body);line-height:1.75;border-left:2px solid rgba(16,185,129,0.4);padding-left:10px;">
+            <strong>단어장(Ontology DB)</strong> 안에서만<br>
+            레고 블록처럼 조립·번역.<br>
+            창작 금지 — 팩트만 조합.
+          </div>
+          <div style="margin-top:10px;font-size:11px;color:#10b981;font-weight:600;">→ 브랜드 안전성 100% 보장</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ontology DB Contents -->
+    <div class="card" data-aos="fade-up" data-aos-delay="200" style="margin-bottom:24px;">
+      <div class="card-title">온톨로지 DB 구성 — '사전 승인된 단어/규칙 셋'</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px;">
+        <div style="padding:12px;background:rgba(21,80,252,0.04);border-radius:8px;border:1px solid rgba(21,80,252,0.15);text-align:center;">
+          <div style="font-size:11px;font-weight:700;color:var(--color-primary);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.4px;">공식 제품 용어</div>
+          <div style="font-size:11px;color:var(--color-body);line-height:1.6;">Neo QLED<br>Quantum Matrix<br>Anti-Reflection</div>
+        </div>
+        <div style="padding:12px;background:rgba(21,80,252,0.04);border-radius:8px;border:1px solid rgba(21,80,252,0.15);text-align:center;">
+          <div style="font-size:11px;font-weight:700;color:var(--color-primary);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.4px;">허용된 프로모션</div>
+          <div style="font-size:11px;color:var(--color-body);line-height:1.6;">24개월 무이자<br>사운드바 번들<br>Trade-in 할인</div>
+        </div>
+        <div style="padding:12px;background:rgba(21,80,252,0.04);border-radius:8px;border:1px solid rgba(21,80,252,0.15);text-align:center;">
+          <div style="font-size:11px;font-weight:700;color:var(--color-primary);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.4px;">브랜드 톤 규칙</div>
+          <div style="font-size:11px;color:var(--color-body);line-height:1.6;">격조 있는 문체<br>과장 표현 금지<br>수치 확인 필수</div>
+        </div>
+        <div style="padding:12px;background:rgba(21,80,252,0.04);border-radius:8px;border:1px solid rgba(21,80,252,0.15);text-align:center;">
+          <div style="font-size:11px;font-weight:700;color:var(--color-primary);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.4px;">현지화 규칙</div>
+          <div style="font-size:11px;color:var(--color-body);line-height:1.6;">승인된 번역 쌍<br>국가별 규정준수<br>통화·단위 포맷</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scalability Beyond ePOP -->
+    <div data-aos="zoom-in" data-aos-delay="160">
+      <div class="section-label" style="margin-bottom:14px;">확장성 — ePOP을 넘어 전체 마케팅 채널로</div>
+      <div class="summary-banner" style="margin-bottom:0;">
+        <div class="summary-text">
+          이 <strong>'온톨로지 기반 동적 조립 엔진'</strong>은 매장 TV에만 머물지 않습니다.<br>
+          한번 구축하면 — <em>프로모션 이메일 · 삼성닷컴 배너 · 모바일 푸시</em> — 모든 채널에 그대로 적용.<br>
+          <strong>단일 엔진으로 삼성 전체 다국어 마케팅 자동화 플랫폼</strong>으로 확장됩니다.
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- SECTION EVO: EVOLUTION OF STRATEGY -->
+  <div class="section">
+    <div class="section-label" data-aos="fade-up">03+ — Strategy Evolution</div>
+    <h2 class="section-title" data-aos="fade-up" data-aos-delay="80">치열한 검증이 만든 무결점 3.0 아키텍처</h2>
+
+    <div class="insight accent" data-aos="fade-up" data-aos-delay="160" style="margin-bottom:36px;">
+      <div class="insight-title">3번의 비판, 3번의 진화</div>
+      <div class="insight-body">단순한 아이디어가 아닙니다. 실전에서 통할 수 있도록 치명적인 반론을 직접 만들고 해결하며 탄생한 무결점 전략입니다. 각 Layer는 <strong>초기 아이디어 → 치명적 비판 → 최종 솔루션</strong>의 사이클을 거쳐 완성됐습니다.</div>
+    </div>
+
+    <!-- EVO LAYER 1 -->
+    <div class="evo-block">
+      <div class="evo-block-label" data-aos="fade-up">Layer 1 — 네트워크 & 메모리 한계 돌파</div>
+      <div class="evo-steps">
+        <div class="evo-step idea" data-aos="fade-right" data-aos-delay="50">
+          <div class="evo-step-header idea-header">IDEA</div>
+          <div class="evo-step-title">초기 아이디어</div>
+          <div class="evo-step-body">무거운 영상 대신 <strong>2KB의 가벼운 JSON 데이터</strong>만 보내서 TV가 직접 화면을 그리게 하자. 메모리·해상도 문제 원천 해결.</div>
+        </div>
+        <div class="evo-arrow" data-aos="fade-in" data-aos-delay="150">→</div>
+        <div class="evo-step attack" data-aos="zoom-in" data-aos-delay="200">
+          <div class="evo-step-header attack-header">ATTACK</div>
+          <div class="evo-step-title">치명적 비판</div>
+          <div class="evo-step-body">제일기획의 고화질 배경 영상은 결국 다운받아야 하잖아? 영업시간에 수십 대의 TV가 동시에 영상을 다운받으면 <strong>매장 네트워크가 마비</strong>된다!</div>
+        </div>
+        <div class="evo-arrow" data-aos="fade-in" data-aos-delay="350">→</div>
+        <div class="evo-step solution" data-aos="fade-left" data-aos-delay="400">
+          <div class="evo-step-header solution-header">SOLVED</div>
+          <div class="evo-step-title">최종 솔루션 — Smart Night-time Caching</div>
+          <div class="evo-step-body">영업시간엔 네트워크 점유율 <strong>0%</strong>. 무거운 영상은 새벽 2시 자동 백그라운드 캐싱. 낮엔 2KB 텍스트만 실시간 전송 → 네트워크 부하 없이 <strong>100% 화질 보장</strong>.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EVO LAYER 2 -->
+    <div class="evo-block">
+      <div class="evo-block-label" data-aos="fade-up">Layer 2 — 개인정보 침해 없는 초정밀 타겟팅</div>
+      <div class="evo-steps">
+        <div class="evo-step idea" data-aos="fade-right" data-aos-delay="50">
+          <div class="evo-step-header idea-header">IDEA</div>
+          <div class="evo-step-title">초기 아이디어</div>
+          <div class="evo-step-body">카메라나 시간대 데이터로 고객의 연령·성별을 추측해서 <strong>맞춤형 광고</strong>를 띄우자.</div>
+        </div>
+        <div class="evo-arrow" data-aos="fade-in" data-aos-delay="150">→</div>
+        <div class="evo-step attack" data-aos="zoom-in" data-aos-delay="200">
+          <div class="evo-step-header attack-header">ATTACK</div>
+          <div class="evo-step-title">치명적 비판</div>
+          <div class="evo-step-body">카메라 인식은 심각한 <strong>개인정보 침해(Privacy Violation)</strong>! 시간대만으로 고객을 추측하는 건 부정확한 헛발질이다!</div>
+        </div>
+        <div class="evo-arrow" data-aos="fade-in" data-aos-delay="350">→</div>
+        <div class="evo-step solution" data-aos="fade-left" data-aos-delay="400">
+          <div class="evo-step-header solution-header">SOLVED</div>
+          <div class="evo-step-title">최종 솔루션 — Fact-Based Proxy Targeting</div>
+          <div class="evo-step-body">개인정보 대신 <strong>'절대 틀리지 않는 팩트'</strong>에 반응. 날씨, 매장 소음 밀도, <strong>실시간 재고 데이터("현재 3대 남음!")</strong>로 AI가 즉각 문구 조립 → 리스크 0%, 전환율 극대화.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EVO LAYER 3 -->
+    <div class="evo-block">
+      <div class="evo-block-label" data-aos="fade-up">Layer 3 — 유통사와의 채널 갈등 해결</div>
+      <div class="evo-steps">
+        <div class="evo-step idea" data-aos="fade-right" data-aos-delay="50">
+          <div class="evo-step-header idea-header">IDEA</div>
+          <div class="evo-step-title">초기 아이디어</div>
+          <div class="evo-step-body">TV 화면에 QR코드를 띄워서 고객이 스마트폰으로 <strong>삼성닷컴(D2C)</strong>에 접속해 결제하게 만들자.</div>
+        </div>
+        <div class="evo-arrow" data-aos="fade-in" data-aos-delay="150">→</div>
+        <div class="evo-step attack" data-aos="zoom-in" data-aos-delay="200">
+          <div class="evo-step-header attack-header">ATTACK</div>
+          <div class="evo-step-title">치명적 비판</div>
+          <div class="evo-step-body">베스트바이·코스트코가 자기 매장 손님을 삼성 온라인몰로 빼돌리는 걸 가만히 두겠어? <strong>당장 TV 전원 코드를 뽑아버릴걸!</strong></div>
+        </div>
+        <div class="evo-arrow" data-aos="fade-in" data-aos-delay="350">→</div>
+        <div class="evo-step solution" data-aos="fade-left" data-aos-delay="400">
+          <div class="evo-step-header solution-header">SOLVED</div>
+          <div class="evo-step-title">최종 솔루션 — Retailer-Aligned Routing</div>
+          <div class="evo-step-body">QR 스캔 시 삼성닷컴이 아닌 <strong>해당 유통사(베스트바이) 장바구니로 직결</strong> 또는 계산대 전용 바코드 발급. 삼성은 리테일 데이터, 유통사는 오프라인 매출 → <strong>완벽한 Win-Win</strong>.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: POSITIONING — MAESTRO ARCHITECTURE (v2) -->
+  <div class="section reveal">
+    <div class="section-label">04 — Competitive Positioning</div>
+    <h2 class="section-title">제일기획과의 포지셔닝 — The Maestro 아키텍처</h2>
+
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-title">핵심 메시지</div>
+      <div class="card-body" style="font-style:italic;font-size:14px;line-height:1.8;border-left:3px solid var(--color-primary);padding-left:16px;margin-top:10px;">
+        "ePOP의 목표는 <strong>'감동(호객)'</strong>과 <strong>'판매(구매 전환)'</strong>를 동시에 달성하는 것입니다. 제일기획의 영상이 고객의 발걸음을 멈추게 하는 <em>무대</em>라면, TecAce의 다이내믹 UI는 실제 지갑을 열게 만드는 <em>배우</em>입니다. 이 둘은 경쟁 관계가 아니라 — AI의 지휘 아래 완벽히 공생하는 삼성 역사상 최고의 마케팅 듀오입니다."
+      </div>
+    </div>
+
+    <div class="insight" style="margin-bottom:20px;">
+      <div class="insight-title">1+1=3을 만드는 레이어 분리 아키텍처</div>
+      <div class="insight-body">무대(배경)와 배우(UI)의 역할을 완벽하게 분리하여, 서로의 장점을 100% 끌어올립니다. 그 위에 AI 지휘자가 타이밍을 조율합니다.</div>
+    </div>
+
+    <div class="layer-card" style="margin-bottom:16px;">
+      <div class="layer-header" style="background:linear-gradient(90deg,rgba(107,114,128,0.08),rgba(107,114,128,0.01));">
+        <div class="layer-num" style="background:#6B7280;">BG</div>
+        <div class="layer-title-wrap">
+          <div class="layer-label">BACKGROUND LAYER</div>
+          <div class="layer-name">제일기획 — 거대 서사 / 브랜드 필름 담당</div>
+        </div>
+        <div style="margin-left:auto;"><span class="badge muted">프리미엄 콘텐츠</span></div>
+      </div>
+      <div class="layer-body">
+        <div class="card-body">수십억을 들여 제작한 <strong>고화질 4K/8K 프리미엄 브랜드 필름</strong>이 TV 화면 가장 밑바탕에서 완벽한 화질로 재생됩니다. TecAce는 제일기획의 원본 영상에 단 하나의 흠집도 내지 않으며, 그들의 기획 의도를 100% 보호합니다. 제일기획은 여전히 "삼성 브랜드의 감성 공급자" 포지션을 유지합니다.</div>
+      </div>
+    </div>
+
+    <div class="layer-card" style="margin-bottom:16px;">
+      <div class="layer-header">
+        <div class="layer-num">FG</div>
+        <div class="layer-title-wrap">
+          <div class="layer-label">FOREGROUND LAYER</div>
+          <div class="layer-name">TecAce — 다이내믹 UI / 구매 전환 담당</div>
+        </div>
+        <div style="margin-left:auto;"><span class="badge">실시간 렌더링</span></div>
+      </div>
+      <div class="layer-body">
+        <div class="card-body" style="margin-bottom:14px;">영상 위에 투명하게 얹혀 실제 <strong>'클로징(판매)'</strong>을 유도하는 다이내믹 UI. 단순한 정적 배너가 아닙니다 — 파티클 애니메이션과 함께 등장하는 QR코드, 스르륵 나타나는 가격표, 실시간 데이터 연동 프로모션이 전경에서 작동합니다. FW 레벨 접근이기 때문에 메모리·해상도 문제가 원천적으로 발생하지 않습니다.</div>
+        <div class="insight" style="margin:0;">
+          <div class="insight-title">TecAce 디자인팀의 역할 진화</div>
+          <div class="insight-body">단순 배너 제작 → <strong>'TV 화면 위에서 살아 숨 쉬는 모션 UI/UX 에셋 크리에이터'</strong>로 격상. 새로운 스킬셋과 크리에이티브 영역 확보.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layer-card" style="margin-bottom:24px;">
+      <div class="layer-header" style="background:linear-gradient(90deg,rgba(231,0,219,0.06),rgba(231,0,219,0.01));">
+        <div class="layer-num" style="background:var(--color-accent);">AI</div>
+        <div class="layer-title-wrap">
+          <div class="layer-label">THE MAESTRO</div>
+          <div class="layer-name">온톨로지 + 온디바이스 LLM — 천재 지휘자</div>
+        </div>
+        <div style="margin-left:auto;"><span class="badge accent">AI 오케스트레이션</span></div>
+      </div>
+      <div class="layer-body">
+        <div class="card-body" style="margin-bottom:16px;">언제, 어떤 UI를 화면에 올릴지 결정하고, 문구를 매장 상황에 맞게 자동 최적화하는 지휘 시스템.</div>
+        <div class="card-grid-3" style="margin-bottom:0;">
+          <div class="card" style="background:rgba(231,0,219,0.03);border-color:rgba(231,0,219,0.15);">
+            <div class="card-title" style="font-size:12px;color:var(--color-accent);">① 눈치채기 (Ontology)</div>
+            <div class="card-body" style="font-size:12px;">주변 소음 + 스마트폰 신호로 매장 상황 인식 <em>("주말 코스트코, 사람 많음")</em></div>
+          </div>
+          <div class="card" style="background:rgba(231,0,219,0.03);border-color:rgba(231,0,219,0.15);">
+            <div class="card-title" style="font-size:12px;color:var(--color-accent);">② 타이밍 계산 (Logic)</div>
+            <div class="card-body" style="font-size:12px;">제일기획 영상 클라이맥스 <strong>45초 지점</strong>에 맞춰 TecAce 특가 팝업 자동 등장</div>
+          </div>
+          <div class="card" style="background:rgba(231,0,219,0.03);border-color:rgba(231,0,219,0.15);">
+            <div class="card-title" style="font-size:12px;color:var(--color-accent);">③ 대사 작성 (LLM)</div>
+            <div class="card-body" style="font-size:12px;">LLM이 매장·언어에 맞춰 <strong>"오늘 코스트코 단독 특가!"</strong> 실시간 윤문·번역</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Maestro Visual Diagram -->
+    <div class="section-label" style="margin-bottom:14px;" data-aos="fade-up">The Maestro 아키텍처 — 레이어 구조 시각화</div>
+    <div class="maestro-diagram" data-aos="fade-up" data-aos-delay="80">
+      <div class="maestro-layer bg-l" data-aos="zoom-in" data-aos-delay="80">
+        <div class="mlayer-chip">Background</div>
+        <div class="mlayer-info">
+          <span class="mlayer-brand">제일기획</span>
+          <span class="mlayer-desc">4K/8K 프리미엄 브랜드 필름 · 감성 스토리텔링 · 새벽 자동 캐싱</span>
+        </div>
+        <div class="mlayer-mock"><strong style="font-size:11px;letter-spacing:0.3px;">4K/8K FILM</strong><br><span style="color:var(--color-muted);font-size:10px;">재생 중 (배경 레이어)</span></div>
+      </div>
+      <div class="maestro-connector">↓ 투명하게 오버레이</div>
+      <div class="maestro-layer fg-l" data-aos="zoom-in" data-aos-delay="220">
+        <div class="mlayer-chip">Foreground</div>
+        <div class="mlayer-info">
+          <span class="mlayer-brand">TecAce 다이내믹 UI</span>
+          <span class="mlayer-desc">QR코드 · 실시간 가격표 · 프로모션 팝업 · 파티클 애니메이션</span>
+        </div>
+        <div class="mlayer-mock"><strong style="font-size:11px;letter-spacing:0.3px;">QR · 가격 · 프로모션</strong><br><span style="color:var(--color-primary);font-size:10px;">다이내믹 오버레이</span></div>
+      </div>
+      <div class="maestro-connector">↓ AI가 타이밍·문구 지휘</div>
+      <div class="maestro-layer ai-l" data-aos="zoom-in" data-aos-delay="360">
+        <div class="mlayer-chip">The Maestro</div>
+        <div class="mlayer-info">
+          <span class="mlayer-brand">온톨로지 + 온디바이스 LLM</span>
+          <span class="mlayer-desc">상황 인식 → 타이밍 계산 → 문구 실시간 최적화</span>
+        </div>
+        <div class="mlayer-mock"><strong style="font-size:11px;letter-spacing:0.3px;">TIMING · COPY · CONTEXT</strong><br><span style="color:var(--color-accent);font-size:10px;">AI 실시간 지휘</span></div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-bottom:12px;" data-aos="fade-up">이해관계자 상생 구조 (Win-Win-Win)</div>
+    <div class="tbl-wrap" style="margin-bottom:20px;">
+      <table>
+        <thead>
+          <tr><th>이해관계자</th><th>우려사항</th><th>Maestro 아키텍처의 해답</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>제일기획</strong></td>
+            <td>"우리 영상을 훼손하거나 우리 자리를 빼앗는 것 아닌가?"</td>
+            <td><span class="badge success" style="font-size:10px;margin-right:6px;">불만 제로</span>"여러분의 훌륭한 영상이 실제 판매로 이어지도록 타이밍에 맞춰 돋보이게 포장해 드립니다."</td>
+          </tr>
+          <tr>
+            <td><strong>삼성 VD 임원</strong></td>
+            <td>"시스템이 무거워져서 TV가 버벅거리면 어떡하나?"</td>
+            <td><span class="badge success" style="font-size:10px;margin-right:6px;">부하 제로</span>"영상(배경)과 데이터(UI)의 처리 경로가 완전히 분리 — 시스템 충돌·화질 저하 없음."</td>
+          </tr>
+          <tr>
+            <td><strong>삼성 브랜드팀</strong></td>
+            <td>"AI가 이상한 문구를 띄우면 브랜드 이미지 망치는데?"</td>
+            <td><span class="badge success" style="font-size:10px;margin-right:6px;">리스크 제로</span>"사전 결재된 브랜드 가이드라인 내에서만 AI가 문구 조정 — 100% 브랜드 안전."</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="summary-banner" style="margin-bottom:20px;">
+      <div class="summary-text">
+        TecAce의 새로운 포지션: 단순한 <strong>'펌웨어 납품자'</strong>에서 벗어나 — 제일기획의 콘텐츠를 실제 매출로 치환시키는 <em style="color:#f9a8d4;">Retail Tech Platform Operator</em>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">커뮤니케이션 톤 가이드</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+        <div style="font-size:12px;padding:10px;background:rgba(244,63,94,0.05);border-radius:8px;border:1px solid rgba(244,63,94,0.15);">
+          <div style="font-weight:700;color:#f43f5e;margin-bottom:4px;font-size:11px;text-transform:uppercase;letter-spacing:0.4px;">피해야 할 표현</div>
+          <div style="color:var(--color-body);line-height:1.7;">"에이전시의 한계" × <br>"제일기획이 못하는 것" × <br>메모리/해상도 문제 직접 언급 ×</div>
+        </div>
+        <div style="font-size:12px;padding:10px;background:rgba(16,185,129,0.05);border-radius:8px;border:1px solid rgba(16,185,129,0.15);">
+          <div style="font-weight:700;color:#10b981;margin-bottom:4px;font-size:11px;text-transform:uppercase;letter-spacing:0.4px;">사용할 표현</div>
+          <div style="color:var(--color-body);line-height:1.7;">"역할의 차이" ✓ <br>"FW 파트너만 할 수 있는 것" ✓ <br>"콘텐츠 전송 방식의 구조적 한계" ✓</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: SAMSUNG KEYMEN -->
+  <div class="section reveal">
+    <div class="section-label" data-aos="fade-up" data-i18n="s5_label">05 — Key Person Strategy</div>
+    <h2 class="section-title" data-aos="fade-up" data-aos-delay="80" data-i18n="s5_title">삼성 내부 키맨 접근 전략</h2>
+
+    <div class="track-grid">
+      <div class="track-card a">
+        <div class="track-label">Track A</div>
+        <div class="track-name" data-i18n="track_a_name">TIZEN팀 실무 리더 (기술 의사결정)</div>
+        <div class="track-goal" data-i18n="track_a_goal">목표</div>
+        <div class="track-item" data-i18n="track_a_goal_d">"TecAce의 기술이 현재 테스트의 문제를 풀 수 있다"는 확신 심기</div>
+        <div class="track-goal" style="margin-top:10px;" data-i18n="track_a_how">접근 방법</div>
+        <div class="track-item" data-i18n="track_a_1">5~6월 비공식 기술 데모 요청. "27년 ePOP FW 협의" 명분으로 미팅 세팅</div>
+        <div class="track-item" data-i18n="track_a_2">데모: JSON 렌더링 vs 이미지 전송 메모리 비교 + 네트워크 불안정 환경 배포 + 다이내믹 QR 프로토타입</div>
+        <div class="track-msg" data-i18n="track_a_msg">"현재 테스트 중인 CMS 방식의 메모리 문제, 이 아키텍처로 원천 해결됩니다"</div>
+      </div>
+      <div class="track-card b">
+        <div class="track-label">Track B</div>
+        <div class="track-name" data-i18n="track_b_name">VD사업부 임원 (예산 의사결정)</div>
+        <div class="track-goal" data-i18n="track_b_goal">목표</div>
+        <div class="track-item" data-i18n="track_b_goal_d">"ePOP의 ROI를 측정 가능하게 만드는 유일한 솔루션"이라는 비즈니스 가치 어필</div>
+        <div class="track-goal" style="margin-top:10px;" data-i18n="track_b_how">접근 방법</div>
+        <div class="track-item" data-i18n="track_b_1">7월 비딩 직전 경영진 브리핑 요청. "ePOP 진화 방향 제안"으로 포지셔닝</div>
+        <div class="track-item" data-i18n="track_b_2">자료: Best Buy/Costco 5개 브랜드 벤치마크 + O2O 전환율 시뮬레이션 + 리테일 광고 플랫폼 수익 모델</div>
+        <div class="track-msg" data-i18n="track_b_msg">"ePOP이 비용 센터에서 수익 센터로 전환될 수 있습니다. 그 열쇠는 구매 전환 데이터입니다."</div>
+      </div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="card" style="margin-top:20px;">
+      <div class="card-title" style="margin-bottom:20px;" data-i18n="timeline_t">타이밍 시퀀스</div>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">4~5월</div><div class="tl-title" data-i18n="tl1_t">PoC 고도화</div><div class="tl-body" data-i18n="tl1">JSON 렌더링 + 다이내믹 QR 프로토타입 고도화</div></div>
+        <div class="tl-item"><div class="tl-dot" style="background:var(--color-primary);"></div><div class="tl-time">5~6월</div><div class="tl-title" data-i18n="tl2_t">Track A 실행</div><div class="tl-body" data-i18n="tl2">TIZEN팀 비공식 데모 — 기술 확신 심기</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">6~7월</div><div class="tl-title" data-i18n="tl3_t">비딩 제안서 완성</div><div class="tl-body" data-i18n="tl3">데모 피드백 반영 → 제안서 고도화</div></div>
+        <div class="tl-item"><div class="tl-dot" style="background:var(--color-accent);"></div><div class="tl-time">7월</div><div class="tl-title" data-i18n="tl4_t">Track B 실행</div><div class="tl-body" data-i18n="tl4">VD 임원 브리핑 — 비즈니스 가치 어필</div></div>
+        <div class="tl-item"><div class="tl-dot" style="background:#10b981;"></div><div class="tl-time">8~9월</div><div class="tl-title" data-i18n="tl5_t">공식 비딩 참여</div><div class="tl-body" data-i18n="tl5">New ePOP 기술 파트너 선점</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: PROPOSAL UPGRADE -->
+  <div class="section reveal">
+    <div class="section-label" data-aos="fade-up" data-i18n="s6_label">06 — Proposal Upgrade</div>
+    <h2 class="section-title" data-aos="fade-up" data-aos-delay="80" data-i18n="s6_title">제안서 업그레이드 방향</h2>
+
+    <div class="card-grid-2">
+      <div class="card">
+        <div class="card-title" data-i18n="s6_add_t">추가할 섹션</div>
+        <div style="margin-top:10px;">
+          <div style="padding:8px 0;border-bottom:1px solid var(--color-card-border);font-size:13px;"><span class="badge" style="font-size:10px;margin-right:8px;">NEW</span><strong data-i18n="add1">하이브리드 AI 아키텍처</strong></div>
+          <div style="padding:8px 0;border-bottom:1px solid var(--color-card-border);font-size:13px;"><span class="badge" style="font-size:10px;margin-right:8px;">NEW</span><strong data-i18n="add2">Semantic ePOP Assembly</strong></div>
+          <div style="padding:8px 0;border-bottom:1px solid var(--color-card-border);font-size:13px;"><span class="badge" style="font-size:10px;margin-right:8px;">NEW</span><strong data-i18n="add3">O2O 구매 전환</strong></div>
+          <div style="padding:8px 0;border-bottom:1px solid var(--color-card-border);font-size:13px;"><span class="badge" style="font-size:10px;margin-right:8px;">NEW</span><strong data-i18n="add4">역할 분리 모델</strong></div>
+          <div style="padding:8px 0;font-size:13px;"><span class="badge accent" style="font-size:10px;margin-right:8px;">CORE</span><strong>Brand-Safe AI Localizer</strong></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" data-i18n="s6_str_t">강조할 기존 강점</div>
+        <div style="margin-top:10px;">
+          <div style="padding:8px 0;border-bottom:1px solid var(--color-card-border);font-size:13px;"><span class="badge muted" style="font-size:10px;margin-right:8px;">4Y+</span>ePOP FW 개발 실적 (14종+ 제작)</div>
+          <div style="padding:8px 0;border-bottom:1px solid var(--color-card-border);font-size:13px;"><span class="badge muted" style="font-size:10px;margin-right:8px;">DONE</span>무선 AP 기반 배포 기술 검증 완료</div>
+          <div style="padding:8px 0;font-size:13px;"><span class="badge muted" style="font-size:10px;margin-right:8px;">PoC</span>TLP Banner CMS 프로토타입 보유</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight" style="margin-top:16px;">
+      <div class="insight-title" data-i18n="s6_tone_t">톤 전환 (핵심)</div>
+      <div class="insight-body">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:13px;">
+          <span style="color:#f43f5e;font-weight:600;" data-i18n="s6_old">기존:</span>
+          <span data-i18n="s6_old_d">"ODM 파트너에게 배포 도구를 제공합니다" → <em>도구 납품자</em></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;font-size:13px;">
+          <span style="color:#10b981;font-weight:600;" data-i18n="s6_new">변경:</span>
+          <span data-i18n="s6_new_d">"ePOP을 구매 전환 플랫폼으로 재정의하고, 그 기술 인프라를 운영합니다" → <strong>플랫폼 운영자</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: RISKS -->
+  <div class="section reveal">
+    <div class="section-label" data-aos="fade-up" data-i18n="s7_label">07 — Risk Management</div>
+    <h2 class="section-title" data-aos="fade-up" data-aos-delay="80" data-i18n="s7_title">리스크와 대응</h2>
+    <div class="risk-grid">
+      <div class="risk-card">
+        <div class="risk-num">1</div>
+        <div>
+          <div class="risk-title" data-i18n="risk1_t">제일기획이 비딩 전까지 메모리/해상도 문제를 해결할 경우</div>
+          <div class="risk-body" data-i18n="risk1">기술 경쟁에서 일부 격차가 줄어들 수 있다.</div>
+          <div class="risk-response"><strong data-i18n="resp">대응:</strong> <span data-i18n="risk1_resp">해결하더라도 "콘텐츠 전송" 방식은 근본적으로 온톨로지 기반 동적 조립이나 O2O 전환을 구현할 수 없다. 기능 범위에서 여전히 TecAce 우위.</span></div>
+        </div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-num">2</div>
+        <div>
+          <div class="risk-title" data-i18n="risk2_t">삼성이 제일기획에게 단독 발주할 경우</div>
+          <div class="risk-body" data-i18n="risk2">단일 파트너로 선정될 가능성.</div>
+          <div class="risk-response"><strong data-i18n="resp2">대응:</strong> <span data-i18n="risk2_resp">Track A에서 TIZEN팀이 기술적 한계를 인식하도록 사전 작업. "기술 파트너"로서 제일기획과 병행 투입되는 구조를 제안.</span></div>
+        </div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-num">3</div>
+        <div>
+          <div class="risk-title" data-i18n="risk3_t">온디바이스 LLM/온톨로지가 비딩 시점까지 PoC 수준에 미달할 경우</div>
+          <div class="risk-body" data-i18n="risk3">AI 기능 완성도가 시연 수준에 미치지 못할 수 있다.</div>
+          <div class="risk-response"><strong data-i18n="resp3">대응:</strong> <span data-i18n="risk3_resp">Phase A(JSON 렌더링)만으로도 충분히 경쟁력 있음. AI는 로드맵으로만 제시하고, 즉시 시연 가능한 것(네트워크 배포 + 템플릿 렌더링 + 다이내믹 QR)에 집중.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 8: SUMMARY -->
+  <div class="section reveal">
+    <div class="section-label" data-aos="fade-up" data-i18n="s8_label">08 — One Line Summary</div>
+    <h2 class="section-title" data-aos="fade-up" data-aos-delay="80" data-i18n="s8_title">한 문장 요약</h2>
+    <div class="summary-banner">
+      <div class="summary-text" data-i18n="summary">
+        "<strong>제일기획이 4K 영상을 밀어 넣다 메모리 벽에 부딪힌 지금</strong>, TecAce는 <em>2KB JSON과 온디바이스 AI</em>로 그 벽을 우회하고, <strong>업계 최초로 매장 TV를 구매 전환 플랫폼으로 만든다.</strong>"
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <span>TecAce — CONFIDENTIAL</span>
+  <span data-i18n="footer_copy">© 2026 TecAce. 본 문서는 내부 전략 리뷰 목적으로만 사용됩니다.</span>
+  <span>ePOP 2027 Strategy</span>
+</div>
+
+<!-- VISUAL EDITOR -->
+<button class="ve-fab" onclick="toggleEditor()" data-i18n="ve_btn">편집 모드</button>
+<div class="ve-panel" id="vePanel">
+  <h4 data-i18n="ve_title">Visual Editor</h4>
+  <div class="ve-row">
+    <div class="ve-label" data-i18n="ve_primary">Primary Color</div>
+    <input type="color" id="vePrimary" value="#1550FC" oninput="applyColor('--color-primary', this.value)">
+  </div>
+  <div class="ve-row">
+    <div class="ve-label" data-i18n="ve_accent">Accent Color</div>
+    <input type="color" id="veAccent" value="#E700DB" oninput="applyColor('--color-accent', this.value)">
+  </div>
+  <div class="ve-row">
+    <div class="ve-label" data-i18n="ve_font">Font Size (Body)</div>
+    <input type="range" id="veFontSize" min="12" max="20" value="15" oninput="document.body.style.fontSize=this.value+'px'">
+  </div>
+  <div class="ve-row">
+    <div class="ve-label" data-i18n="ve_edit">Click-to-Edit Mode</div>
+    <button class="ve-btn" id="editModeBtn" onclick="toggleEditMode()" data-i18n="ve_edit_on">편집 모드 켜기</button>
+  </div>
+  <button class="ve-btn" onclick="downloadHTML()" data-i18n="ve_dl">HTML 다운로드</button>
+</div>
+
+<script>
+// i18n
+var LANG = {
+  ko: {
+    lang_btn: 'English', nav_title: 'ePOP 2027 전략 기획서', badge: 'STRATEGY BRIEF',
+    title: 'Next ePOP 주도권 확보<br><span style="color:rgba(255,255,255,0.5);font-size:0.65em;font-weight:300;">제일기획이 풀지 못한 벽을 우회하라</span>',
+    subtitle: 'TecAce ePOP 2027 경영진 전략 리뷰 | New ePOP 기술 파트너 선점 전략',
+    meta_date: 'Date', meta_status: 'Status', meta_status_val: '내부 경영진 전략 리뷰용',
+    meta_bid: '비딩 일정', meta_bid_val: '8~9월 예정', meta_window: '기회 창', meta_window_val: '결정적 타이밍 — 지금',
+    s1_label: '01 — Situation Assessment', s1_title: '상황 인식',
+    s1_know: '우리가 아는 것', s1_intel: '핵심 인텔',
+    intel_bad: '문제 발생', intel_bid: '비딩', intel_last: '마지막', intel_align: '유사',
+    s1_impl_title: '이것이 의미하는 바', s1_impl: '제일기획이 구조적 기술 한계에 부딪힌 상태에서 비딩이 5개월 앞으로 다가왔다. 이 창(window)은 TecAce가 4년간 쌓은 FW 역량 + AI 기술 차별화로 <strong>"New ePOP의 기술 파트너"를 선점할 수 있는 결정적 타이밍</strong>이다.',
+    s2_label: '02 — Competitor Analysis', s2_title: '제일기획의 구조적 약점 분석',
+    s2_core_title: '문제의 근본 원인', s2_core: '제일기획의 접근 = "완성된 4K 콘텐츠를 CMS에서 TV로 전송" → 이 방식은 구조적으로 해결 불가능한 3가지 문제를 내포한다.',
+    weak1_t: '메모리 과부하', weak1: '고해상도 영상/이미지를 TV 인터널 스토리지에 저장 필요. TV 내장 메모리(8~16GB, 가용 2~4GB)로는 다수의 ePOP 콘텐츠 수용 불가.',
+    weak2_t: '해상도 깨짐', weak2: 'FHD/4K/8K 패널 대응 시 해상도별 리소스 각각 필요. CMS 단일 리소스 → 스케일링 과정 화질 열화 발생.',
+    weak3_t: '배포 속도 제약', weak3: '콘텐츠 용량 大 → 네트워크 전송 시간 증가. 매장 Wi-Fi 환경에서 안정적 전송 보장 불가.',
+    s2_why_title: '왜 에이전시로서는 풀 수 없는가', s2_why: '제일기획은 "콘텐츠를 만드는 회사"이지, "TV 펌웨어를 다루는 회사"가 아니다. 메모리 최적화, 네이티브 렌더링, TV 하드웨어 자원 관리는 펌웨어 레벨의 역량이 필요하다. <strong>이것이 TecAce만의 영역이다.</strong>',
+    s3_label: '03 — Asymmetric Strategy', s3_title: 'TecAce의 비대칭 전략 — 3개 Layer',
+    l1_label: 'Hybrid AI Rendering', l1_name: '하이브리드 AI 렌더링', l1_badge: '영상 대신 데이터를 전송',
+    l1_desc: '서버에서 초경량 데이터(JSON 구조체 + 텍스트 + 에셋 참조)만 전송하고, TV 내부에서 이를 해석하여 화면을 실시간 렌더링. TV에 탑재된 경량 언어 모델(SLM)이 수신 데이터를 해석하여 최적 레이아웃과 문구 배치를 결정, 네이티브 UI로 렌더링한다.',
+    ph_a_t: '즉시 가능', ph_a: 'JSON 기반 템플릿 렌더링 엔진. LLM 없이도 현재 FW 역량으로 구현. 이것만으로도 메모리/해상도 문제 해결.',
+    ph_b_t: '3~6개월', ph_b: 'SLM 기반 지능형 렌더링. 경량 모델이 레이아웃 자동 최적화, 문구 자동 현지화, 컨텍스트 기반 UI 배치 수행.',
+    ph_c_t: '6~12개월', ph_c: '완전 자율 렌더링. 온디바이스 LLM이 매장 환경, 시간대, 고객 행동 패턴까지 반영한 동적 콘텐츠 생성.',
+    cmp_item: '항목', cmp_cheil: '제일기획 (콘텐츠 전송)', cmp_tecace: 'TecAce (데이터 전송 + 렌더링)',
+    cmp_r1: '전송 데이터', cmp_r2: 'TV 메모리 점유', cmp_r3: '해상도 대응', cmp_r4: '매장 Wi-Fi 의존도', cmp_r5: '오프라인 동작',
+    l2_label: 'Semantic ePOP Assembly', l2_name: '세일즈 지식 그래프 기반 동적 조립', l2_badge: '온톨로지 기반 추론',
+    l2_desc: '제품 스펙, 타겟 고객 프로필, 매장 위치, 프로모션 조건, 시간대 등의 관계를 지식 그래프로 구축. 이 관계망을 기반으로 시스템이 스스로 추론하여 "지금, 이 매장에서, 이 고객에게, 가장 효과적인 화면"을 자동 조립.',
+    scenario_label: '구체적 시나리오', scenario_input: '입력: 토요일 오후 3시 + 코스트코 시애틀점 + Neo QLED 85인치 진열대',
+    scenario_logic: '온톨로지 추론: 주말 오후 → 가족 단위 방문 높음 + 코스트코 → 번들 딜 선호 + Neo QLED 85 → 프리미엄 세그먼트',
+    scenario_out: '출력: 가족 시청 시나리오 배너 + 사운드바 번들 프로모션 + 24개월 무이자 QR코드',
+    impl_step: '단계', impl_content: '내용', impl_timing: '시점',
+    impl_1: '1단계 — 룰 기반 매칭', impl_1d: '사전 정의된 조건-결과 매핑 테이블. "매장 유형 × 제품 카테고리 × 프로모션 유형" 조합 세팅', now: '즉시 가능',
+    impl_2: '2단계 — 지식 그래프 기반 추론', impl_2d: '제품-고객-매장 관계를 그래프 DB로 구축. 새로운 조건 조합에도 추론 기반 콘텐츠 조립',
+    impl_3: '3단계 — 학습 기반 최적화', impl_3d: '배포 후 성과 데이터(QR 스캔율, 체류 시간)를 피드백하여 조립 로직 자동 개선',
+    l3_name: 'O2O 구매 전환', l3_badge: '업계 최초',
+    l3_desc: 'Best Buy와 Costco에서 5개 브랜드 현장 조사 결과 — 전 브랜드에 구매 전환 장치가 전무하다. TecAce는 업계 최초로 매장 TV에서 직접 구매 전환을 만든다.',
+    brand_col: '브랜드', epop_col: 'ePOP 화면 활용', qr_col: 'QR 코드', mobile_col: '모바일 연동',
+    partial: '일부 활용', partial2: '일부 활용', partial3: '일부 활용', full: '전체 활용', full2: '전체 활용',
+    none: '없음', none2: '없음', none3: '없음', none4: '없음', none5: '없음', none6: '없음', none7: '없음', none8: '없음', none9: '없음', none10: '없음',
+    l3_impact_t: '비즈니스 임팩트', l3_impact: 'ePOP을 "콘텐츠 디스플레이"에서 <strong>"구매 전환 플랫폼"으로 재정의</strong>. 삼성에게는 리테일 매장 전환율을 측정 가능하게 만드는 최초의 도구. 이 데이터는 향후 리테일 광고 플랫폼으로 확장하는 기반이 된다.',
+    s4_label: '04 — Competitive Positioning', s4_title: '제일기획과의 포지셔닝 — 적이 아닌 역할 분리',
+    s4_msg_t: '메시지 구조', s4_msg: '"제일기획의 역할은 브랜드 스토리텔링입니다. 그들이 만든 프리미엄 브랜드 필름은 ePOP의 Background 콘텐츠로 최적입니다. TecAce의 역할은 그 위에서 작동하는 기술 인프라입니다. 로컬 맞춤형 프로모션 조립, 실시간 렌더링, 구매 전환 연결 — 이것은 FW 레벨에서만 가능한 일이며, 에이전시의 영역이 아닙니다."',
+    cheil_role: '제일기획 → 콘텐츠 공급자 (Supplier)', cheil_role_d: '브랜드 스토리텔링, 프리미엄 브랜드 필름 제작. ePOP의 Background 콘텐츠 공급자 역할로 포지션 변환.',
+    tecace_role: 'TecAce → 플랫폼 운영자 (Operator)', tecace_role_d: '기술 인프라 운영. 로컬 맞춤 프로모션 조립 + 실시간 렌더링 + 구매 전환 연결. 실질적 주도권 보유.',
+    tone_t: '커뮤니케이션 톤 가이드', avoid: '피해야 할 표현', avoid_d: '"에이전시의 한계" × <br>"제일기획이 못하는 것" × <br>메모리/해상도 문제 직접 언급 ×',
+    use: '사용할 표현', use_d: '"역할의 차이" ✓ <br>"FW 파트너만 할 수 있는 것" ✓ <br>"콘텐츠 전송 방식의 구조적 한계" ✓',
+    s5_label: '05 — Key Person Strategy', s5_title: '삼성 내부 키맨 접근 전략',
+    track_a_name: 'TIZEN팀 실무 리더 (기술 의사결정)', track_a_goal: '목표', track_a_goal_d: '"TecAce의 기술이 현재 테스트의 문제를 풀 수 있다"는 확신 심기',
+    track_a_how: '접근 방법', track_a_1: '5~6월 비공식 기술 데모 요청. "27년 ePOP FW 협의" 명분으로 미팅 세팅',
+    track_a_2: '데모: JSON 렌더링 vs 이미지 전송 메모리 비교 + 네트워크 불안정 환경 배포 + 다이내믹 QR 프로토타입',
+    track_a_msg: '"현재 테스트 중인 CMS 방식의 메모리 문제, 이 아키텍처로 원천 해결됩니다"',
+    track_b_name: 'VD사업부 임원 (예산 의사결정)', track_b_goal: '목표', track_b_goal_d: '"ePOP의 ROI를 측정 가능하게 만드는 유일한 솔루션"이라는 비즈니스 가치 어필',
+    track_b_how: '접근 방법', track_b_1: '7월 비딩 직전 경영진 브리핑 요청. "ePOP 진화 방향 제안"으로 포지셔닝',
+    track_b_2: '자료: Best Buy/Costco 5개 브랜드 벤치마크 + O2O 전환율 시뮬레이션 + 리테일 광고 플랫폼 수익 모델',
+    track_b_msg: '"ePOP이 비용 센터에서 수익 센터로 전환될 수 있습니다. 그 열쇠는 구매 전환 데이터입니다."',
+    timeline_t: '타이밍 시퀀스', tl1_t: 'PoC 고도화', tl1: 'JSON 렌더링 + 다이내믹 QR 프로토타입 고도화',
+    tl2_t: 'Track A 실행', tl2: 'TIZEN팀 비공식 데모 — 기술 확신 심기',
+    tl3_t: '비딩 제안서 완성', tl3: '데모 피드백 반영 → 제안서 고도화',
+    tl4_t: 'Track B 실행', tl4: 'VD 임원 브리핑 — 비즈니스 가치 어필',
+    tl5_t: '공식 비딩 참여', tl5: 'New ePOP 기술 파트너 선점',
+    s6_label: '06 — Proposal Upgrade', s6_title: '제안서 업그레이드 방향',
+    s6_add_t: '추가할 섹션', add1: '하이브리드 AI 아키텍처', add2: 'Semantic ePOP Assembly', add3: 'O2O 구매 전환', add4: '역할 분리 모델',
+    s6_str_t: '강조할 기존 강점',
+    s6_tone_t: '톤 전환 (핵심)', s6_old: '기존:', s6_old_d: '"ODM 파트너에게 배포 도구를 제공합니다" → 도구 납품자',
+    s6_new: '변경:', s6_new_d: '"ePOP을 구매 전환 플랫폼으로 재정의하고, 그 기술 인프라를 운영합니다" → <strong>플랫폼 운영자</strong>',
+    s7_label: '07 — Risk Management', s7_title: '리스크와 대응',
+    risk1_t: '제일기획이 비딩 전까지 메모리/해상도 문제를 해결할 경우', risk1: '기술 경쟁에서 일부 격차가 줄어들 수 있다.',
+    resp: '대응:', risk1_resp: '해결하더라도 "콘텐츠 전송" 방식은 근본적으로 온톨로지 기반 동적 조립이나 O2O 전환을 구현할 수 없다. 기능 범위에서 여전히 TecAce 우위.',
+    risk2_t: '삼성이 제일기획에게 단독 발주할 경우', risk2: '단일 파트너로 선정될 가능성.',
+    resp2: '대응:', risk2_resp: 'Track A에서 TIZEN팀이 기술적 한계를 인식하도록 사전 작업. "기술 파트너"로서 제일기획과 병행 투입되는 구조를 제안.',
+    risk3_t: '온디바이스 LLM/온톨로지가 비딩 시점까지 PoC 수준에 미달할 경우', risk3: 'AI 기능 완성도가 시연 수준에 미치지 못할 수 있다.',
+    resp3: '대응:', risk3_resp: 'Phase A(JSON 렌더링)만으로도 충분히 경쟁력 있음. AI는 로드맵으로만 제시하고, 즉시 시연 가능한 것(네트워크 배포 + 템플릿 렌더링 + 다이내믹 QR)에 집중.',
+    s8_label: '08 — One Line Summary', s8_title: '한 문장 요약',
+    summary: '"<strong>제일기획이 4K 영상을 밀어 넣다 메모리 벽에 부딪힌 지금</strong>, TecAce는 <em>2KB JSON과 온디바이스 AI</em>로 그 벽을 우회하고, <strong>업계 최초로 매장 TV를 구매 전환 플랫폼으로 만든다.</strong>"',
+    footer_copy: '© 2026 TecAce. 본 문서는 내부 전략 리뷰 목적으로만 사용됩니다.',
+    ve_btn: '편집 모드', ve_title: 'Visual Editor', ve_primary: 'Primary Color', ve_accent: 'Accent Color',
+    ve_font: 'Font Size (Body)', ve_edit: 'Click-to-Edit Mode', ve_edit_on: '편집 모드 켜기', ve_dl: 'HTML 다운로드'
+  },
+  en: {
+    lang_btn: '한국어', nav_title: 'ePOP 2027 Strategy Brief', badge: 'STRATEGY BRIEF',
+    title: 'Securing Next ePOP Leadership<br><span style="color:rgba(255,255,255,0.5);font-size:0.65em;font-weight:300;">Bypassing the Wall Cheil Couldn\'t Break</span>',
+    subtitle: 'TecAce ePOP 2027 Executive Strategy Review | Securing New ePOP Tech Partner Position',
+    meta_date: 'Date', meta_status: 'Status', meta_status_val: 'Internal Executive Review',
+    meta_bid: 'Bid Schedule', meta_bid_val: 'Aug~Sep Planned', meta_window: 'Window', meta_window_val: 'Critical Timing — Now',
+    s1_label: '01 — Situation Assessment', s1_title: 'Situation Assessment',
+    s1_know: 'What We Know', s1_intel: 'Key Intel',
+    intel_bad: 'Problem', intel_bid: 'Bidding', intel_last: 'Last Ver.', intel_align: 'Aligned',
+    s1_impl_title: 'What This Means', s1_impl: 'With Cheil hitting structural technical limits and the bid just 5 months away, this is the decisive window for TecAce to secure the position of <strong>"New ePOP Tech Partner"</strong> using 4 years of FW capabilities + AI differentiation.',
+    s2_label: '02 — Competitor Analysis', s2_title: 'Structural Weaknesses of Cheil',
+    s2_core_title: 'Root Cause', s2_core: 'Cheil\'s approach = "Push completed 4K content from CMS to TV" → This inherently causes 3 structurally unsolvable problems.',
+    weak1_t: 'Memory Overload', weak1: 'High-res video/images must be stored on TV internal storage. With only 2~4GB available after system usage, multiple ePOP contents cannot be accommodated.',
+    weak2_t: 'Resolution Degradation', weak2: 'FHD/4K/8K panels each need separate resources. Pushing a single CMS resource causes quality degradation during scaling.',
+    weak3_t: 'Deployment Speed Limit', weak3: 'Large content = longer network transfer time. Stable transfer cannot be guaranteed on store Wi-Fi.',
+    s2_why_title: 'Why Agencies Cannot Solve This', s2_why: 'Cheil is a "content creation company," not a "TV firmware company." Memory optimization, native rendering, and TV hardware resource management require firmware-level capabilities. <strong>This is TecAce\'s exclusive territory.</strong>',
+    s3_label: '03 — Asymmetric Strategy', s3_title: 'TecAce\'s Asymmetric Strategy — 3 Layers',
+    l1_label: 'Hybrid AI Rendering', l1_name: 'Hybrid AI Rendering', l1_badge: 'Send Data, Not Video',
+    l1_desc: 'Instead of sending completed video/images, TecAce transmits ultra-lightweight data (JSON + text + asset references) from the server, then renders the screen in real-time inside the TV. An SLM embedded in the TV interprets received data and decides layout/copy placement, rendering natively.',
+    ph_a_t: 'Immediate', ph_a: 'JSON-based template rendering engine. Implementable with current FW capabilities without LLM. This alone solves the memory/resolution problem.',
+    ph_b_t: '3~6 Months', ph_b: 'SLM-based intelligent rendering. Lightweight model handles auto layout optimization, auto localization, and context-based UI placement.',
+    ph_c_t: '6~12 Months', ph_c: 'Fully autonomous rendering. On-device LLM generates dynamic content reflecting store environment, time of day, and customer behavior patterns.',
+    cmp_item: 'Item', cmp_cheil: 'Cheil (Content Transfer)', cmp_tecace: 'TecAce (Data Transfer + Rendering)',
+    cmp_r1: 'Transfer Data', cmp_r2: 'TV Memory Usage', cmp_r3: 'Resolution Support', cmp_r4: 'Store Wi-Fi Dependency', cmp_r5: 'Offline Operation',
+    l2_label: 'Semantic ePOP Assembly', l2_name: 'Knowledge Graph-Based Dynamic Assembly', l2_badge: 'Ontology-Based Inference',
+    l2_desc: 'Build a knowledge graph of product specs, target customer profiles, store location, promotion conditions, and time. Based on this network, the system autonomously infers and assembles "the most effective screen for this customer, in this store, right now."',
+    scenario_label: 'Concrete Scenario', scenario_input: 'Input: Saturday 3PM + Costco Seattle + Neo QLED 85" display',
+    scenario_logic: 'Ontology: Weekend afternoon → family visits high + Costco → bundle deal preference + Neo QLED 85 → premium segment',
+    scenario_out: 'Output: Family viewing scenario banner + Soundbar bundle promo + 24-month 0% financing QR code',
+    impl_step: 'Phase', impl_content: 'Content', impl_timing: 'Timing',
+    impl_1: 'Phase 1 — Rule-Based Matching', impl_1d: 'Pre-defined condition-result mapping table. Preset combinations of "Store Type × Product Category × Promotion Type"', now: 'Immediate',
+    impl_2: 'Phase 2 — Knowledge Graph Inference', impl_2d: 'Build product-customer-store relationships in graph DB. Inference-based content assembly for new condition combinations',
+    impl_3: 'Phase 3 — Learning-Based Optimization', impl_3d: 'Feed back performance data (QR scan rate, dwell time) to auto-improve assembly logic',
+    l3_name: 'O2O Purchase Conversion', l3_badge: 'Industry First',
+    l3_desc: 'Field research at Best Buy & Costco across 5 brands reveals zero purchase conversion tools industry-wide. TecAce creates the first direct purchase conversion from in-store TVs.',
+    brand_col: 'Brand', epop_col: 'ePOP Usage', qr_col: 'QR Code', mobile_col: 'Mobile Integration',
+    partial: 'Partial', partial2: 'Partial', partial3: 'Partial', full: 'Full Screen', full2: 'Full Screen',
+    none: 'None', none2: 'None', none3: 'None', none4: 'None', none5: 'None', none6: 'None', none7: 'None', none8: 'None', none9: 'None', none10: 'None',
+    l3_impact_t: 'Business Impact', l3_impact: 'Redefines ePOP from "content display" to <strong>"purchase conversion platform."</strong> The first tool for Samsung to measure retail conversion rates. This data becomes the foundation for expanding into a retail advertising platform.',
+    s4_label: '04 — Competitive Positioning', s4_title: 'Positioning vs. Cheil — Role Separation, Not Opposition',
+    s4_msg_t: 'Message Structure', s4_msg: '"Cheil\'s role is brand storytelling. Their premium brand films are perfect as ePOP background content. TecAce\'s role is the technology infrastructure running on top of that. Local custom promotion assembly, real-time rendering, purchase conversion — these are only possible at the FW level, not in an agency\'s domain."',
+    cheil_role: 'Cheil → Content Supplier', cheil_role_d: 'Brand storytelling, premium brand film production. Position changes to ePOP background content supplier.',
+    tecace_role: 'TecAce → Platform Operator', tecace_role_d: 'Technology infrastructure operation. Local custom promo assembly + real-time rendering + purchase conversion. Holds actual platform control.',
+    tone_t: 'Communication Tone Guide', avoid: 'Avoid', avoid_d: '"Agency limitations" × <br>"What Cheil can\'t do" × <br>Direct mention of memory/resolution issues ×',
+    use: 'Use Instead', use_d: '"Difference in roles" ✓ <br>"What only FW partners can do" ✓ <br>"Structural limits of content-transfer approach" ✓',
+    s5_label: '05 — Key Person Strategy', s5_title: 'Samsung Key Person Approach Strategy',
+    track_a_name: 'TIZEN Team Lead (Technical Decision)', track_a_goal: 'Goal', track_a_goal_d: 'Plant conviction that "TecAce\'s technology can solve the current test problems"',
+    track_a_how: 'Approach', track_a_1: 'Request informal tech demo May~June. Frame meeting as "27 ePOP FW consultation"',
+    track_a_2: 'Demo: JSON rendering vs. image transfer memory comparison + stable deployment under unstable network + dynamic QR prototype',
+    track_a_msg: '"The memory problem with the current CMS approach — this architecture solves it at the root."',
+    track_b_name: 'VD Division Executive (Budget Decision)', track_b_goal: 'Goal', track_b_goal_d: 'Appeal with "the only solution that makes ePOP ROI measurable"',
+    track_b_how: 'Approach', track_b_1: 'Request executive briefing just before July bid. Position as "ePOP evolution direction proposal"',
+    track_b_2: 'Materials: Best Buy/Costco 5-brand benchmark + O2O conversion rate simulation + retail ad platform revenue model overview',
+    track_b_msg: '"ePOP can transition from cost center to revenue center. The key is purchase conversion data."',
+    timeline_t: 'Timing Sequence', tl1_t: 'PoC Enhancement', tl1: 'JSON rendering + dynamic QR prototype enhancement',
+    tl2_t: 'Track A Execution', tl2: 'TIZEN team informal demo — plant technical conviction',
+    tl3_t: 'Bid Proposal Completion', tl3: 'Incorporate demo feedback → enhance proposal',
+    tl4_t: 'Track B Execution', tl4: 'VD executive briefing — appeal business value',
+    tl5_t: 'Official Bid Participation', tl5: 'Secure New ePOP tech partner position',
+    s6_label: '06 — Proposal Upgrade', s6_title: 'Proposal Upgrade Direction',
+    s6_add_t: 'Sections to Add', add1: 'Hybrid AI Architecture', add2: 'Semantic ePOP Assembly', add3: 'O2O Purchase Conversion', add4: 'Role Separation Model',
+    s6_str_t: 'Existing Strengths to Emphasize',
+    s6_tone_t: 'Tone Shift (Key)', s6_old: 'Before:', s6_old_d: '"We provide deployment tools for ODM partners" → Tool vendor',
+    s6_new: 'After:', s6_new_d: '"We redefine ePOP as a purchase conversion platform and operate its technology infrastructure" → <strong>Platform Operator</strong>',
+    s7_label: '07 — Risk Management', s7_title: 'Risks & Mitigation',
+    risk1_t: 'If Cheil resolves memory/resolution issues before the bid', risk1: 'Technical gap may narrow.',
+    resp: 'Mitigation:', risk1_resp: 'Even if resolved, the content-transfer approach fundamentally cannot implement ontology-based dynamic assembly or O2O conversion. TecAce still leads in feature scope.',
+    risk2_t: 'If Samsung awards exclusive contract to Cheil', risk2: 'Risk of being left out entirely.',
+    resp2: 'Mitigation:', risk2_resp: 'Pre-work in Track A to have TIZEN team recognize technical limits. Propose parallel deployment structure with Cheil as a "technology partner."',
+    risk3_t: 'If on-device LLM/ontology fails to meet PoC level by bid time', risk3: 'AI feature completeness may fall short of demonstration level.',
+    resp3: 'Mitigation:', risk3_resp: 'Phase A (JSON rendering) alone is sufficiently competitive. Present AI only as roadmap; focus on what can be demonstrated immediately (network deployment + template rendering + dynamic QR).',
+    s8_label: '08 — One Line Summary', s8_title: 'One Line Summary',
+    summary: '"<strong>While Cheil hits the memory wall trying to push 4K video</strong>, TecAce bypasses that wall with <em>2KB JSON and on-device AI</em>, and <strong>becomes the first to turn in-store TVs into a purchase conversion platform.</strong>"',
+    footer_copy: '© 2026 TecAce. For internal strategy review purposes only.',
+    ve_btn: 'Edit Mode', ve_title: 'Visual Editor', ve_primary: 'Primary Color', ve_accent: 'Accent Color',
+    ve_font: 'Font Size (Body)', ve_edit: 'Click-to-Edit Mode', ve_edit_on: 'Enable Edit Mode', ve_dl: 'Download HTML'
+  }
+};
+
+var curLang = localStorage.getItem('tecace-lang') || 'ko';
+function applyLang(lang) {
+  var d = LANG[lang]; curLang = lang;
+  localStorage.setItem('tecace-lang', lang);
+  document.documentElement.lang = lang === 'ko' ? 'ko' : 'en';
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var k = el.getAttribute('data-i18n');
+    if (d[k] !== undefined) el.textContent = d[k];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
+    var k = el.getAttribute('data-i18n-html');
+    if (d[k] !== undefined) el.innerHTML = d[k];
+  });
+  document.getElementById('langBtn').textContent = d.lang_btn;
+}
+function toggleLang() { applyLang(curLang === 'ko' ? 'en' : 'ko'); }
+
+// Theme
+var currentTheme = localStorage.getItem('tecace-theme') || 'light';
+function applyTheme(t) {
+  document.documentElement.className = 'theme-' + t;
+  document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
+  localStorage.setItem('tecace-theme', t);
+  currentTheme = t;
+}
+function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
+
+// PDF
+async function downloadPDF() {
+  var btn = document.getElementById('pdfBtn');
+  var orig = btn.innerHTML; btn.textContent = 'Generating...'; btn.disabled = true;
+  document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('visible'); });
+  var fname = curLang === 'ko' ? 'TecAce_ePOP2027_Strategy_KO.pdf' : 'TecAce_ePOP2027_Strategy_EN.pdf';
+  try {
+    await html2pdf().set({
+      margin: 0, filename: fname,
+      image: { type: 'jpeg', quality: 0.96 },
+      html2canvas: { scale: 2, useCORS: true, letterRendering: true, logging: false },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['css', 'legacy'] }
+    }).from(document.body).save();
+  } finally { btn.innerHTML = orig; btn.disabled = false; }
+}
+
+// Scroll reveal
+var obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(function(el){ obs.observe(el); });
+
+// Visual Editor
+function toggleEditor() {
+  var p = document.getElementById('vePanel');
+  p.classList.toggle('open');
+}
+function applyColor(varName, val) {
+  document.documentElement.style.setProperty(varName, val);
+}
+var editMode = false;
+function toggleEditMode() {
+  editMode = !editMode;
+  document.body.classList.toggle('ve-edit-mode', editMode);
+  document.getElementById('editModeBtn').textContent = editMode ? (curLang==='ko'?'편집 모드 끄기':'Disable Edit Mode') : (curLang==='ko'?'편집 모드 켜기':'Enable Edit Mode');
+  if (editMode) {
+    document.body.querySelectorAll('p,h1,h2,h3,h4,td,th,span,div').forEach(function(el){
+      if (el.children.length === 0 && el.textContent.trim()) {
+        el.setAttribute('contenteditable','true');
+      }
+    });
+  } else {
+    document.body.querySelectorAll('[contenteditable]').forEach(function(el){ el.removeAttribute('contenteditable'); });
+  }
+}
+function downloadHTML() {
+  var today = new Date();
+  var dateStr = today.getFullYear() + ('0'+(today.getMonth()+1)).slice(-2) + ('0'+today.getDate()).slice(-2);
+  var filename = 'TecAce_ePOP2027_Strategy_' + dateStr + '.html';
+  var blob = new Blob([document.documentElement.outerHTML], {type:'text/html'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  // Show toast notification
+  showDownloadToast(filename);
+}
+function showDownloadToast(filename) {
+  var toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:32px;right:32px;z-index:99999;' +
+    'background:#1a1a2e;color:#fff;padding:14px 20px;border-radius:10px;' +
+    'font-family:Poppins,Pretendard,sans-serif;font-size:12px;font-weight:500;' +
+    'box-shadow:0 8px 32px rgba(0,0,0,0.35);border-left:3px solid #10b981;' +
+    'max-width:320px;line-height:1.6;opacity:0;transition:opacity 0.3s;';
+  toast.innerHTML = '<div style="font-size:11px;color:#10b981;font-weight:700;letter-spacing:0.4px;margin-bottom:4px;text-transform:uppercase;">다운로드 완료</div>' +
+    '<div style="color:rgba(255,255,255,0.9);">' + filename + '</div>' +
+    '<div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px;">브라우저 기본 다운로드 폴더에 저장됨</div>';
+  document.body.appendChild(toast);
+  setTimeout(function(){ toast.style.opacity = '1'; }, 50);
+  setTimeout(function(){ toast.style.opacity = '0'; setTimeout(function(){ document.body.removeChild(toast); }, 300); }, 4000);
+}
+
+// Init
+applyTheme(currentTheme);
+applyLang(curLang);
+</script>
+
+<script>
+  function initAOS() {
+    if (typeof AOS !== 'undefined') {
+      AOS.init({
+        duration: 700,
+        easing: 'ease-out-quart',
+        once: true,
+        offset: 60,
+        delay: 0,
+        anchorPlacement: 'top-bottom'
+      });
+    } else {
+      // Fallback: make all AOS elements visible immediately
+      document.querySelectorAll('[data-aos]').forEach(function(el) {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+    }
+  }
+  // Run on window load (ensures external scripts are fully loaded)
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAOS);
+  } else {
+    initAOS();
+  }
+  // Extra safety: also run on window load
+  window.addEventListener('load', function() {
+    if (typeof AOS !== 'undefined') AOS.refreshHard();
+  });
+</script>
+
+</body>
+</html>
