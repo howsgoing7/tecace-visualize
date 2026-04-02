@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="ko" class="theme-light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iKamper GEO Analysis Report — 2026.04 | TecAce</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+/* ── Reset ── */
+*{margin:0;padding:0;box-sizing:border-box;}
+
+/* ── Theme ── */
+html.theme-light{
+  --color-primary:#1550FC;--color-accent:#E700DB;
+  --color-heading:#101828;--color-body:#364153;
+  --color-bg:#FFFFFF;--color-card-bg:#F9FAFB;
+  --color-card-border:#E5E7EB;--color-muted:#667085;
+  --surface:#F9FAFB;--surface-hover:#F3F4F6;--border:#E5E7EB;
+}
+html.theme-dark{
+  --color-primary:#4B7BFF;--color-accent:#F040E8;
+  --color-heading:#F9FAFB;--color-body:#D1D5DB;
+  --color-bg:#0D0D0D;--color-card-bg:#1A1A1A;
+  --color-card-border:#2D2D2D;--color-muted:#9CA3AF;
+  --surface:#1A1A1A;--surface-hover:#242424;--border:#2D2D2D;
+}
+
+body{
+  font-family:'Poppins','Pretendard',sans-serif;
+  background:var(--color-bg);color:var(--color-body);
+  transition:background .3s,color .3s;
+}
+
+/* ── Top Nav ── */
+.top-nav{
+  position:sticky;top:0;z-index:300;
+  background:var(--color-bg);border-bottom:1px solid var(--color-card-border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;height:46px;
+  transition:background .3s,border-color .3s;
+}
+.nav-left{display:flex;align-items:center;gap:12px;}
+.nav-logo{font-size:13px;font-weight:700;color:var(--color-primary);}
+.nav-sep{width:1px;height:14px;background:var(--color-card-border);}
+.nav-title{font-size:12px;color:var(--color-muted);}
+.nav-right{display:flex;gap:6px;}
+.nav-btn{
+  padding:4px 12px;border-radius:5px;border:1px solid var(--color-card-border);
+  background:transparent;cursor:pointer;font-size:11px;font-weight:600;
+  color:var(--color-muted);font-family:'Poppins','Pretendard',sans-serif;
+  transition:all .15s;letter-spacing:.3px;
+}
+.nav-btn:hover{background:var(--surface-hover);color:var(--color-heading);}
+.nav-btn.primary{background:var(--color-primary);color:#fff;border-color:var(--color-primary);}
+.nav-btn.primary:hover{opacity:.88;}
+.nav-btn.lang-btn{background:rgba(21,80,252,.07);color:var(--color-primary);border-color:rgba(21,80,252,.2);}
+html.theme-dark .nav-btn.lang-btn{background:rgba(75,123,255,.12);color:#93C5FD;border-color:rgba(75,123,255,.3);}
+.nav-btn:disabled{opacity:.5;cursor:default;}
+
+/* ── Header Banner ── */
+.header-banner{
+  padding:60px 64px 52px;
+  background:linear-gradient(135deg,#0f1142 0%,#1a0a2e 30%,#0d1a5c 60%,#1a0038 100%);
+  position:relative;overflow:hidden;
+}
+html.theme-dark .header-banner{background:linear-gradient(135deg,#0a0a1a 0%,#0d1040 100%);}
+.header-banner::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 20% 50%,rgba(21,80,252,.3) 0%,transparent 60%),
+             radial-gradient(ellipse at 80% 30%,rgba(231,0,219,.2) 0%,transparent 55%);
+  pointer-events:none;
+}
+.doc-type-badge{
+  display:inline-block;font-size:11px;font-weight:600;letter-spacing:.7px;
+  text-transform:uppercase;color:rgba(255,255,255,.85);
+  border:1px solid rgba(255,255,255,.3);border-radius:4px;
+  padding:3px 10px;margin-bottom:18px;position:relative;z-index:1;
+}
+.doc-title{
+  font-size:56px;font-weight:300;letter-spacing:.4px;color:#fff;
+  line-height:1.1;margin-bottom:14px;position:relative;z-index:1;
+}
+.doc-subtitle{
+  font-size:17px;font-weight:400;color:rgba(255,255,255,.65);
+  margin-bottom:32px;position:relative;z-index:1;
+}
+.doc-meta{display:flex;gap:32px;flex-wrap:wrap;position:relative;z-index:1;}
+.doc-meta-item{
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+  border-radius:8px;padding:12px 18px;
+}
+.doc-meta-item strong{display:block;font-size:10px;font-weight:600;color:rgba(255,255,255,.5);
+  text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.doc-meta-item span{font-size:15px;font-weight:600;color:#fff;}
+
+/* ── Main Container ── */
+.container{max-width:960px;margin:0 auto;padding:52px 64px;}
+@media(max-width:768px){.container{padding:32px 20px;}}
+
+/* ── Section ── */
+.section{margin-bottom:52px;}
+.section-label{
+  font-size:11px;font-weight:600;letter-spacing:.7px;text-transform:uppercase;
+  color:var(--color-primary);margin-bottom:8px;
+}
+.section-title{
+  font-size:36px;font-weight:300;letter-spacing:.5px;color:var(--color-heading);
+  margin-bottom:24px;line-height:1.2;
+}
+.section-divider{height:1px;background:var(--color-card-border);margin-bottom:28px;}
+
+/* ── Cards ── */
+.card{
+  background:var(--color-card-bg);border:1px solid var(--color-card-border);
+  border-radius:12px;padding:24px;
+}
+.card-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.card-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+@media(max-width:680px){.card-grid-2,.card-grid-3{grid-template-columns:1fr;}}
+
+/* ── KPI Cards ── */
+.kpi-card{
+  background:var(--color-card-bg);border:1px solid var(--color-card-border);
+  border-radius:12px;padding:20px 24px;
+}
+.kpi-value{font-size:40px;font-weight:300;line-height:1;color:var(--color-primary);}
+.kpi-label{font-size:12px;font-weight:600;color:var(--color-muted);
+  text-transform:uppercase;letter-spacing:.5px;margin-top:4px;}
+.kpi-sub{font-size:12px;color:var(--color-muted);margin-top:4px;}
+
+/* ── Color Legend ── */
+.color-legend{
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  padding:11px 16px;background:var(--color-card-bg);
+  border:1px solid var(--color-card-border);border-radius:8px;margin-bottom:32px;
+}
+.legend-item{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:500;color:var(--color-muted);}
+.legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
+.legend-dot.vis{background:#1550FC;}
+.legend-dot.sov{background:#E700DB;}
+.legend-dot.pos{background:#10b981;}
+.legend-dot.neg{background:#f43f5e;}
+.legend-dot.neutral{background:#F97316;}
+.legend-sep{width:1px;height:14px;background:var(--color-card-border);}
+
+/* ── Insight Box ── */
+.insight{border-left:3px solid var(--color-primary);padding:13px 18px;
+  background:rgba(21,80,252,.04);border-radius:0 10px 10px 0;margin-bottom:14px;}
+html.theme-dark .insight{background:rgba(75,123,255,.06);}
+.insight.acc{border-color:var(--color-accent);background:rgba(231,0,219,.04);}
+.insight.warn{border-color:#f43f5e;background:rgba(244,63,94,.04);}
+.insight.ok{border-color:#10b981;background:rgba(16,185,129,.04);}
+.insight-title{font-size:13px;font-weight:700;color:var(--color-primary);margin-bottom:5px;}
+.insight.acc .insight-title{color:var(--color-accent);}
+.insight.warn .insight-title{color:#f43f5e;}
+.insight.ok .insight-title{color:#10b981;}
+.insight-body{font-size:13px;color:var(--color-body);line-height:1.65;}
+
+/* ── CSS Bar Charts ── */
+.bar-chart{display:flex;flex-direction:column;gap:10px;}
+.bar-row{display:flex;align-items:center;gap:10px;}
+.bar-label{font-size:12px;font-weight:500;color:var(--color-body);width:160px;flex-shrink:0;}
+.bar-track{flex:1;height:14px;background:var(--color-card-border);border-radius:3px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:3px;transition:width .6s ease;}
+.bar-fill.blue{background:var(--color-primary);}
+.bar-fill.acc{background:var(--color-accent);}
+.bar-fill.green{background:#10b981;}
+.bar-fill.red{background:#f43f5e;}
+.bar-fill.orange{background:#F97316;}
+.bar-val{font-size:12px;font-weight:700;color:var(--color-heading);width:52px;text-align:right;}
+
+/* ── Data Tables ── */
+.data-table{width:100%;border-collapse:collapse;font-family:'Poppins','Pretendard',sans-serif;}
+.data-table thead tr{background:var(--color-primary);}
+.data-table thead th{padding:10px 12px;font-size:10px;font-weight:700;color:#fff;text-align:left;letter-spacing:.4px;text-transform:uppercase;}
+.data-table tbody tr:nth-child(even){background:var(--surface);}
+.data-table tbody tr:hover{background:var(--surface-hover);}
+.data-table tbody td{padding:10px 12px;font-size:12px;color:var(--color-body);border-bottom:1px solid var(--color-card-border);}
+.data-table tbody td strong{color:var(--color-heading);}
+
+/* ── Framing Distribution ── */
+.frame-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+@media(max-width:680px){.frame-grid{grid-template-columns:1fr 1fr;}}
+.frame-card{
+  background:var(--color-card-bg);border:1px solid var(--color-card-border);
+  border-radius:10px;padding:16px;text-align:center;
+}
+.frame-val{font-size:28px;font-weight:300;line-height:1;}
+.frame-label{font-size:11px;font-weight:600;color:var(--color-muted);
+  text-transform:uppercase;letter-spacing:.4px;margin-top:4px;}
+.frame-sub{font-size:11px;color:var(--color-muted);margin-top:3px;}
+
+/* ── SWOT ── */
+.swot-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:680px){.swot-grid{grid-template-columns:1fr;}}
+.swot-card{border-radius:10px;padding:20px;}
+.swot-card.s{background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.25);}
+.swot-card.w{background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);}
+.swot-card.o{background:rgba(21,80,252,.06);border:1px solid rgba(21,80,252,.2);}
+.swot-card.t{background:rgba(231,0,219,.06);border:1px solid rgba(231,0,219,.2);}
+.swot-head{font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px;}
+.swot-card.s .swot-head{color:#10b981;}
+.swot-card.w .swot-head{color:#f43f5e;}
+.swot-card.o .swot-head{color:var(--color-primary);}
+.swot-card.t .swot-head{color:var(--color-accent);}
+.swot-list{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.swot-list li{font-size:12px;color:var(--color-body);line-height:1.55;padding-left:12px;position:relative;}
+.swot-list li::before{content:'·';position:absolute;left:0;font-weight:700;}
+
+/* ── Tag pills ── */
+.tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+.tag{
+  padding:4px 12px;border-radius:5px;font-size:11px;font-weight:600;letter-spacing:.3px;
+  border:1px solid var(--color-card-border);color:var(--color-muted);background:var(--color-card-bg);
+}
+.tag.strong{background:rgba(21,80,252,.08);color:var(--color-primary);border-color:rgba(21,80,252,.25);}
+.tag.warn{background:rgba(244,63,94,.07);color:#f43f5e;border-color:rgba(244,63,94,.2);}
+
+/* ── Persona Cards ── */
+.persona-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:680px){.persona-grid{grid-template-columns:1fr;}}
+.persona-card{
+  background:var(--color-card-bg);border:1px solid var(--color-card-border);
+  border-radius:12px;padding:20px;
+}
+.persona-name{font-size:14px;font-weight:700;color:var(--color-heading);margin-bottom:4px;}
+.persona-pos{font-size:11px;font-weight:600;color:var(--color-primary);
+  text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px;}
+.persona-row{display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:4px;font-size:12px;}
+.persona-stat{font-weight:700;color:var(--color-heading);}
+.persona-text{font-size:12px;color:var(--color-body);line-height:1.5;margin-top:8px;}
+
+/* ── Domain rank ── */
+.domain-list{display:flex;flex-direction:column;gap:10px;}
+.domain-row{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 16px;background:var(--color-card-bg);
+  border:1px solid var(--color-card-border);border-radius:8px;
+}
+.domain-rank{font-size:18px;font-weight:300;color:var(--color-primary);width:24px;}
+.domain-name{font-size:13px;font-weight:600;color:var(--color-heading);flex:1;}
+.domain-type{font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;}
+.domain-type.owned{background:rgba(16,185,129,.12);color:#10b981;}
+.domain-type.rival{background:rgba(244,63,94,.1);color:#f43f5e;}
+.domain-type.media{background:rgba(21,80,252,.08);color:var(--color-primary);}
+.domain-count{font-size:13px;font-weight:700;color:var(--color-heading);text-align:right;width:48px;}
+
+/* ── Strategy items ── */
+.strategy-list{display:flex;flex-direction:column;gap:12px;}
+.strategy-item{
+  display:flex;gap:14px;padding:16px;
+  background:var(--color-card-bg);border:1px solid var(--color-card-border);border-radius:10px;
+}
+.strategy-num{
+  font-size:20px;font-weight:300;color:var(--color-primary);
+  width:28px;flex-shrink:0;line-height:1;
+}
+.strategy-content{}
+.strategy-title{font-size:14px;font-weight:700;color:var(--color-heading);margin-bottom:4px;}
+.strategy-body{font-size:13px;color:var(--color-body);line-height:1.6;}
+
+/* ── Query Table ── */
+.query-table{width:100%;border-collapse:collapse;}
+.query-table th{padding:9px 10px;font-size:10px;font-weight:700;color:#fff;
+  background:var(--color-primary);text-align:left;text-transform:uppercase;letter-spacing:.4px;}
+.query-table td{padding:8px 10px;font-size:11px;color:var(--color-body);
+  border-bottom:1px solid var(--color-card-border);}
+.query-table tr:nth-child(even) td{background:var(--surface);}
+.query-table .qid{font-weight:600;color:var(--color-primary);white-space:nowrap;}
+
+/* ── Footer ── */
+.footer{
+  border-top:1px solid var(--color-card-border);padding:28px 64px;
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:12px;color:var(--color-muted);
+}
+
+/* ── Reveal ── */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ── Highlight number ── */
+.hl{color:var(--color-primary);font-weight:700;}
+.hl.acc{color:var(--color-accent);}
+.hl.ok{color:#10b981;}
+.hl.warn{color:#f43f5e;}
+
+p{font-size:14px;line-height:1.75;color:var(--color-body);margin-bottom:12px;}
+h3{font-size:20px;font-weight:600;color:var(--color-heading);margin-bottom:14px;}
+h4{font-size:15px;font-weight:600;color:var(--color-heading);margin-bottom:8px;}
+</style>
+</head>
+<body>
+
+<!-- ── TOP NAV ── -->
+<nav class="top-nav">
+  <div class="nav-left">
+    <span class="nav-logo">TecAce</span>
+    <span class="nav-sep"></span>
+    <span class="nav-title" id="navTitle">iKamper GEO Analysis Report 2026.04</span>
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn lang-btn" id="langBtn" onclick="toggleLang()">English</button>
+    <button class="nav-btn" onclick="cycleTheme()"><span id="themeLabel">Light</span></button>
+    <button class="nav-btn primary" id="pdfBtn" onclick="downloadPDF()">PDF Download</button>
+  </div>
+</nav>
+
+<!-- ── HEADER BANNER ── -->
+<div class="header-banner">
+  <span class="doc-type-badge" data-i18n="badge">GEO ANALYSIS REPORT</span>
+  <h1 class="doc-title" data-i18n-html="title">iKamper<br>GEO Brand Visibility</h1>
+  <p class="doc-subtitle" data-i18n="subtitle">Generative Engine Optimization — Monthly Analysis Report</p>
+  <div class="doc-meta">
+    <div class="doc-meta-item"><strong data-i18n="meta1_label">분석 기간</strong><span>2026년 4월</span></div>
+    <div class="doc-meta-item"><strong data-i18n="meta2_label">총 쿼리</strong><span>50 Queries</span></div>
+    <div class="doc-meta-item"><strong data-i18n="meta3_label">브랜드 멘션</strong><span>261 Mentions</span></div>
+    <div class="doc-meta-item"><strong data-i18n="meta4_label">Prepared by</strong><span>TecAce AI Supervision</span></div>
+  </div>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="container">
+
+  <!-- ── 1. EXECUTIVE SUMMARY ── -->
+  <div class="section reveal">
+    <div class="section-label">01 — Executive Summary</div>
+    <div class="section-title" data-i18n="s1title">핵심 발견</div>
+    <div class="section-divider"></div>
+
+    <div class="insight warn" style="margin-bottom:20px;">
+      <div class="insight-title">구조적 양극화 진단</div>
+      <div class="insight-body">iKamper의 AI 가시성은 <strong>'핵심 카테고리의 아이콘(Icon) vs 주변 카테고리의 부재(Absence)'</strong>라는 상반된 양극화 구조를 보이고 있습니다. 루프탑 텐트 카테고리에서는 압도적 인지도를 확보한 반면, 어닝/쉘터 및 소형 텐트 영역에서는 AI가 iKamper를 완전히 배제하는 구조적 공백이 확인됩니다.</div>
+    </div>
+
+    <div class="card-grid-3" style="margin-bottom:20px;">
+      <div class="kpi-card">
+        <div class="kpi-value">72%</div>
+        <div class="kpi-label">AI Visibility</div>
+        <div class="kpi-sub">50쿼리 중 36개에서 언급</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value" style="color:var(--color-accent);">16.5%</div>
+        <div class="kpi-label">Share of Voice</div>
+        <div class="kpi-sub">261회 중 43회 점유</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value" style="color:#10b981;">1.61</div>
+        <div class="kpi-label">평균 노출 순위</div>
+        <div class="kpi-sub">언급 시 63.9%가 Position 1</div>
+      </div>
+    </div>
+
+    <div class="card-grid-2" style="margin-bottom:20px;">
+      <div class="card">
+        <div class="kpi-value" style="color:var(--color-accent);font-size:28px;">28.0%</div>
+        <div class="kpi-label" style="margin-top:4px;">미언급(Absent) 비율</div>
+        <div class="kpi-sub" style="margin-top:4px;">14건 중 7건이 어닝/쉘터 카테고리 집중</div>
+      </div>
+      <div class="card">
+        <div class="kpi-value" style="color:#f43f5e;font-size:28px;">0%</div>
+        <div class="kpi-label" style="margin-top:4px;">어닝/쉘터 Visibility</div>
+        <div class="kpi-sub" style="margin-top:4px;">7개 쿼리 전체에서 완전 배제</div>
+      </div>
+    </div>
+
+    <p>전체 50개 쿼리 중 iKamper의 AI Visibility는 72%로, 36개 쿼리에서 최소 한 번 이상 언급되었습니다. 그러나 Share of Voice(SoV)는 16.5%에 그쳐, 총 261회 브랜드 멘션 중 43회만을 점유했습니다. <span class="hl acc">Roofnest가 약 40.4%의 SoV로 시장 지배적 위치</span>를 점하고 있으며, iKamper는 James Baroud(약 10.0%), Front Runner(약 9.6%), ARB(약 9.2%) 등과 함께 2위 그룹을 형성하고 있습니다.</p>
+    <p>iKamper의 GEO 성과는 <span class="hl warn">Skycamp이라는 단일 제품라인에 과도하게 의존</span>하고 있으며, 제품 포트폴리오 확장 없이는 SoV 반등이 구조적으로 고착될 위험이 있습니다.</p>
+  </div>
+
+  <!-- ── TOP 3 STRONG / WEAK ── -->
+  <div class="section reveal">
+    <div class="section-label">01.2 — Strengths & Weaknesses</div>
+    <div class="section-title">Top 3 Strong / Weak Points</div>
+    <div class="section-divider"></div>
+
+    <div class="card-grid-2" style="margin-bottom:20px;">
+      <div>
+        <h3 style="color:#10b981;margin-bottom:16px;">Top 3 강점</h3>
+        <div class="insight ok">
+          <div class="insight-title">① 루프탑 텐트 카테고리의 기준점 (The Reference Standard)</div>
+          <div class="insight-body">루프탑 텐트 카테고리(30개 쿼리)에서 Visibility <strong>90.0%</strong>, SoV <strong>24.8%</strong>. 추천·트렌드·가격·사용 사례 유형에서 Visibility 100% 달성. AI가 루프탑 텐트를 이야기할 때 반드시 Skycamp을 거치는 구조.</div>
+        </div>
+        <div class="insight ok">
+          <div class="insight-title">② 언급 시 1순위 포지셔닝 (First-Mention Dominance)</div>
+          <div class="insight-body">언급된 36개 쿼리 중 <strong>23건(63.9%)에서 Position 1</strong>. 평균 노출 순위 1.61위. Skycamp이 AI 추천 엔진의 기본값(default)으로 자리잡은 상태.</div>
+        </div>
+        <div class="insight ok">
+          <div class="insight-title">③ 공식 도메인 기반의 정보 통제력 (Reference Authority)</div>
+          <div class="insight-body">ikamper.com <strong>36회 인용</strong>으로 전체 도메인 2위. 공식 도메인 총 인용 37회. 브랜드 발신 정보가 AI 답변에 직접 반영.</div>
+        </div>
+      </div>
+      <div>
+        <h3 style="color:#f43f5e;margin-bottom:16px;">Top 3 약점</h3>
+        <div class="insight warn">
+          <div class="insight-title">① 어닝/쉘터 카테고리의 완전한 부재 (The Invisible Brand)</div>
+          <div class="insight-body">어닝/쉘터 카테고리 7개 쿼리 전체에서 Visibility <strong>0%</strong>. AI는 ARB, EZE-Breeze, Dometic 등 전문 브랜드만 추천하며 iKamper를 완전히 배제.</div>
+        </div>
+        <div class="insight warn">
+          <div class="insight-title">② Roofnest 대비 SoV 격차 심화 (The Dominant Rival)</div>
+          <div class="insight-body">Roofnest SoV <strong>40.4%</strong>로 iKamper(16.5%)의 2.4배. 50개 쿼리 중 52%에서 경쟁사로 등장. Skycamp Mini는 단 2회 언급.</div>
+        </div>
+        <div class="insight warn">
+          <div class="insight-title">③ 소형 텐트 세그먼트의 인지도 부족 (Mini Tent Blind Spot)</div>
+          <div class="insight-body">소형 루프탑 텐트(5개 쿼리)에서 Visibility <strong>40.0%</strong>, SoV <strong>9.1%</strong>. 평균 포지션 2.5위. 세단/크로스오버 시장 확대 어려운 상황.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 2. METHODOLOGY ── -->
+  <div class="section reveal">
+    <div class="section-label">02 — 분석 방법론</div>
+    <div class="section-title">데이터 및 프레임워크</div>
+    <div class="section-divider"></div>
+
+    <p><strong>GEO(Generative Engine Optimization)</strong>는 ChatGPT, Gemini 등 생성형 AI 검색 엔진에서 브랜드의 가시성을 최적화하는 전략입니다. 기존 SEO가 검색 결과 페이지의 순위를 관리했다면, GEO는 AI가 생성하는 답변 내에서 브랜드가 얼마나 빈번히, 긍정적으로, 정확하게 언급되는지를 분석하고 관리합니다.</p>
+
+    <div class="card-grid-2" style="margin-bottom:20px;">
+      <div class="card">
+        <h4>4개 분석 축</h4>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="padding:10px;background:var(--surface);border-radius:6px;font-size:12px;"><strong style="color:var(--color-primary);">Contextual Dimension</strong><br>Category/Type/Tag 교차 분석</div>
+          <div style="padding:10px;background:var(--surface);border-radius:6px;font-size:12px;"><strong style="color:var(--color-primary);">Persona Dimension</strong><br>질문자 의도별 AI 답변 패턴 차이</div>
+          <div style="padding:10px;background:var(--surface);border-radius:6px;font-size:12px;"><strong style="color:var(--color-primary);">Reference Ecology</strong><br>AI 답변 근거 URL 도메인 분석</div>
+          <div style="padding:10px;background:var(--surface);border-radius:6px;font-size:12px;"><strong style="color:var(--color-primary);">Competitive Landscape</strong><br>경쟁사 GEO 포지셔닝 비교</div>
+        </div>
+      </div>
+      <div class="card">
+        <h4>데이터셋 구성</h4>
+        <table class="data-table">
+          <tbody>
+            <tr><td><strong>분석 기준일</strong></td><td>2026년 4월</td></tr>
+            <tr><td><strong>총 쿼리 수</strong></td><td>50개</td></tr>
+            <tr><td><strong>총 브랜드 멘션</strong></td><td>261회 (12개 브랜드)</td></tr>
+            <tr><td><strong>루프탑 텐트</strong></td><td>30개 쿼리</td></tr>
+            <tr><td><strong>어닝/쉘터</strong></td><td>7개 쿼리</td></tr>
+            <tr><td><strong>소형 루프탑 텐트</strong></td><td>5개 쿼리</td></tr>
+            <tr><td><strong>Baseline Data</strong></td><td>단일 시점 분석 (과거 데이터 미제공)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 3. 정량 분석 ── -->
+  <div class="section reveal">
+    <div class="section-label">03 — 정량 분석</div>
+    <div class="section-title">AI Visibility · SoV · Sentiment</div>
+    <div class="section-divider"></div>
+
+    <h3>3.1 AI Visibility (브랜드 언급률)</h3>
+    <p style="margin-bottom:16px;">iKamper의 전체 AI Visibility는 72%로, 50개 쿼리 중 36개에서 최소 한 번 이상 언급. 평균 노출 순위는 1.61위로, 언급 시 대부분 상위권에 위치.</p>
+
+    <div class="bar-chart" style="margin-bottom:28px;">
+      <div class="bar-row">
+        <span class="bar-label">루프탑 텐트</span>
+        <div class="bar-track"><div class="bar-fill blue" style="width:90%"></div></div>
+        <span class="bar-val">90%</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">전체 평균</span>
+        <div class="bar-track"><div class="bar-fill blue" style="width:72%"></div></div>
+        <span class="bar-val">72%</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">소형 루프탑 텐트</span>
+        <div class="bar-track"><div class="bar-fill orange" style="width:40%"></div></div>
+        <span class="bar-val" style="color:#F97316;">40%</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">어닝/쉘터</span>
+        <div class="bar-track"><div class="bar-fill red" style="width:0%"></div></div>
+        <span class="bar-val" style="color:#f43f5e;">0%</span>
+      </div>
+    </div>
+
+    <h3>3.2 Share of Voice (SoV) 경쟁 구조</h3>
+    <p style="margin-bottom:16px;">iKamper의 SoV는 16.5%로, 총 261회 브랜드 멘션 중 43회를 점유. Visibility(72%)에 비해 SoV가 낮은 것은, iKamper가 언급될 때 다수의 경쟁사와 함께 비교되는 구조.</p>
+
+    <div class="color-legend">
+      <div class="legend-item"><div class="legend-dot blue" style="background:var(--color-primary)"></div><span>파란색 = AI Visibility</span></div>
+      <div class="legend-sep"></div>
+      <div class="legend-item"><div class="legend-dot acc" style="background:var(--color-accent)"></div><span>마젠타 = SoV</span></div>
+    </div>
+
+    <div class="bar-chart" style="margin-bottom:8px;">
+      <div class="bar-row">
+        <span class="bar-label"><strong>Roofnest</strong></span>
+        <div class="bar-track"><div class="bar-fill acc" style="width:40.4%"></div></div>
+        <span class="bar-val" style="color:var(--color-accent);">40.4%</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label"><strong>iKamper</strong></span>
+        <div class="bar-track"><div class="bar-fill blue" style="width:16.5%"></div></div>
+        <span class="bar-val">16.5%</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">James Baroud</span>
+        <div class="bar-track"><div class="bar-fill" style="width:10%;background:#9CA3AF"></div></div>
+        <span class="bar-val" style="color:#9CA3AF;">10%</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Front Runner</span>
+        <div class="bar-track"><div class="bar-fill" style="width:9.6%;background:#9CA3AF"></div></div>
+        <span class="bar-val" style="color:#9CA3AF;">9.6%</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">ARB</span>
+        <div class="bar-track"><div class="bar-fill" style="width:9.2%;background:#9CA3AF"></div></div>
+        <span class="bar-val" style="color:#9CA3AF;">9.2%</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">EZE-Breeze</span>
+        <div class="bar-track"><div class="bar-fill" style="width:4.8%;background:#9CA3AF"></div></div>
+        <span class="bar-val" style="color:#9CA3AF;">4.8%</span>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;margin-bottom:28px;">
+      <table class="data-table">
+        <thead><tr><th>브랜드</th><th>당월 SoV</th><th>주요 특징</th></tr></thead>
+        <tbody>
+          <tr><td>Roofnest</td><td><strong style="color:#f43f5e;">약 40.4%</strong></td><td>미국 기반 브랜드로 전 카테고리 커버. 소형 텐트 및 AS/부품 접근성에서 압도적</td></tr>
+          <tr><td><strong>iKamper</strong></td><td><strong>16.5%</strong></td><td>Skycamp 중심의 강력한 플래그십 인지도. 루프탑 텐트 카테고리에서 1순위 언급률 최고</td></tr>
+          <tr><td>James Baroud</td><td>약 10%</td><td>유럽 프리미엄 브랜드. 4시즌 단열/방수/환기 성능에서 차별화</td></tr>
+          <tr><td>Front Runner</td><td>약 9.6%</td><td>루프랙/차량 액세서리 전문. 오프로더 생태계에서 강세</td></tr>
+          <tr><td>ARB</td><td>약 9.2%</td><td>어닝/쉘터 카테고리의 대표 브랜드. 270도 어닝 시장 지배</td></tr>
+          <tr><td>EZE-Breeze</td><td>약 4.8%</td><td>단열/선룸 전문. 겨울철 어닝룸 조합에서 언급</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>3.3 Sentiment (감성 분석) & Framing (프레이밍)</h3>
+    <p style="margin-bottom:16px;">iKamper에 대한 AI 답변의 감성 분포는 긍정 35건(70.0%), 중립 15건(30.0%)으로, 부정 응답은 발견되지 않았습니다. 평균 감성 점수는 0.7416.</p>
+
+    <div class="frame-grid" style="margin-bottom:20px;">
+      <div class="frame-card">
+        <div class="frame-val" style="color:var(--color-primary);">10건</div>
+        <div class="frame-label">Primary</div>
+        <div class="frame-sub">1순위 언급 (20%)</div>
+      </div>
+      <div class="frame-card">
+        <div class="frame-val" style="color:#10b981;">20건</div>
+        <div class="frame-label">Secondary</div>
+        <div class="frame-sub">비교 대상 (40%)</div>
+      </div>
+      <div class="frame-card">
+        <div class="frame-val" style="color:#F97316;">6건</div>
+        <div class="frame-label">Compared</div>
+        <div class="frame-sub">직접 비교 (12%)</div>
+      </div>
+      <div class="frame-card">
+        <div class="frame-val" style="color:#f43f5e;">14건</div>
+        <div class="frame-label">Absent</div>
+        <div class="frame-sub">완전 미언급 (28%)</div>
+      </div>
+    </div>
+
+    <div class="insight" style="margin-bottom:20px;">
+      <div class="insight-title">프레이밍 양극화 구조</div>
+      <div class="insight-body">iKamper가 언급될 때는 주로 1순위이지만, 아예 배제되는 영역도 상당합니다. <strong>"언급 시 주로 1순위이나, 아예 배제되는 영역도 존재"</strong>하는 양극화 구조. 미언급 14건 중 7건이 어닝/쉘터 카테고리에 집중.</div>
+    </div>
+
+    <h3>3.4 Tag 상위 5개</h3>
+    <div class="tag-row" style="margin-bottom:16px;">
+      <span class="tag strong">Skycamp (91.7%)</span>
+      <span class="tag strong">iKamper (87.8%)</span>
+      <span class="tag strong">하드쉐텐트 (86.1%)</span>
+      <span class="tag">오버랜드 (72.7%)</span>
+      <span class="tag">캠핑 (71.7%)</span>
+    </div>
+    <table class="data-table" style="margin-bottom:8px;">
+      <thead><tr><th>Tag</th><th>언급 횟수</th><th>Visibility</th><th>평균 감성</th><th>평가</th></tr></thead>
+      <tbody>
+        <tr><td>루프탑텐트</td><td>50회</td><td>72%</td><td>0.74</td><td>경쟁 구도</td></tr>
+        <tr><td>캠핑</td><td>46회</td><td>71.7%</td><td>0.74</td><td>경쟁 구도</td></tr>
+        <tr><td>오버랜드</td><td>44회</td><td>72.7%</td><td>0.74</td><td>경쟁 구도</td></tr>
+        <tr><td><strong>iKamper</strong></td><td>41회</td><td><strong>87.8%</strong></td><td>0.79</td><td><strong style="color:#10b981;">강세</strong></td></tr>
+        <tr><td><strong>Skycamp</strong></td><td>36회</td><td><strong>91.7%</strong></td><td>0.81</td><td><strong style="color:#10b981;">강세</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── 4. 카테고리 분석 ── -->
+  <div class="section reveal">
+    <div class="section-label">04 — 카테고리 분석</div>
+    <div class="section-title">카테고리 및 질문 유형별 분석</div>
+    <div class="section-divider"></div>
+
+    <table class="data-table" style="margin-bottom:24px;">
+      <thead><tr><th>Category</th><th>Type</th><th>Trend</th><th>Insight</th></tr></thead>
+      <tbody>
+        <tr><td>루프탑 텐트</td><td>information search</td><td><strong style="color:#10b981;">강세</strong></td><td>Skycamp이 정보 탐색 쿼리에서 기준점으로 기능</td></tr>
+        <tr><td>루프탑 텐트</td><td>performance</td><td><strong style="color:#10b981;">강세</strong></td><td>방수/내풍 성능에서 James Baroud와 경합</td></tr>
+        <tr><td>루프탑 텐트</td><td>trends</td><td><strong style="color:#10b981;">강세</strong></td><td>Vis 100%, SoV 41.7%로 전체 유형 중 최고 성과</td></tr>
+        <tr><td>루프탑 텐트</td><td>recommendations</td><td><strong style="color:#10b981;">강세</strong></td><td>Vis 100%로 필수 추천 브랜드</td></tr>
+        <tr><td>루프탑 텐트</td><td>pricing</td><td><strong style="color:#10b981;">강세</strong></td><td>Vis 100%, 프리미엄 포지셔닝 확보</td></tr>
+        <tr><td>어닝/쉘터</td><td>information search</td><td><strong style="color:#f43f5e;">약세</strong></td><td>Vis 0%, SoV 0% — 완전한 공백</td></tr>
+        <tr><td>소형 루프탑 텐트</td><td>use cases</td><td><strong style="color:#F97316;">보통</strong></td><td>Vis 100%이나 SoV 20%로 제한적</td></tr>
+      </tbody>
+    </table>
+
+    <div class="card-grid-2">
+      <div class="card">
+        <h4 style="color:#10b981;">강세 유형 (Strong Types)</h4>
+        <p style="font-size:13px;margin-bottom:0;"><strong>trends 유형</strong>에서 Visibility 100%, SoV 41.7%로 전체 유형 중 최고 성과. 오버랜드 박람회 수상 경력, 세대별 업그레이드(Skycamp 3.0) 등 iKamper의 브랜드 스토리가 AI 응답에 강하게 반영.</p>
+      </div>
+      <div class="card">
+        <h4 style="color:#f43f5e;">약세 유형 (Weak Types)</h4>
+        <p style="font-size:13px;margin-bottom:0;"><strong>information search 유형</strong>에서 어닝/쉘터 카테고리 3개 쿼리 모두 Visibility 0%. "어닝룸 추천", "바닥 없는 어닝룸 비교" 등의 쿼리에서 AI는 ARB, Dometic 등만 추천.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 5. PERSONA DEEP DIVE ── -->
+  <div class="section reveal">
+    <div class="section-label">05 — Persona Deep Dive</div>
+    <div class="section-title">페르소나별 GEO 포지셔닝</div>
+    <div class="section-divider"></div>
+
+    <p style="margin-bottom:20px;">페르소나에 따라 AI 답변의 iKamper 포지셔닝이 극명하게 갈립니다. 기술 탐색형 페르소나에서는 압도적 우위를 점하지만, 가성비/실용성 중시형에서는 Roofnest와의 경쟁이 치열한 구조입니다.</p>
+
+    <div class="persona-grid" style="margin-bottom:24px;">
+      <div class="persona-card" style="border-top:3px solid var(--color-primary);">
+        <div class="persona-name">가성비/실용성 중시형</div>
+        <div class="persona-pos">Safe Bet for Families</div>
+        <div class="persona-row"><span>쿼리 수</span><span class="persona-stat">41개 (82%)</span></div>
+        <div class="persona-row"><span>Visibility</span><span class="persona-stat">68.3%</span></div>
+        <div class="persona-row"><span>SoV</span><span class="persona-stat" style="color:#f43f5e;">14.9%</span></div>
+        <div class="persona-text">Roofnest(23회 등장)에 압도. 어닝/쉘터 7개 쿼리 전체에서 부재. 최대 그룹이므로 이 그룹의 SoV 향상이 전체 성과에 가장 큰 영향.</div>
+      </div>
+      <div class="persona-card" style="border-top:3px solid #10b981;">
+        <div class="persona-name">기타 (전문가형)</div>
+        <div class="persona-pos">The Premium Choice</div>
+        <div class="persona-row"><span>쿼리 수</span><span class="persona-stat">6개</span></div>
+        <div class="persona-row"><span>Visibility</span><span class="persona-stat" style="color:#10b981;">100%</span></div>
+        <div class="persona-row"><span>SoV</span><span class="persona-stat" style="color:#10b981;">30.4%</span></div>
+        <div class="persona-text">결로/겨울 캠핑 등 전문 쿼리에서 강세. 쿼리 수가 적어 통계적 유의성 제한. James Baroud와 경합 구도.</div>
+      </div>
+      <div class="persona-card" style="border-top:3px solid #F97316;">
+        <div class="persona-name">내구성/디자인 중시형</div>
+        <div class="persona-pos">Known but Not Preferred</div>
+        <div class="persona-row"><span>Visibility</span><span class="persona-stat">50%</span></div>
+        <div class="persona-row"><span>SoV</span><span class="persona-stat" style="color:#F97316;">11.1%</span></div>
+        <div class="persona-text">하드쉐 내구성 쿼리에서 언급. James Baroud, Pelican 등이 우위. UV 저항/외장 내구성 쿼리에서 미언급.</div>
+      </div>
+      <div class="persona-card" style="border-top:3px solid var(--color-accent);">
+        <div class="persona-name">얼리어답터/기술 탐색형</div>
+        <div class="persona-pos">The Undisputed Leader</div>
+        <div class="persona-row"><span>Visibility</span><span class="persona-stat" style="color:var(--color-accent);">100%</span></div>
+        <div class="persona-row"><span>SoV</span><span class="persona-stat" style="color:var(--color-accent);">100%</span></div>
+        <div class="persona-text">하나의 쿼리에서 완벽한 독점. 샘플 부족(1개). 향후 기술 탐색 쿼리 확대 시 경쟁 구도 변화 가능성.</div>
+      </div>
+    </div>
+
+    <h3>Persona-Product 매트릭스</h3>
+    <table class="data-table" style="margin-bottom:20px;">
+      <thead><tr><th>매칭 등급</th><th>조합</th><th>Visibility</th><th>SoV</th></tr></thead>
+      <tbody>
+        <tr><td><strong style="color:#10b981;">High Match</strong></td><td>얼리어답터/기술 탐색형 × 루프탑 텐트</td><td>100%</td><td>100%</td></tr>
+        <tr><td><strong style="color:#10b981;">High Match</strong></td><td>기타 그룹 × 루프탑 텐트</td><td>100%</td><td>30.4%</td></tr>
+        <tr><td><strong style="color:#F97316;">Medium Match</strong></td><td>가성비/실용성 × 루프탑 텐트</td><td>68.3%</td><td>14.9%</td></tr>
+        <tr><td><strong style="color:#f43f5e;">Low Match</strong></td><td>가성비/실용성 × 어닝/쉘터</td><td>0%</td><td>0%</td></tr>
+      </tbody>
+    </table>
+
+    <h3>iKamper vs 경쟁사 비교 (Persona 관점)</h3>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="insight">
+        <div class="insight-title">vs Roofnest</div>
+        <div class="insight-body">가성비/실용성 중시형에서 가장 치열한 경쟁. Roofnest는 23회 등장으로 압도적. 소형 텐트, AS/부품, 어닝 등 iKamper가 약한 영역을 모두 커버하는 종합 브랜드로 포지셔닝. iKamper는 Skycamp의 플래그십 인지도와 "1분 설치" 메시지로 대응.</div>
+      </div>
+      <div class="insight acc">
+        <div class="insight-title">vs James Baroud</div>
+        <div class="insight-body">내구성/디자인 중시형과 성능(performance) 쿼리에서 경합. James Baroud는 4시즌 단열, 방수, 환기 성능에서 프리미엄 전문 브랜드로 포지셔닝. iKamper는 설치 편의성과 공간 효율성으로 차별화.</div>
+      </div>
+      <div class="insight warn">
+        <div class="insight-title">vs ARB/Front Runner</div>
+        <div class="insight-body">어닝/쉘터 및 차량 액세서리 영역에서 완전한 열위. iKamper는 이 영역에 제품 라인업이 없어 AI가 언급할 정보 자체가 부재한 상황.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 6. REFERENCE DOMAIN ── -->
+  <div class="section reveal">
+    <div class="section-label">06 — Reference Domain 분석</div>
+    <div class="section-title">월별 Top Referenced Domains</div>
+    <div class="section-divider"></div>
+
+    <div class="domain-list" style="margin-bottom:24px;">
+      <div class="domain-row">
+        <span class="domain-rank">1</span>
+        <span class="domain-name">roofnest.com</span>
+        <span class="domain-type rival">경쟁사</span>
+        <span style="font-size:12px;color:var(--color-muted);flex:1;padding-left:12px;">소형 텐트, 부품/AS 영역까지 활발히 참조</span>
+        <span class="domain-count" style="color:#f43f5e;">38회</span>
+      </div>
+      <div class="domain-row" style="border:1px solid var(--color-primary);border-radius:8px;">
+        <span class="domain-rank">2</span>
+        <span class="domain-name" style="color:var(--color-primary);">ikamper.com</span>
+        <span class="domain-type owned">공식 도메인</span>
+        <span style="font-size:12px;color:var(--color-muted);flex:1;padding-left:12px;">루프탑 텐트 카테고리 중심 AI 정보 근거</span>
+        <span class="domain-count">36회</span>
+      </div>
+      <div class="domain-row">
+        <span class="domain-rank">3</span>
+        <span class="domain-name">jamesbaroud.com</span>
+        <span class="domain-type rival">경쟁사</span>
+        <span style="font-size:12px;color:var(--color-muted);flex:1;padding-left:12px;">성능/내구성 쿼리에서 주로 참조</span>
+        <span class="domain-count">17회</span>
+      </div>
+      <div class="domain-row">
+        <span class="domain-rank">4</span>
+        <span class="domain-name">gearjunkie.com</span>
+        <span class="domain-type media">미디어</span>
+        <span style="font-size:12px;color:var(--color-muted);flex:1;padding-left:12px;">아웃도어 전문 미디어. 중립적 정보원</span>
+        <span class="domain-count">13회</span>
+      </div>
+      <div class="domain-row">
+        <span class="domain-rank">5</span>
+        <span class="domain-name">tepui.com</span>
+        <span class="domain-type rival">경쟁사</span>
+        <span style="font-size:12px;color:var(--color-muted);flex:1;padding-left:12px;">Thule 산하 브랜드. 비교 쿼리에서 경쟁 대안</span>
+        <span class="domain-count">9회</span>
+      </div>
+    </div>
+
+    <div class="card-grid-2" style="margin-bottom:20px;">
+      <div class="card" style="border-top:3px solid #10b981;">
+        <h4 style="color:#10b981;">강점</h4>
+        <p style="font-size:13px;margin-bottom:0;">ikamper.com의 제품 페이지가 AI 학습 데이터에 효과적으로 반영. "1분 설치" 핵심 마케팅 메시지가 AI 답변에 직접 반영. Skycamp 세대별 업데이트 정보도 AI가 정확하게 반영.</p>
+      </div>
+      <div class="card" style="border-top:3px solid #f43f5e;">
+        <h4 style="color:#f43f5e;">약점</h4>
+        <p style="font-size:13px;margin-bottom:0;">경쟁사 공식 도메인 총 인용(Roofnest 38 + JB 19 + FR 6 + Tepui 9 등)이 iKamper(37회)를 크게 상회. 어닝/쉘터 카테고리에서는 iKamper 공식 도메인 참조 0회.</p>
+      </div>
+    </div>
+
+    <h3>Reference 전략 제언</h3>
+    <div class="strategy-list">
+      <div class="strategy-item">
+        <div class="strategy-num">1</div>
+        <div class="strategy-content">
+          <div class="strategy-title">Media Outreach 강화</div>
+          <div class="strategy-body">gearjunkie.com(13회), rei.com(7회) 등 주요 아웃도어 미디어에서 iKamper Skycamp의 리뷰/비교 콘텐츠 확대. 특히 "소형 텐트 비교", "어닝 조합 가이드" 등 현재 미언급 영역의 콘텐츠를 미디어를 통해 생성.</div>
+        </div>
+      </div>
+      <div class="strategy-item">
+        <div class="strategy-num">2</div>
+        <div class="strategy-content">
+          <div class="strategy-title">Owned Media 최적화</div>
+          <div class="strategy-body">ikamper.com에 어닝/쉘터 호환성 가이드, Skycamp Mini 전용 비교 페이지, Q&A 형식의 구조화된 콘텐츠를 발행하여 AI가 읽기 쉬운 형태로 정보를 제공.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 7. SWOT ── -->
+  <div class="section reveal">
+    <div class="section-label">07 — SWOT & Competitors</div>
+    <div class="section-title">iKamper SWOT 분석</div>
+    <div class="section-divider"></div>
+
+    <div class="swot-grid" style="margin-bottom:28px;">
+      <div class="swot-card s">
+        <div class="swot-head">Strengths</div>
+        <ul class="swot-list">
+          <li>루프탑 텐트 카테고리 Vis 90%, SoV 24.8%로 가장 강한 카테고리</li>
+          <li>언급 시 63.9%가 Position 1으로 AI 추천 기본값 확보</li>
+          <li>Skycamp 제품라인의 브랜드 인지도 고착 — 지속적 관리 필요</li>
+        </ul>
+      </div>
+      <div class="swot-card w">
+        <div class="swot-head">Weaknesses</div>
+        <ul class="swot-list">
+          <li>어닝/쉘터 Vis 0%로 완전한 공백</li>
+          <li>소형 텐트 Vis 40%, SoV 9.1%로 Roofnest에 압도당함</li>
+          <li>제품 포트폴리오 확장 없이는 구조적 개선 불가. 콘텐츠 확대 시급</li>
+        </ul>
+      </div>
+      <div class="swot-card o">
+        <div class="swot-head">Opportunities</div>
+        <ul class="swot-list">
+          <li>텐트설치 태그 Vis 85.7%로 "1분 설치" 메시지 효과 확인</li>
+          <li>기타 페르소나에서 SoV 30.4%로 전문 쿼리 강세</li>
+          <li>설치 편의성 메시지 강화 + 전문 쿼리 대상 콘텐츠 확대로 성장 가능</li>
+        </ul>
+      </div>
+      <div class="swot-card t">
+        <div class="swot-head">Threats</div>
+        <ul class="swot-list">
+          <li>Roofnest SoV 40.4%로 격차 심화 중</li>
+          <li>가성비/실용성 중시형(82% 쿼리)에서 SoV 14.9%로 낮음</li>
+          <li>Roofnest의 종합적 커버리지가 카테고리 확장을 선점할 위험</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Competitor Shifts 요약</h3>
+    <table class="data-table">
+      <thead><tr><th>브랜드</th><th>SoV</th><th>GEO 포지셔닝 전략</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Roofnest</strong></td><td><strong style="color:#f43f5e;">40.4%</strong></td><td>시장 지배자. 소형(Sparrow/Falcon)~대형(Condor) 전 제품군 커버. AS/부품 미국 내 유통망 우위. iKamper에 가장 직접적인 위협</td></tr>
+        <tr><td>James Baroud</td><td>약 10.0%</td><td>프리미엄 전문가. 4시즌 단열·방수·환기 성능에서 차별화. 성능 쿼리에서 iKamper와 직접 경합</td></tr>
+        <tr><td>ARB</td><td>약 9.2%</td><td>어닝/쉘터 절대 강자. 270도 어닝 시장에서 독점. 오버랜드 장비 생태계의 표준으로 인식</td></tr>
+        <tr><td>Front Runner</td><td>약 9.6%</td><td>루프랙/차량 액세서리 전문. 오버랜드 장비 생태계의 표준. iKamper 제품 라인업 확장 없이는 경쟁 불가</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── 8. STRATEGY ── -->
+  <div class="section reveal">
+    <div class="section-label">08 — 대응 전략</div>
+    <div class="section-title">iKamper GEO 대응 전략</div>
+    <div class="section-divider"></div>
+
+    <div class="strategy-list" style="margin-bottom:28px;">
+      <div class="strategy-item" style="border-left:3px solid var(--color-primary);">
+        <div class="strategy-num">①</div>
+        <div class="strategy-content">
+          <div class="strategy-title">종합적 완성도 + 생태계 확장</div>
+          <div class="strategy-body">현재 Skycamp 단일 제품에 과도하게 의존하는 구조에서 벗어나, <strong>어닝/쉘터 호환성 가이드, 소형 텐트(Skycamp Mini) 전용 콘텐츠, 차량별 설치 가이드</strong> 등 시나리오 기반 콘텐츠를 대량 생성하여 AI 학습을 유도해야 합니다.</div>
+        </div>
+      </div>
+      <div class="strategy-item" style="border-left:3px solid var(--color-accent);">
+        <div class="strategy-num">②</div>
+        <div class="strategy-content">
+          <div class="strategy-title">Persona 타겟 전략</div>
+          <div class="strategy-body"><strong>가성비/실용성 중시형(41개 쿼리, SoV 14.9%)</strong>이 전체 성과의 병목 역할. 이 그룹에 맞춤형 GEO 콘텐츠(가격 비교, 입문자 가이드, 차량별 호환성 표 등)를 집중 발행하여 Roofnest 대비 SoV 격차를 줄여야 합니다.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>우선순위 액션 아이템</h3>
+    <table class="data-table">
+      <thead><tr><th>우선순위</th><th>액션</th><th>예상 효과</th></tr></thead>
+      <tbody>
+        <tr><td><strong style="color:#f43f5e;">HIGH</strong></td><td>ikamper.com 어닝/쉘터 호환성 가이드 페이지 발행</td><td>어닝/쉘터 Vis 0% → 개선</td></tr>
+        <tr><td><strong style="color:#f43f5e;">HIGH</strong></td><td>Skycamp Mini 전용 비교 콘텐츠 강화</td><td>소형 텐트 SoV 9.1% → 향상</td></tr>
+        <tr><td><strong style="color:#F97316;">MED</strong></td><td>gearjunkie.com 등 미디어 파트너십 확대</td><td>Reference 순위 2위 → 1위 도전</td></tr>
+        <tr><td><strong style="color:#F97316;">MED</strong></td><td>가성비/실용성 페르소나 타겟 가격 비교 콘텐츠</td><td>최대 그룹 SoV 14.9% → 향상</td></tr>
+        <tr><td><strong style="color:#10b981;">LOW</strong></td><td>Q&A 형식 구조화 콘텐츠 발행 (AI 읽기 최적화)</td><td>AI 답변 직접 반영률 향상</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── 9. 전체 쿼리 목록 ── -->
+  <div class="section reveal">
+    <div class="section-label">09 — 부록</div>
+    <div class="section-title">전체 쿼리 목록 (50개)</div>
+    <div class="section-divider"></div>
+
+    <table class="query-table" style="margin-bottom:8px;">
+      <thead><tr><th>Query ID</th><th>Query Text</th><th>Category</th><th>Type</th></tr></thead>
+      <tbody>
+        <tr><td class="qid">q0000001</td><td>1분 내 설치로 유명한 4인용 하드쉘 루프탑 텐트 모델은 무엇이 있나요?</td><td>루프탑 텐트</td><td>information search</td></tr>
+        <tr><td class="qid">q0000002</td><td>패밀리 오버랜드용으로 침대 크기가 킹 사이즈에 가까운 하드쉘 루프탑 텐트를 추천...</td><td>루프탑 텐트</td><td>recommendations</td></tr>
+        <tr><td class="qid">q0000003</td><td>알루미늄 하우징과 파이버글라스 하우징을 채택한 프리미엄 루프탑 텐트의 대표 모델들을 비교...</td><td>루프탑 텐트</td><td>comparison</td></tr>
+        <tr><td class="qid">q0000004</td><td>세단이나 크로스오버에도 장착 가능한 소형 루프탑 텐트 중 가장 가벼운 모델은?</td><td>소형 루프탑 텐트</td><td>information search</td></tr>
+        <tr><td class="qid">q0000005</td><td>4시즌 단열 키트 호환이 잘 되는 하드쉘 루프탑 텐트로 많이 거론되는 제품은?</td><td>루프탑 텐트</td><td>information search</td></tr>
+        <tr><td class="qid">q0000006</td><td>사다리 각도 조절과 최대 하중 스펙이 우수한 텐트 전용 사다리로 많이 쓰이는 제품은?</td><td>텐트 액세서리(사다리)</td><td>information search</td></tr>
+        <tr><td class="qid">q0000007</td><td>어닝룸까지 확장 가능한 270도 어닝과 호환성이 검증된 루프탑 텐트 조합을 알려주세요.</td><td>어닝/쉘터</td><td>recommendations</td></tr>
+        <tr><td class="qid">q0000008</td><td>픽업트럭 전용 루프랙과 호환성이 좋은 하드쉘 텐트 브랜드/모델을 비교해 주세요.</td><td>루프랙 호환성</td><td>comparison</td></tr>
+        <tr><td class="qid">q0000009</td><td>미국 시장에서 후기와 리뷰가 가장 많은 하드쉘 루프탑 텐트 톱 모델은 무엇인가요?</td><td>루프탑 텐트</td><td>trends</td></tr>
+        <tr><td class="qid">q0000010</td><td>장마철 방수 테스트에서 고평가된 하드쉘 루프탑 텐트는 어떤 제품인가요?</td><td>루프탑 텐트</td><td>performance</td></tr>
+        <tr><td class="qid">q0000011</td><td>SUV 루프 레일 강도가 낮은 차량에도 설치가 쉬운 경량 미니 루프탑 텐트 추천해 주세요.</td><td>소형 루프탑 텐트</td><td>use cases</td></tr>
+        <tr><td class="qid">q0000012</td><td>미끄럼 방지 트레드와 연장 옵션을 제공하는 텐트 사다리 중 커뮤니티에서 가장 많이 쓰는...</td><td>텐트 액세서리(사다리)</td><td>information search</td></tr>
+        <tr><td class="qid">q0000013</td><td>루프탑 텐트에 맞춘 침낭·매트·수납 솔루션을 함께 제공하는 번들 제품이 있을까요?</td><td>캠핑용품 및 수납 액세서리</td><td>information search</td></tr>
+        <tr><td class="qid">q0000014</td><td>정적하중 1,000파운드 기준을 충족하는 루프랙과 궁합이 좋은 텐트 모델을 알려주세요.</td><td>루프랙 호환성</td><td>recommendations</td></tr>
+        <tr><td class="qid">q0000015</td><td>설치·철수 시간이 가장 짧다고 평가되는 4인용 하드쉘과 2인용 미니 텐트의 대표 모델...</td><td>루프탑 텐트</td><td>comparison</td></tr>
+        <tr><td class="qid">q0000016</td><td>여름 결로를 줄이는 대형 루프 벤트를 갖춘 하드쉘 텐트로 유명한 제품은 무엇인가요?</td><td>루프탑 텐트</td><td>performance</td></tr>
+        <tr><td class="qid">q0000017</td><td>혼자 올리기 쉬운 루프탑 텐트 리프팅 보조 키트나 롤러 액세서리 추천해 주세요.</td><td>캠핑용품 및 수납 액세서리</td><td>recommendations</td></tr>
+        <tr><td class="qid">q0000018</td><td>사이드 어닝과 텐트 색상·소재 매칭이 좋은 오버랜드 셋업으로 최근 커뮤니티에서 많이...</td><td>어닝/쉘터</td><td>trends</td></tr>
+        <tr><td class="qid">q0000019</td><td>고속도로 주행풍 소음이 적은 에어로 쉘 디자인의 하드쉘 텐트 모델을 알려주세요.</td><td>루프탑 텐트</td><td>performance</td></tr>
+        <tr><td class="qid">q0000020</td><td>4인 가족 기준 내부 수납 포켓과 천장 메쉬 구성이 잘 된 루프탑 텐트 추천 부탁해요.</td><td>루프탑 텐트</td><td>recommendations</td></tr>
+        <tr><td class="qid">q0000021</td><td>미국 보증기간이 2년 이상이고 서비스 응대가 좋은 하드쉘 텐트의 플래그십 모델은?</td><td>루프탑 텐트</td><td>information search</td></tr>
+        <tr><td class="qid">q0000022</td><td>겨울철 히터 사용에 유리한 어닝룸 단열 키트까지 갖춘 어닝/룸 조합 추천해 주세요.</td><td>어닝/쉘터</td><td>use cases</td></tr>
+        <tr><td class="qid">q0000023</td><td>사각·에어로 루프바 클램프 규격을 폭넓게 지원하는 루프탑 텐트 모델은 무엇인가요?</td><td>루프랙 호환성</td><td>information search</td></tr>
+        <tr><td class="qid">q0000024</td><td>원터치 래치 내구성이 뛰어나다고 평가되는 하드쉘 텐트는 어떤 제품인가요?</td><td>루프탑 텐트</td><td>performance</td></tr>
+        <tr><td class="qid">q0000025</td><td>오버랜드 박람회나 아웃도어 어워드에서 수상 경력이 있는 루프탑 텐트 모델은?</td><td>루프탑 텐트</td><td>trends</td></tr>
+        <tr><td class="qid">q0000026</td><td>비 오는 날 트렁크 동선을 가려주는 패스스루 어닝룸으로 유명한 제품은 무엇인가요?</td><td>어닝/쉘터</td><td>information search</td></tr>
+        <tr><td class="qid">q0000027</td><td>미니 SUV 루프 길이에 맞춘 단축형 하드쉘 텐트 모델을 추천해 주세요.</td><td>소형 루프탑 텐트</td><td>use cases</td></tr>
+        <tr><td class="qid">q0000028</td><td>내장 매트리스 두께 6cm 이상이고 이너텐트 옵션을 제공하는 모델들을 비교해 주세요.</td><td>루프탑 텐트</td><td>comparison</td></tr>
+        <tr><td class="qid">q0000029</td><td>쉘 커버 색상 커스터마이즈(블랙·그레이 등)가 가능한 하드쉘 텐트가 있을까요?</td><td>루프탑 텐트</td><td>information search</td></tr>
+        <tr><td class="qid">q0000030</td><td>폴리코튼 원단 GSM 수치와 방수 등급이 명시된 프리미엄 모델들을 스펙으로 비교해 주세요.</td><td>루프탑 텐트</td><td>comparison</td></tr>
+        <tr><td class="qid">q0000031</td><td>지프 랭글러나 브롱코 같은 오프로더에 자주 장착되는 대표적인 하드쉘 텐트는 무엇인가요?</td><td>루프탑 텐트</td><td>information search</td></tr>
+        <tr><td class="qid">q0000032</td><td>세대별 업그레이드가 이어져 3세대 이상 출시된 하드쉘 텐트의 최신 모델명은 무엇인가요?</td><td>루프탑 텐트</td><td>trends</td></tr>
+        <tr><td class="qid">q0000033</td><td>힌지·가스 스트럿·캔버스 등 교체 부품을 미국 내에서 쉽게 구할 수 있는 하드쉘 텐트는?</td><td>텐트 수리/AS</td><td>information search</td></tr>
+        <tr><td class="qid">q0000034</td><td>UV 저항력이 높은 쉘 코팅으로 옥외 보관에 유리하다고 알려진 모델은 무엇인가요?</td><td>루프탑 텐트</td><td>performance</td></tr>
+        <tr><td class="qid">q0000035</td><td>가격 대비 기능(스카이뷰 창, 슈즈백, LED 레일)이 잘 갖춰진 하드쉘 텐트 추천...</td><td>루프탑 텐트</td><td>pricing</td></tr>
+        <tr><td class="qid">q0000036</td><td>상판에 기어 레일이나 크로스바 옵션을 제공해 적재 확장이 가능한 루프탑 텐트 모델은?</td><td>루프탑 텐트</td><td>information search</td></tr>
+        <tr><td class="qid">q0000037</td><td>접었을 때 높이가 낮은 초저프로파일 미니 루프탑 텐트로 유명한 제품은 무엇인가요?</td><td>소형 루프탑 텐트</td><td>performance</td></tr>
+        <tr><td class="qid">q0000038</td><td>차량캠핑 유튜버들이 자주 사용하는 4인용 하드쉘 텐트 모델은 무엇인가요?</td><td>루프탑 텐트</td><td>trends</td></tr>
+        <tr><td class="qid">q0000039</td><td>바닥 없는 어닝룸과 바닥 일체형 어닝룸의 인기 모델과 장단점을 비교해 주세요.</td><td>어닝/쉘터</td><td>comparison</td></tr>
+        <tr><td class="qid">q0000040</td><td>장거리 오버랜드에서 신속한 피칭과 방풍성이 검증된 텐트 조합으로 많이 추천되는 모델은?</td><td>루프탑 텐트</td><td>use cases</td></tr>
+        <tr><td class="qid">q0000041</td><td>아이 둘과 반려견이 함께 쓰기 좋은, 출입구가 넓고 개방감 있는 하드쉘 텐트 추천...</td><td>루프탑 텐트</td><td>use cases</td></tr>
+        <tr><td class="qid">q0000042</td><td>입문자 예산으로 접근 가능한 엔트리급 미니 루프탑 텐트의 대표 모델과 가격대는?</td><td>소형 루프탑 텐트</td><td>pricing</td></tr>
+        <tr><td class="qid">q0000043</td><td>시속 40마일 이상의 강풍 조건에서 버틴 사례가 많은 하드쉘 텐트는 어떤 제품인가요?</td><td>루프탑 텐트</td><td>performance</td></tr>
+        <tr><td class="qid">q0000044</td><td>차량에 영구 개조 없이 장착 가능한 어닝/쉘터 시스템 중 대중적으로 많이 쓰이는 제품은?</td><td>어닝/쉘터</td><td>information search</td></tr>
+        <tr><td class="qid">q0000045</td><td>퀵릴리즈 브래킷으로 탈부착이 쉬운 루프탑 텐트 추천해 주세요.</td><td>루프탑 텐트</td><td>recommendations</td></tr>
+        <tr><td class="qid">q0000046</td><td>캠핑 후기 사이트에서 평점이 높은 4인용 하드쉘 텐트 TOP3를 비교해 주세요.</td><td>루프탑 텐트</td><td>comparison</td></tr>
+        <tr><td class="qid">q0000047</td><td>난방 호스를 연결할 수 있는 패스스루 포트를 갖춘 어닝룸이나 텐트 모델이 있을까요?</td><td>어닝/쉘터</td><td>information search</td></tr>
+        <tr><td class="qid">q0000048</td><td>파노라마 루프 창과 대형 스카이뷰 창을 모두 갖춘 하드쉘 텐트를 알려주세요.</td><td>루프탑 텐트</td><td>information search</td></tr>
+        <tr><td class="qid">q0000049</td><td>중고 시세가 안정적이어서 되팔기 좋은 하드쉘 루프탑 텐트 모델은 무엇인가요?</td><td>루프탑 텐트</td><td>pricing</td></tr>
+        <tr><td class="qid">q0000050</td><td>AS 응답이 빠르고 사용자 커뮤니티가 활발한 하드쉘 텐트 브랜드의 시그니처 모델은?</td><td>루프탑 텐트</td><td>information search</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- end container -->
+
+<!-- ── FOOTER ── -->
+<div class="footer">
+  <span>TecAce AI Supervision — iKamper GEO Analysis Report 2026.04</span>
+  <span>Prepared by TecAce AI SUPERVISION</span>
+</div>
+
+<!-- ── SCRIPTS ── -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+/* ── i18n ── */
+var LANG = {
+  ko: {
+    badge: 'GEO 분석 리포트',
+    title: 'iKamper<br>GEO Brand Visibility',
+    subtitle: 'Generative Engine Optimization — 월간 분석 리포트',
+    meta1_label: '분석 기간', meta2_label: '총 쿼리', meta3_label: '브랜드 멘션', meta4_label: '작성',
+    lang_btn: 'English'
+  },
+  en: {
+    badge: 'GEO ANALYSIS REPORT',
+    title: 'iKamper<br>GEO Brand Visibility',
+    subtitle: 'Generative Engine Optimization — Monthly Analysis Report',
+    meta1_label: 'Period', meta2_label: 'Queries', meta3_label: 'Brand Mentions', meta4_label: 'Prepared by',
+    lang_btn: '한국어'
+  }
+};
+var curLang = localStorage.getItem('tecace-lang') || 'ko';
+function applyLang(lang) {
+  curLang = lang;
+  localStorage.setItem('tecace-lang', lang);
+  document.documentElement.lang = lang === 'ko' ? 'ko' : 'en';
+  var d = LANG[lang];
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var k = el.getAttribute('data-i18n');
+    if (d[k] !== undefined) el.textContent = d[k];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
+    var k = el.getAttribute('data-i18n-html');
+    if (d[k] !== undefined) el.innerHTML = d[k];
+  });
+  document.getElementById('langBtn').textContent = d.lang_btn;
+}
+function toggleLang() { applyLang(curLang === 'ko' ? 'en' : 'ko'); }
+applyLang(curLang);
+
+/* ── Theme ── */
+var currentTheme = localStorage.getItem('tecace-theme') || 'light';
+function applyTheme(t) {
+  document.documentElement.className = 'theme-' + t;
+  document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
+  localStorage.setItem('tecace-theme', t);
+  currentTheme = t;
+}
+function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
+applyTheme(currentTheme);
+
+/* ── Scroll Reveal ── */
+var obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.06 });
+document.querySelectorAll('.reveal').forEach(function(el){ obs.observe(el); });
+
+/* ── PDF ── */
+async function downloadPDF() {
+  var btn = document.getElementById('pdfBtn');
+  var orig = btn.textContent; btn.textContent = 'Generating...'; btn.disabled = true;
+  document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('visible'); });
+  var fname = curLang === 'ko' ? 'TecAce_iKamper_GEO_Report_KO.pdf' : 'TecAce_iKamper_GEO_Report_EN.pdf';
+  try {
+    await html2pdf().set({
+      margin: 0, filename: fname,
+      image: { type: 'jpeg', quality: 0.96 },
+      html2canvas: { scale: 2, useCORS: true, letterRendering: true, logging: false },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['css', 'legacy'] }
+    }).from(document.body).save();
+  } finally { btn.textContent = orig; btn.disabled = false; }
+}
+</script>
+
+<!-- ✦ TecAce Visual Editor v2.1 -->
+<style>
+#ve-toggle{position:fixed;bottom:24px;left:24px;z-index:9999;background:linear-gradient(90deg,#1550FC,#E700DB);color:#fff;border:none;border-radius:10px;padding:10px 18px;font-family:'Poppins','Pretendard',sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:7px;box-shadow:0 4px 20px rgba(21,80,252,.4);transition:opacity .15s}
+#ve-toggle:hover{opacity:.9}
+body.ve-mode *:not(#ve-panel):not(#ve-panel *):not(#ve-toggle):not(script):not(style){cursor:crosshair !important}
+body.ve-mode *:not(#ve-panel):not(#ve-panel *):not(#ve-toggle):not([contenteditable="true"]):hover{outline:2px solid rgba(21,80,252,.45) !important;outline-offset:1px}
+body.ve-mode .ve-selected{outline:2px solid #E700DB !important;outline-offset:2px}
+[contenteditable="true"]{outline:2px dashed #E700DB !important;outline-offset:3px;cursor:text !important;border-radius:3px;min-width:4px;min-height:1em}
+#ve-panel{position:fixed;right:0;top:0;bottom:0;width:300px;z-index:9998;background:#fff;border-left:1px solid #E5E7EB;display:none;flex-direction:column;font-family:'Poppins','Pretendard',sans-serif;box-shadow:-4px 0 24px rgba(0,0,0,.1)}
+#ve-panel.open{display:flex}
+.ve-header{padding:14px 18px;border-bottom:1px solid #E5E7EB;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(90deg,rgba(21,80,252,.06),rgba(231,0,219,.04))}
+.ve-header-title{font-size:13px;font-weight:700;color:#101828;display:flex;align-items:center;gap:6px}
+.ve-close{width:28px;height:28px;border-radius:6px;border:1px solid #E5E7EB;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#667085}
+.ve-hint{padding:5px 18px;font-size:11px;color:#9CA3AF;text-align:center;background:rgba(21,80,252,.03);border-bottom:1px solid #E5E7EB}
+.ve-hint span{color:#E700DB;font-weight:600}
+.ve-empty{padding:28px 18px;text-align:center;color:#9CA3AF;font-size:13px;line-height:1.8}
+.ve-empty svg{margin:0 auto 12px;display:block;opacity:.4}
+.ve-target-label{margin:12px 18px 0;padding:8px 12px;background:#F5F6FA;border-radius:8px;font-size:11.5px;color:#667085;font-weight:500;border:1px solid #E5E7EB;word-break:break-all}
+.ve-props{flex:1;overflow-y:auto;padding:12px 18px;display:flex;flex-direction:column;gap:10px}
+.ve-prop{display:flex;flex-direction:column;gap:5px}
+.ve-prop-label{font-size:11px;font-weight:600;color:#667085;text-transform:uppercase;letter-spacing:.4px}
+.ve-prop-row{display:flex;gap:6px;align-items:center}
+.ve-input{flex:1;padding:6px 10px;border-radius:7px;border:1px solid #E5E7EB;background:#F9FAFB;font-size:13px;font-family:'Poppins','Pretendard',sans-serif;color:#101828;outline:none;transition:border-color .15s}
+.ve-input:focus{border-color:#1550FC}
+.ve-textarea{width:100%;padding:8px 10px;border-radius:7px;border:1px solid rgba(231,0,219,.35);background:#FFF5FE;font-size:13px;font-family:'Poppins','Pretendard',sans-serif;color:#101828;outline:none;resize:vertical;min-height:64px;line-height:1.5;transition:border-color .15s}
+.ve-textarea:focus{border-color:#E700DB;box-shadow:0 0 0 3px rgba(231,0,219,.08)}
+.ve-text-sub{font-size:10.5px;color:#9CA3AF;margin-top:2px}
+.ve-color-wrap{position:relative;width:34px;height:34px;flex-shrink:0}
+.ve-color-wrap input[type=color]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:none;padding:0}
+.ve-color-swatch{width:34px;height:34px;border-radius:7px;border:2px solid #E5E7EB;pointer-events:none;transition:background .1s}
+.ve-slider{width:100%;accent-color:#1550FC;cursor:pointer}
+.ve-section-title{font-size:11px;font-weight:700;color:#1550FC;text-transform:uppercase;letter-spacing:.5px;padding:6px 0 2px;border-bottom:1px solid #E5E7EB;margin-top:4px}
+.ve-section-title.ve-accent{color:#E700DB}
+.ve-section-title.ve-green{color:#059669}
+.ve-code-area{border-top:1px solid #E5E7EB;background:#F8F9FF;padding:12px 18px;max-height:140px;overflow-y:auto}
+.ve-code-title{font-size:11px;font-weight:600;color:#667085;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+.ve-code-block{font-size:11px;line-height:1.7;color:#1550FC;font-family:'Courier New',monospace;white-space:pre-wrap;word-break:break-all}
+.ve-copy-btn{font-size:11px;font-weight:600;color:#E700DB;background:none;border:none;cursor:pointer;font-family:'Poppins','Pretendard',sans-serif;padding:0}
+.ve-footer{padding:12px 18px;border-top:1px solid #E5E7EB;display:flex;gap:8px}
+.ve-dl-btn{flex:1;padding:8px;border-radius:8px;font-size:12.5px;font-weight:600;font-family:'Poppins','Pretendard',sans-serif;cursor:pointer;border:none;background:linear-gradient(90deg,#1550FC,#E700DB);color:#fff;display:flex;align-items:center;justify-content:center;gap:5px}
+.ve-dl-btn:hover{opacity:.9}
+.ve-reset-btn{padding:8px 12px;border-radius:8px;font-size:12.5px;font-weight:500;font-family:'Poppins','Pretendard',sans-serif;cursor:pointer;border:1px solid #E5E7EB;background:none;color:#667085}
+</style>
+<button id="ve-toggle" onclick="veToggle()">
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+  편집 모드
+</button>
+<div id="ve-panel">
+  <div class="ve-header">
+    <span class="ve-header-title">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      비주얼 에디터 v2
+    </span>
+    <button class="ve-close" onclick="veToggle()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="ve-hint">클릭 = 스타일 &nbsp;·&nbsp; <span>더블클릭 = 텍스트</span></div>
+  <div id="ve-empty" class="ve-empty">
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14L21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+    화면에서 바꾸고 싶은<br>요소를 클릭하세요<br><br>
+    <span style="font-size:11px;color:#E700DB;font-weight:600">더블클릭</span>하면 텍스트를<br>바로 수정할 수 있어요
+  </div>
+  <div id="ve-target-label" class="ve-target-label" style="display:none"></div>
+  <div id="ve-props" class="ve-props" style="display:none"></div>
+  <div id="ve-code-area" class="ve-code-area" style="display:none">
+    <div class="ve-code-title">변경된 CSS <button class="ve-copy-btn" onclick="veCopyCode()">복사</button></div>
+    <div id="ve-code-block" class="ve-code-block"></div>
+  </div>
+  <div class="ve-footer">
+    <button class="ve-reset-btn" onclick="veReset()">초기화</button>
+    <button class="ve-dl-btn" onclick="veDownload()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      HTML 다운로드
+    </button>
+  </div>
+</div>
+<script>
+(function(){
+var veActive=false,veTarget=null,veChanges={},veEditing=null;
+var veTrans={};
+window.veToggle=function(){
+  veActive=!veActive;
+  document.body.classList.toggle('ve-mode',veActive);
+  document.getElementById('ve-panel').classList.toggle('open',veActive);
+  document.getElementById('ve-toggle').innerHTML=veActive
+    ?'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> 편집 종료'
+    :'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg> 편집 모드';
+  if(!veActive)veShowEmpty();
+};
+document.addEventListener('click',function(e){
+  if(!veActive)return;
+  if(e.target.closest('#ve-panel')||e.target.id==='ve-toggle')return;
+  if(veEditing&&veEditing!==e.target)veStopEditing();
+  if(veTarget)veTarget.classList.remove('ve-selected');
+  veTarget=e.target;veTarget.classList.add('ve-selected');veShowProps(veTarget);
+});
+document.addEventListener('dblclick',function(e){
+  if(!veActive)return;
+  if(e.target.closest('#ve-panel')||e.target.id==='ve-toggle')return;
+  e.preventDefault();veStartEditing(e.target);
+});
+function veStartEditing(el){
+  veStopEditing();veEditing=el;
+  el.setAttribute('contenteditable','true');el.focus();
+  var range=document.createRange();range.selectNodeContents(el);range.collapse(false);
+  var sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);
+  if(veTarget)veTarget.classList.remove('ve-selected');
+  veTarget=el;veTarget.classList.add('ve-selected');veShowProps(el);
+}
+function veStopEditing(){if(veEditing){veEditing.removeAttribute('contenteditable');veEditing=null;}}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&veEditing)veStopEditing();});
+function veShowEmpty(){
+  document.getElementById('ve-empty').style.display='';
+  document.getElementById('ve-target-label').style.display='none';
+  document.getElementById('ve-props').style.display='none';
+  document.getElementById('ve-code-area').style.display='none';
+}
+function veGetSel(el){
+  if(el.id)return'#'+el.id;
+  var cls=Array.from(el.classList).filter(function(c){return!['ve-selected','active','open'].includes(c);});
+  return cls.length?'.'+cls[0]:el.tagName.toLowerCase();
+}
+function veShowProps(el){
+  document.getElementById('ve-empty').style.display='none';
+  document.getElementById('ve-target-label').style.display='';
+  document.getElementById('ve-props').style.display='';
+  document.getElementById('ve-code-area').style.display='';
+  document.getElementById('ve-target-label').textContent='<'+el.tagName.toLowerCase()+'> '+veGetSel(el);
+  var props=document.getElementById('ve-props');props.innerHTML='';
+  var cs=window.getComputedStyle(el);
+  function rgb2hex(v){var m=v.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);if(!m)return'#000000';return'#'+[m[1],m[2],m[3]].map(function(x){return parseInt(x).toString(16).padStart(2,'0');}).join('');}
+  function sec(t,cls){var d=document.createElement('div');d.className='ve-section-title'+(cls?' '+cls:'');d.textContent=t;props.appendChild(d);}
+  var rawText=(el.innerText||el.textContent||'').trim();
+  var hasDirectText=Array.from(el.childNodes).some(function(n){return n.nodeType===3&&n.textContent.trim();});
+  if(hasDirectText||el.children.length===0){
+    sec('텍스트 내용','ve-accent');
+    var td=document.createElement('div');td.className='ve-prop';
+    var rows=rawText.length<60&&!rawText.includes('\n')?2:4;
+    td.innerHTML='<textarea class="ve-textarea" id="ve-txt-ta" rows="'+rows+'">'+rawText.replace(/</g,'&lt;')+'</textarea><div class="ve-text-sub">또는 더블클릭해서 직접 수정</div>';
+    props.appendChild(td);
+    setTimeout(function(){
+      var ta=document.getElementById('ve-txt-ta');if(!ta)return;
+      ta.addEventListener('input',function(){
+        if(el.children.length===0){el.textContent=ta.value;}
+        else{Array.from(el.childNodes).forEach(function(n){if(n.nodeType===3)n.textContent=ta.value;});}
+      });
+      ta.addEventListener('click',function(e){e.stopPropagation();});
+      ta.addEventListener('dblclick',function(e){e.stopPropagation();});
+    },0);
+  }
+  sec('색상');
+  function col(lbl,p,v){
+    var h=rgb2hex(v);
+    var r=document.createElement('div');r.className='ve-prop';
+    r.innerHTML='<div class="ve-prop-label">'+lbl+'</div><div class="ve-prop-row"><div class="ve-color-wrap"><div class="ve-color-swatch" id="sw-'+p+'" style="background:'+h+'"></div><input type="color" value="'+h+'" oninput="veApply(\''+p+'\',this.value);document.getElementById(\'sw-'+p+'\').style.background=this.value"></div><input class="ve-input" type="text" value="'+h+'" oninput="if(this.value.match(/^#[0-9a-fA-F]{6}$/)){veApply(\''+p+'\',this.value);document.getElementById(\'sw-'+p+'\').style.background=this.value}"></div>';
+    props.appendChild(r);
+  }
+  function sld(lbl,p,v,mn,mx,u){
+    var n=parseFloat(v)||0;
+    var r=document.createElement('div');r.className='ve-prop';
+    r.innerHTML='<div class="ve-prop-label">'+lbl+' <span id="sv-'+p+'" style="color:#1550FC;font-weight:700">'+Math.round(n)+u+'</span></div><input class="ve-slider" type="range" min="'+mn+'" max="'+mx+'" value="'+Math.round(n)+'" oninput="veApply(\''+p+'\',this.value+\''+u+'\');document.getElementById(\'sv-'+p+'\').textContent=this.value+\''+u+'\'">';
+    props.appendChild(r);
+  }
+  col('글자색','color',cs.color);col('배경색','background-color',cs.backgroundColor);
+  sec('크기 & 여백');sld('글자 크기','font-size',cs.fontSize,8,72,'px');sld('글자 굵기','font-weight',cs.fontWeight,100,900,'');sld('안쪽 여백','padding',cs.paddingTop,0,60,'px');
+  sec('테두리');col('테두리 색상','border-color',cs.borderTopColor);sld('테두리 두께','border-width',cs.borderTopWidth,0,8,'px');sld('모서리 반경','border-radius',cs.borderRadius,0,32,'px');
+  veUpdateCode();
+}
+window.veApply=function(p,v){
+  if(!veTarget)return;
+  veTarget.style.setProperty(p,v);
+  var s=veGetSel(veTarget);if(!veChanges[s])veChanges[s]={};veChanges[s][p]=v;
+  veUpdateCode();
+};
+function veUpdateCode(){
+  var lines=[];
+  Object.keys(veChanges).forEach(function(s){
+    var p=veChanges[s];var f=Object.keys(p);
+    if(f.length){var d=f.map(function(k){return'  '+k+': '+p[k]+';';}).join('\n');lines.push(s+' {\n'+d+'\n}');}
+  });
+  document.getElementById('ve-code-block').textContent=lines.join('\n\n')||'(아직 변경 없음)';
+}
+window.veCopyCode=function(){navigator.clipboard.writeText(document.getElementById('ve-code-block').textContent);};
+window.veReset=function(){
+  if(!veTarget)return;veStopEditing();
+  veTarget.removeAttribute('style');
+  var s=veGetSel(veTarget);delete veChanges[s];delete veTrans[s];
+  veUpdateCode();veShowProps(veTarget);
+};
+window.veDownload=function(){
+  veStopEditing();
+  var css=Object.keys(veChanges).map(function(s){
+    var p=veChanges[s];var f=Object.keys(p);
+    if(!f.length)return'';
+    var d=f.map(function(k){return'  '+k+': '+p[k]+' !important;';}).join('\n');
+    return s+' {\n'+d+'\n}';
+  }).filter(Boolean).join('\n');
+  var doc2=new DOMParser().parseFromString(document.documentElement.outerHTML,'text/html');
+  ['ve-panel','ve-toggle'].forEach(function(id){var el=doc2.getElementById(id);if(el)el.remove();});
+  doc2.querySelectorAll('[contenteditable]').forEach(function(el){el.removeAttribute('contenteditable');});
+  if(css){var st=doc2.createElement('style');st.textContent='/* ✦ 비주얼 에디터 변경사항 */\n'+css;doc2.head.appendChild(st);}
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['<!DOCTYPE html>\n'+doc2.documentElement.outerHTML],{type:'text/html'}));
+  a.download='ikamper-geo-visualize-edited.html';a.click();
+};
+})();
+</script>
+<!-- ✦ TecAce Visual Editor v2.1 END -->
+
+</body>
+</html>
