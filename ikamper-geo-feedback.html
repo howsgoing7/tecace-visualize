@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ko" class="theme-light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GEO 분석 리포트 검토 피드백 — iKamper 2026.04</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html.theme-light{
+  --color-primary:#1550FC;--color-accent:#E700DB;
+  --color-heading:#101828;--color-body:#364153;
+  --color-bg:#FFFFFF;--color-card-bg:#F9FAFB;
+  --color-card-border:#E5E7EB;--color-muted:#667085;
+  --surface:#F9FAFB;--surface-hover:#F3F4F6;
+}
+body{font-family:'Poppins','Pretendard',sans-serif;background:var(--color-bg);color:var(--color-body);}
+
+/* Nav */
+.top-nav{position:sticky;top:0;z-index:300;background:var(--color-bg);border-bottom:1px solid var(--color-card-border);display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:46px;}
+.nav-left{display:flex;align-items:center;gap:12px;}
+.nav-logo{font-size:13px;font-weight:700;color:var(--color-primary);}
+.nav-sep{width:1px;height:14px;background:var(--color-card-border);}
+.nav-title{font-size:12px;color:var(--color-muted);}
+.nav-right{display:flex;gap:6px;}
+.nav-btn{padding:4px 12px;border-radius:5px;border:1px solid var(--color-card-border);background:transparent;cursor:pointer;font-size:11px;font-weight:600;color:var(--color-muted);font-family:'Poppins','Pretendard',sans-serif;transition:all .15s;}
+.nav-btn:hover{background:var(--surface-hover);color:var(--color-heading);}
+.nav-btn.primary{background:var(--color-primary);color:#fff;border-color:var(--color-primary);}
+.nav-btn.primary:hover{opacity:.88;}
+
+/* Banner */
+.header-banner{padding:52px 64px 44px;background:linear-gradient(135deg,#0f1142 0%,#1a0a2e 35%,#0d1a5c 65%,#1a0038 100%);position:relative;overflow:hidden;}
+.header-banner::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 15% 50%,rgba(21,80,252,.35) 0%,transparent 60%),radial-gradient(ellipse at 85% 30%,rgba(231,0,219,.2) 0%,transparent 55%);pointer-events:none;}
+.doc-badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.7px;text-transform:uppercase;color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.3);border-radius:4px;padding:3px 10px;margin-bottom:16px;position:relative;z-index:1;}
+.doc-title{font-size:42px;font-weight:300;color:#fff;line-height:1.15;margin-bottom:10px;position:relative;z-index:1;letter-spacing:.3px;}
+.doc-sub{font-size:15px;color:rgba(255,255,255,.6);margin-bottom:28px;position:relative;z-index:1;}
+.doc-meta{display:flex;gap:20px;flex-wrap:wrap;position:relative;z-index:1;}
+.meta-chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:6px;padding:9px 16px;}
+.meta-chip strong{display:block;font-size:9px;font-weight:600;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;}
+.meta-chip span{font-size:13px;font-weight:500;color:#fff;}
+
+/* Container */
+.container{max-width:900px;margin:0 auto;padding:48px 64px;}
+
+/* Sections */
+.section{margin-bottom:48px;}
+.section-label{font-size:10px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--color-primary);margin-bottom:6px;}
+.section-title{font-size:28px;font-weight:300;color:var(--color-heading);margin-bottom:6px;letter-spacing:.3px;}
+.section-desc{font-size:13px;color:var(--color-muted);margin-bottom:24px;line-height:1.65;}
+.divider{height:1px;background:var(--color-card-border);margin-bottom:24px;}
+
+/* Issue cards */
+.issue-list{display:flex;flex-direction:column;gap:14px;}
+.issue-card{border-radius:10px;padding:20px 22px;border:1px solid;}
+
+.issue-card.red{background:#FEF2F2;border-color:#FECACA;}
+.issue-card.orange{background:#FFF7ED;border-color:#FED7AA;}
+.issue-card.gray{background:var(--color-card-bg);border-color:var(--color-card-border);}
+
+.issue-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;}
+.issue-badge{flex-shrink:0;font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:3px 8px;border-radius:4px;margin-top:2px;}
+.badge-critical{background:#DC2626;color:#fff;}
+.badge-check{background:#F97316;color:#fff;}
+.badge-remove{background:#6B7280;color:#fff;}
+
+.issue-title{font-size:14px;font-weight:700;color:var(--color-heading);line-height:1.4;}
+.issue-page{font-size:11px;font-weight:600;color:var(--color-muted);margin-top:2px;}
+
+.issue-body{font-size:12.5px;color:var(--color-body);line-height:1.7;margin-bottom:10px;}
+
+/* Evidence block */
+.evidence{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.evidence-box{border-radius:6px;padding:10px 13px;}
+.evidence-box.a{background:#fff;border:1px solid #FECACA;}
+.evidence-box.b{background:#fff;border:1px solid #BFDBFE;}
+.ev-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.ev-label.red{color:#DC2626;}
+.ev-label.blue{color:#1550FC;}
+.ev-text{font-size:12px;color:var(--color-heading);line-height:1.5;font-weight:500;}
+.ev-page{font-size:10px;color:var(--color-muted);margin-top:3px;}
+
+/* Request box */
+.request-box{background:rgba(21,80,252,.05);border:1px solid rgba(21,80,252,.2);border-radius:6px;padding:10px 14px;display:flex;gap:10px;align-items:flex-start;}
+.req-icon{font-size:11px;font-weight:700;color:var(--color-primary);flex-shrink:0;padding-top:1px;}
+.req-text{font-size:12px;color:var(--color-body);line-height:1.6;}
+.req-text strong{color:var(--color-heading);}
+
+/* Summary table */
+.summary-table{width:100%;border-collapse:collapse;}
+.summary-table thead tr{background:var(--color-primary);}
+.summary-table thead th{padding:10px 14px;font-size:10px;font-weight:700;color:#fff;text-align:left;letter-spacing:.4px;text-transform:uppercase;}
+.summary-table tbody tr:nth-child(even){background:var(--surface);}
+.summary-table tbody tr:hover{background:var(--surface-hover);}
+.summary-table tbody td{padding:10px 14px;font-size:12px;color:var(--color-body);border-bottom:1px solid var(--color-card-border);line-height:1.5;vertical-align:top;}
+.summary-table tbody td strong{color:var(--color-heading);}
+.tag{display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;text-transform:uppercase;letter-spacing:.3px;}
+.tag.red{background:#FEE2E2;color:#DC2626;}
+.tag.orange{background:#FEF3C7;color:#D97706;}
+.tag.green{background:#D1FAE5;color:#059669;}
+
+/* OK table */
+.ok-table{width:100%;border-collapse:collapse;}
+.ok-table thead tr{background:#059669;}
+.ok-table thead th{padding:9px 14px;font-size:10px;font-weight:700;color:#fff;text-align:left;letter-spacing:.4px;text-transform:uppercase;}
+.ok-table tbody tr:nth-child(even){background:#F0FDF4;}
+.ok-table tbody td{padding:9px 14px;font-size:12px;color:var(--color-body);border-bottom:1px solid #D1FAE5;}
+
+/* Footer */
+.footer{border-top:1px solid var(--color-card-border);padding:24px 64px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--color-muted);}
+
+p{font-size:13.5px;line-height:1.75;color:var(--color-body);margin-bottom:10px;}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="nav-left">
+    <span class="nav-logo">TecAce</span>
+    <span class="nav-sep"></span>
+    <span class="nav-title">GEO 리포트 검토 피드백</span>
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn primary" onclick="window.print()">인쇄 / PDF</button>
+  </div>
+</nav>
+
+<div class="header-banner">
+  <span class="doc-badge">Quality Review Feedback</span>
+  <h1 class="doc-title">iKamper GEO 분석 리포트<br>검토 피드백</h1>
+  <p class="doc-sub">데이터 정확성 및 업체 적절성 검토 결과 — 재확인 요청 사항 정리</p>
+  <div class="doc-meta">
+    <div class="meta-chip"><strong>검토 대상</strong><span>GEO 분석 리포트 iKamper 2026년 04월</span></div>
+    <div class="meta-chip"><strong>검토 일자</strong><span>2026년 4월</span></div>
+    <div class="meta-chip"><strong>발신</strong><span>iKamper</span></div>
+    <div class="meta-chip"><strong>수신</strong><span>리포트 작성사</span></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 개요 -->
+  <div class="section">
+    <div class="section-label">Overview</div>
+    <div class="section-title">검토 개요</div>
+    <div class="divider"></div>
+    <p>2026년 4월 iKamper GEO 분석 리포트를 내부 검토한 결과, 아래와 같이 <strong>데이터 수치 불일치 4건</strong>, <strong>재확인 필요 사항 2건</strong>, <strong>포함 적절성 재검토 업체 4개</strong>를 확인하였습니다.</p>
+    <p>리포트의 핵심 수치(iKamper Visibility, SoV, Position 등)는 정확하게 확인되었습니다. 아래 사항에 대해 원본 CSV 데이터를 기준으로 재확인 및 수정본 공유를 요청드립니다.</p>
+  </div>
+
+  <!-- 수치 불일치 -->
+  <div class="section">
+    <div class="section-label">Category 1 — 데이터 불일치</div>
+    <div class="section-title">수치가 앞뒤로 다른 항목</div>
+    <div class="divider"></div>
+    <p style="margin-bottom:20px;">같은 리포트 내에서 동일 항목의 수치가 섹션별로 다르게 기재되어 있습니다. 원본 데이터 기준으로 정확한 수치 확인 후 통일을 요청드립니다.</p>
+
+    <div class="issue-list">
+
+      <!-- 이슈 1 -->
+      <div class="issue-card red">
+        <div class="issue-header">
+          <span class="issue-badge badge-critical">수치 불일치</span>
+          <div>
+            <div class="issue-title">① EZE-Breeze 언급 횟수 vs SoV 수치</div>
+          </div>
+        </div>
+        <div class="evidence">
+          <div class="evidence-box a">
+            <div class="ev-label red">p.5 본문 기재</div>
+            <div class="ev-text">"EZE-Breeze <strong>(1회)</strong> 언급"</div>
+            <div class="ev-page">1.3 Top 3 Weak Points 섹션</div>
+          </div>
+          <div class="evidence-box b">
+            <div class="ev-label blue">p.8 SoV 표 기재</div>
+            <div class="ev-text">EZE-Breeze <strong>약 4.8%</strong><br>→ 261회 중 약 <strong>13회</strong>에 해당</div>
+            <div class="ev-page">3.2 Share of Voice 표</div>
+          </div>
+        </div>
+        <div class="request-box">
+          <span class="req-icon">→</span>
+          <div class="req-text"><strong>재확인 요청:</strong> 실제 언급 횟수가 1회인지 13회인지 원본 CSV 기준으로 확인 후 두 수치를 통일해 주시기 바랍니다.</div>
+        </div>
+      </div>
+
+      <!-- 이슈 2 -->
+      <div class="issue-card red">
+        <div class="issue-header">
+          <span class="issue-badge badge-critical">수치 불일치</span>
+          <div>
+            <div class="issue-title">② ARB 언급 횟수 vs SoV 수치</div>
+          </div>
+        </div>
+        <div class="evidence">
+          <div class="evidence-box a">
+            <div class="ev-label red">p.5 본문 기재</div>
+            <div class="ev-text">"ARB <strong>(4회)</strong> 언급"</div>
+            <div class="ev-page">1.3 Top 3 Weak Points 섹션</div>
+          </div>
+          <div class="evidence-box b">
+            <div class="ev-label blue">p.8 SoV 표 기재</div>
+            <div class="ev-text">ARB <strong>약 9.2%</strong><br>→ 261회 중 약 <strong>24회</strong>에 해당</div>
+            <div class="ev-page">3.2 Share of Voice 표</div>
+          </div>
+        </div>
+        <div class="request-box">
+          <span class="req-icon">→</span>
+          <div class="req-text"><strong>재확인 요청:</strong> 4회는 특정 카테고리에서의 부분 집계인지, 전체 멘션 수와의 차이가 발생하는 이유를 명시해 주시기 바랍니다.</div>
+        </div>
+      </div>
+
+      <!-- 이슈 3 -->
+      <div class="issue-card red">
+        <div class="issue-header">
+          <span class="issue-badge badge-critical">논리 오류</span>
+          <div>
+            <div class="issue-title">③ 어닝/쉘터 Visibility 0%인데 감성 점수 존재</div>
+          </div>
+        </div>
+        <div class="evidence">
+          <div class="evidence-box a">
+            <div class="ev-label red">p.7 기재</div>
+            <div class="ev-text">어닝/쉘터 카테고리<br>iKamper Visibility <strong>0%</strong><br>(한 번도 언급되지 않음)</div>
+            <div class="ev-page">3.1 AI Visibility 섹션</div>
+          </div>
+          <div class="evidence-box b">
+            <div class="ev-label blue">p.9 기재</div>
+            <div class="ev-text">어닝/쉘터 평균 감성 점수<br><strong>0.50</strong></div>
+            <div class="ev-page">3.3 Sentiment 섹션</div>
+          </div>
+        </div>
+        <div class="request-box">
+          <span class="req-icon">→</span>
+          <div class="req-text"><strong>재확인 요청:</strong> iKamper가 언급되지 않은 카테고리에서 iKamper 감성 점수가 산출될 수 없습니다. 해당 감성 점수가 iKamper 기준인지, 카테고리 전체 브랜드 평균인지 명확히 해주시기 바랍니다.</div>
+        </div>
+      </div>
+
+      <!-- 이슈 4 -->
+      <div class="issue-card orange">
+        <div class="issue-header">
+          <span class="issue-badge badge-check">확인 요청</span>
+          <div>
+            <div class="issue-title">④ ikamper.com 36회 vs 공식 도메인 총 37회</div>
+          </div>
+        </div>
+        <div class="evidence">
+          <div class="evidence-box a">
+            <div class="ev-label red">p.4 동일 문장 내 기재 ①</div>
+            <div class="ev-text">"ikamper.com은 <strong>36회</strong> 인용"</div>
+            <div class="ev-page">1.2 Strong Points 섹션</div>
+          </div>
+          <div class="evidence-box b">
+            <div class="ev-label blue">p.4 동일 문장 내 기재 ②</div>
+            <div class="ev-text">"공식 도메인(owned_target) 총 인용 <strong>37회</strong>"</div>
+            <div class="ev-page">1.2 Strong Points 섹션</div>
+          </div>
+        </div>
+        <div class="request-box">
+          <span class="req-icon">→</span>
+          <div class="req-text"><strong>확인 요청:</strong> 공식 도메인이 ikamper.com 외에 1개 더 있다면 어느 도메인인지 명시해 주시기 바랍니다.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 재확인 필요 -->
+  <div class="section">
+    <div class="section-label">Category 2 — 재확인 필요</div>
+    <div class="section-title">설명 보완이 필요한 항목</div>
+    <div class="divider"></div>
+
+    <div class="issue-list">
+
+      <!-- 이슈 5 -->
+      <div class="issue-card orange">
+        <div class="issue-header">
+          <span class="issue-badge badge-check">설명 요청</span>
+          <div>
+            <div class="issue-title">⑤ Roofnest 수치의 측정 단위 혼용</div>
+          </div>
+        </div>
+        <div class="issue-body">
+          p.8에서 Roofnest SoV 40.4%는 총 261회 중 약 <strong>105회</strong> 언급에 해당합니다. 그런데 p.13 Persona 표에서는 "Roofnest <strong>(23회 등장)</strong>"으로 기재되어 있습니다.<br><br>
+          두 수치는 서로 다른 단위입니다. 105회는 답변 내 총 언급 횟수이고, 23회는 50개 질문 중 Roofnest가 등장한 질문의 수입니다. 같은 표 내에서 단위 혼용 시 오해를 유발할 수 있습니다.
+        </div>
+        <div class="request-box">
+          <span class="req-icon">→</span>
+          <div class="req-text"><strong>보완 요청:</strong> 두 수치의 측정 단위(답변 내 언급 횟수 vs 쿼리 등장 수)를 명확히 구분하여 표기해 주시기 바랍니다.</div>
+        </div>
+      </div>
+
+      <!-- 이슈 6 -->
+      <div class="issue-card orange">
+        <div class="issue-header">
+          <span class="issue-badge badge-check">통계 신뢰성</span>
+          <div>
+            <div class="issue-title">⑥ 얼리어답터 페르소나 — 쿼리 1개 기반 수치</div>
+          </div>
+        </div>
+        <div class="issue-body">
+          p.13에서 얼리어답터/기술 탐색형 페르소나의 Visibility <strong>100%</strong>, SoV <strong>100%</strong>로 기재되어 있으나, 해당 페르소나의 샘플 쿼리가 <strong>1개</strong>입니다. 쿼리 1개에서 산출된 수치를 100%로 표현하는 것은 통계적으로 의미를 가지기 어렵습니다.
+        </div>
+        <div class="request-box">
+          <span class="req-icon">→</span>
+          <div class="req-text"><strong>보완 요청:</strong> 해당 수치에 "n=1, 참고 수준" 등의 주석을 추가하거나, 관련 쿼리 수를 늘려 재분석해 주시기 바랍니다.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 업체 적절성 -->
+  <div class="section">
+    <div class="section-label">Category 3 — 업체 포함 적절성</div>
+    <div class="section-title">재검토 요청 업체 4개</div>
+    <div class="divider"></div>
+    <p style="margin-bottom:20px;">아래 업체들은 포함 근거, 데이터 일관성, 업종 적합성 측면에서 재검토를 요청드립니다.</p>
+
+    <table class="summary-table">
+      <thead>
+        <tr>
+          <th>업체명</th>
+          <th>등장 위치</th>
+          <th>문제 유형</th>
+          <th>검토 의견</th>
+          <th>조치 요청</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>EZE-Breeze</strong></td>
+          <td>p.5 본문<br>p.8 SoV 표</td>
+          <td><span class="tag red">수치 불일치</span><br><span class="tag red">업종 부적합</span></td>
+          <td>주택 베란다·선룸용 창호 회사로, 차량 캠핑·오버랜드 시장과 직접적인 관련이 없습니다. 본문 1회 언급과 SoV 4.8%(13회) 간 수치도 불일치합니다.</td>
+          <td>SoV 표 및 본문에서 <strong>삭제</strong> 또는 수치 재확인 후 포함 근거 명시</td>
+        </tr>
+        <tr>
+          <td><strong>Pelican</strong></td>
+          <td>p.13 단 1줄</td>
+          <td><span class="tag red">근거 없음</span></td>
+          <td>Persona 매트릭스 표 1줄에만 등장하며, SoV 표, 브랜드 분석, 경쟁사 섹션 어디에도 관련 데이터가 없습니다.</td>
+          <td>포함 근거(언급 횟수, SoV 등) <strong>데이터 제공</strong> 또는 <strong>삭제</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Dometic</strong></td>
+          <td>p.5 본문</td>
+          <td><span class="tag orange">기준 불일치</span></td>
+          <td>EZE-Breeze와 동일하게 1회 언급으로 기재되어 있으나, EZE-Breeze는 SoV 표에 포함되고 Dometic은 제외되어 있습니다. 포함 기준이 불명확합니다. 단, Dometic은 차량용 어닝 제품을 실제로 제조하므로 업종 관련성은 있습니다.</td>
+          <td>SoV 표 포함/제외 기준을 <strong>통일</strong>하고, 포함 시 정확한 수치 제공 요청</td>
+        </tr>
+        <tr>
+          <td><strong>Tepui</strong></td>
+          <td>p.15 Domain 섹션</td>
+          <td><span class="tag orange">데이터 혼용</span></td>
+          <td>tepui.com이 Reference Domain 5위(9회 인용)로만 등장하며, 브랜드 SoV 데이터는 없습니다. 도메인 인용 횟수와 브랜드 멘션 횟수는 다른 지표입니다.</td>
+          <td>Tepui 브랜드 멘션 횟수 및 SoV 데이터 <strong>별도 제공</strong> 또는 Domain 섹션에만 한정 표기 요청</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 정상 확인 수치 -->
+  <div class="section">
+    <div class="section-label">Reference — 정상 확인</div>
+    <div class="section-title">검증 완료된 수치 (수정 불필요)</div>
+    <div class="divider"></div>
+    <p style="margin-bottom:16px;">아래 수치들은 내부 검토 결과 정확하게 산출된 것으로 확인되었습니다.</p>
+    <table class="ok-table">
+      <thead><tr><th>항목</th><th>수치</th><th>검증 계산</th><th>결과</th></tr></thead>
+      <tbody>
+        <tr><td>iKamper SoV</td><td>16.5%</td><td>43회 ÷ 261회 = 16.48%</td><td>✓ 일치</td></tr>
+        <tr><td>Position 1 비율</td><td>63.9%</td><td>23건 ÷ 36건 = 63.9%</td><td>✓ 일치</td></tr>
+        <tr><td>가성비 페르소나 비중</td><td>82%</td><td>41개 ÷ 50개 = 82%</td><td>✓ 일치</td></tr>
+        <tr><td>Framing 합계</td><td>50건</td><td>10 + 20 + 6 + 14 = 50</td><td>✓ 일치</td></tr>
+        <tr><td>Roofnest 등장 쿼리 비율</td><td>52%</td><td>26개 ÷ 50개 = 52%</td><td>✓ 일치</td></tr>
+        <tr><td>iKamper AI Visibility</td><td>72%</td><td>36개 ÷ 50개 = 72%</td><td>✓ 일치</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 요청 사항 요약 -->
+  <div class="section">
+    <div class="section-label">Action Items</div>
+    <div class="section-title">최종 요청 사항 요약</div>
+    <div class="divider"></div>
+    <table class="summary-table">
+      <thead><tr><th>#</th><th>요청 사항</th><th>우선순위</th><th>관련 페이지</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>EZE-Breeze 언급 횟수(1회 vs 13회) 원본 CSV 기준 재확인 및 수치 통일</td>
+          <td><span class="tag red">높음</span></td>
+          <td>p.5, p.8</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>ARB 언급 횟수(4회 vs 24회) 집계 기준 명시 및 수치 통일</td>
+          <td><span class="tag red">높음</span></td>
+          <td>p.5, p.8</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>어닝/쉘터 감성 점수 0.50의 산출 기준 명확화 (iKamper 기준인지 카테고리 전체인지)</td>
+          <td><span class="tag red">높음</span></td>
+          <td>p.9</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>EZE-Breeze 삭제 또는 포함 근거 및 정확한 수치 재제공</td>
+          <td><span class="tag red">높음</span></td>
+          <td>p.5, p.8</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Pelican 포함 근거(언급 횟수, SoV) 데이터 제공 또는 삭제</td>
+          <td><span class="tag red">높음</span></td>
+          <td>p.13</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>Dometic의 SoV 표 포함/제외 기준 EZE-Breeze와 통일</td>
+          <td><span class="tag orange">중간</span></td>
+          <td>p.5, p.8</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>ikamper.com 36회 vs owned_target 37회 차이 설명 또는 수정</td>
+          <td><span class="tag orange">중간</span></td>
+          <td>p.4</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>Roofnest 수치 단위(멘션 횟수 vs 쿼리 등장 수) 구분 표기</td>
+          <td><span class="tag orange">중간</span></td>
+          <td>p.8, p.13</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>얼리어답터 페르소나 n=1 주석 추가 또는 쿼리 확대 재분석</td>
+          <td><span class="tag orange">중간</span></td>
+          <td>p.13</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>Tepui 브랜드 멘션 데이터 제공 또는 Domain 섹션 한정 표기</td>
+          <td><span class="tag orange">중간</span></td>
+          <td>p.15</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<div class="footer">
+  <span>iKamper — GEO 리포트 내부 검토 피드백 · 2026년 4월</span>
+  <span>Reviewed by TecAce AI Supervision</span>
+</div>
+
+</body>
+</html>
