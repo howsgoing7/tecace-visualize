@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ko" class="theme-light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gemma 4 온디바이스 성능 분석 리포트 — TecAce Tech Log</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html.theme-light{--color-primary:#1550FC;--color-accent:#E700DB;--color-heading:#101828;--color-body:#364153;--color-bg:#FFFFFF;--color-card-bg:#F9FAFB;--color-card-border:#E5E7EB;--color-muted:#667085;--surface:#F9FAFB;--surface-hover:#F3F4F6;--border:#E5E7EB}
+html.theme-dark{--color-primary:#4B7BFF;--color-accent:#F040E8;--color-heading:#F9FAFB;--color-body:#D1D5DB;--color-bg:#0D0D0D;--color-card-bg:#1A1A1A;--color-card-border:#2D2D2D;--color-muted:#9CA3AF;--surface:#1A1A1A;--surface-hover:#242424;--border:#2D2D2D}
+body{font-family:'Poppins','Pretendard',sans-serif;background:var(--color-bg);color:var(--color-body);line-height:1.65;transition:background 0.3s,color 0.3s}
+.top-nav{position:sticky;top:0;z-index:300;background:var(--color-bg);border-bottom:1px solid var(--color-card-border);display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:46px;transition:background 0.3s,border-color 0.3s}
+.nav-left{display:flex;align-items:center;gap:12px}
+.nav-logo{font-size:13px;font-weight:700;color:var(--color-primary)}
+.nav-sep{width:1px;height:14px;background:var(--color-card-border)}
+.nav-title{font-size:12px;color:var(--color-muted)}
+.nav-right{display:flex;gap:6px}
+.nav-btn{padding:4px 12px;border-radius:5px;border:1px solid var(--color-card-border);background:transparent;cursor:pointer;font-size:11px;font-weight:600;color:var(--color-muted);font-family:'Poppins','Pretendard',sans-serif;transition:all 0.15s;letter-spacing:0.3px}
+.nav-btn:hover{background:var(--surface-hover);color:var(--color-heading)}
+.nav-btn.primary{background:var(--color-primary);color:white;border-color:var(--color-primary)}
+.nav-btn.primary:hover{opacity:0.88}
+.nav-btn.lang-btn{background:rgba(21,80,252,0.07);color:var(--color-primary);border-color:rgba(21,80,252,0.2)}
+html.theme-dark .nav-btn.lang-btn{background:rgba(75,123,255,0.12);color:#93C5FD;border-color:rgba(75,123,255,0.3)}
+.nav-btn:disabled{opacity:0.5;cursor:default}
+.header-banner{padding:60px 64px 52px;background:linear-gradient(135deg,#060e38 0%,#0d1a5c 40%,#1a0038 80%,#0d0d2a 100%);position:relative;overflow:hidden}
+html.theme-dark .header-banner{background:linear-gradient(135deg,#050510 0%,#0b0e30 100%)}
+.header-banner::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 60%,rgba(231,0,219,0.25) 0%,transparent 55%),radial-gradient(ellipse at 75% 25%,rgba(21,80,252,0.3) 0%,transparent 55%);pointer-events:none}
+.header-banner > *{position:relative;z-index:1}
+.doc-type-badge{display:inline-block;background:var(--color-accent);color:white;border-radius:5px;padding:4px 12px;font-size:11px;font-weight:600;letter-spacing:0.7px;text-transform:uppercase;margin-bottom:16px}
+.doc-title{font-size:clamp(24px,3.8vw,46px);font-weight:700;color:#fff;margin-bottom:12px;line-height:1.2}
+.doc-subtitle{font-size:14px;color:rgba(255,255,255,0.72);max-width:680px;line-height:1.65}
+.doc-meta{display:flex;gap:28px;margin-top:24px;flex-wrap:wrap}
+.doc-meta-item{font-size:12px;color:rgba(255,255,255,0.5)}
+.doc-meta-item strong{color:rgba(255,255,255,0.85);font-weight:600;display:block;margin-bottom:2px}
+.main{max-width:960px;margin:0 auto;padding:52px 64px}
+@media(max-width:768px){.main{padding:32px 20px}.top-nav{padding:0 20px}.header-banner{padding:40px 20px 36px}}
+.section{margin-bottom:52px}
+.section-label{font-size:11px;font-weight:600;letter-spacing:0.7px;text-transform:uppercase;color:var(--color-primary);margin-bottom:8px}
+.section-title{font-size:22px;font-weight:600;color:var(--color-heading);margin-bottom:6px}
+.divider{height:1px;background:var(--color-card-border);margin-bottom:28px}
+.card{background:var(--color-card-bg);border:1px solid var(--color-card-border);border-radius:12px;padding:24px;margin-bottom:16px}
+.card-title{font-size:13px;font-weight:700;color:var(--color-heading);margin-bottom:14px;letter-spacing:0.3px}
+.color-legend{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:11px 16px;background:var(--color-card-bg);border:1px solid var(--color-card-border);border-radius:8px;margin-bottom:28px}
+.legend-item{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:500;color:var(--color-muted)}
+.legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.legend-sep{width:1px;height:14px;background:var(--color-card-border)}
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th{background:var(--color-primary);color:white;padding:9px 12px;text-align:left;font-weight:600;font-size:11px;letter-spacing:0.3px}
+.data-table th:first-child{border-radius:6px 0 0 0}.data-table th:last-child{border-radius:0 6px 0 0}
+.data-table td{padding:9px 12px;border-bottom:1px solid var(--color-card-border);color:var(--color-body)}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:var(--surface-hover)}
+.data-table .highlight{font-weight:700;color:var(--color-heading)}
+.data-table .q3-row{background:rgba(21,80,252,0.04)}
+.data-table .q8-row{background:rgba(16,185,129,0.04)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+@media(max-width:768px){.grid-2,.grid-3{grid-template-columns:1fr}}
+.metric-card{background:var(--color-card-bg);border:1px solid var(--color-card-border);border-radius:12px;padding:20px 24px}
+.metric-label{font-size:11px;font-weight:600;color:var(--color-muted);letter-spacing:0.4px;text-transform:uppercase;margin-bottom:6px}
+.metric-value{font-size:28px;font-weight:700;color:var(--color-heading);line-height:1.1}
+.metric-unit{font-size:13px;font-weight:400;color:var(--color-muted);margin-left:4px}
+.metric-change{font-size:12px;font-weight:600;margin-top:6px}
+.metric-change.up{color:#10b981}.metric-change.down{color:#f43f5e}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.bar-label{font-size:12px;font-weight:500;color:var(--color-body);width:130px;flex-shrink:0}
+.bar-track{flex:1;height:7px;background:var(--color-card-border);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px}
+.bar-val{font-size:12px;font-weight:700;width:110px;text-align:right;flex-shrink:0}
+.insight{border-left:3px solid var(--color-primary);padding:13px 18px;background:rgba(21,80,252,0.04);border-radius:0 10px 10px 0;margin-bottom:14px}
+html.theme-dark .insight{background:rgba(75,123,255,0.06)}
+.insight.warn{border-color:#f43f5e;background:rgba(244,63,94,0.04)}
+.insight.success{border-color:#10b981;background:rgba(16,185,129,0.04)}
+.insight.accent{border-color:var(--color-accent);background:rgba(231,0,219,0.04)}
+.insight.neutral{border-color:#f59e0b;background:rgba(245,158,11,0.04)}
+.insight-title{font-size:13px;font-weight:700;color:var(--color-primary);margin-bottom:5px}
+.insight.warn .insight-title{color:#f43f5e}.insight.success .insight-title{color:#10b981}.insight.accent .insight-title{color:var(--color-accent)}.insight.neutral .insight-title{color:#d97706}
+.insight-body{font-size:13px;color:var(--color-body);line-height:1.65}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase}
+.badge.blue{background:rgba(21,80,252,0.1);color:var(--color-primary)}
+.badge.magenta{background:rgba(231,0,219,0.1);color:var(--color-accent)}
+.badge.green{background:rgba(16,185,129,0.1);color:#10b981}
+.badge.purple{background:rgba(168,85,247,0.1);color:#a855f7}
+.scenario-table{width:100%;border-collapse:collapse;font-size:13px}
+.scenario-table th{background:var(--surface);color:var(--color-heading);padding:10px 14px;text-align:left;font-weight:600;font-size:12px;border-bottom:2px solid var(--color-card-border)}
+.scenario-table td{padding:10px 14px;border-bottom:1px solid var(--color-card-border);color:var(--color-body);vertical-align:top}
+.scenario-table tr:last-child td{border-bottom:none}
+.scenario-table .rec{font-weight:700;color:var(--color-primary)}
+/* TRIPLE COMPARISON BADGE */
+.model-badge{display:inline-flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+.mb-item{padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:0.3px}
+.reveal{opacity:0;transform:translateY(14px);transition:opacity 0.5s ease,transform 0.5s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.doc-footer{background:#0D0D0F;height:40px;display:flex;align-items:center;justify-content:space-between;padding:0 48px}
+.footer-left{font-size:11px;color:#667085}
+.footer-right{font-size:11px;font-weight:600;color:#E700DB;letter-spacing:0.3px;text-transform:uppercase}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="nav-left">
+    <span class="nav-logo">TecAce</span>
+    <span class="nav-sep"></span>
+    <span class="nav-title" id="nav_title">Gemma 4 온디바이스 성능 분석</span>
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn lang-btn" id="langBtn" onclick="toggleLang()">English</button>
+    <button class="nav-btn" onclick="cycleTheme()"><span id="themeLabel">Light</span></button>
+    <button class="nav-btn primary" id="pdfBtn" onclick="downloadPDF()">PDF Download</button>
+  </div>
+</nav>
+
+<div class="header-banner">
+  <span class="doc-type-badge">ANALYSIS REPORT</span>
+  <h1 class="doc-title" id="doc_title">Gemma 4 온디바이스<br>성능 분석 리포트</h1>
+  <p class="doc-subtitle" id="doc_subtitle">Gemma 4 E2B (Q3_K_M / Q4_K_M / Q8_0) — Samsung Galaxy S25 Ultra 벤치마크</p>
+  <div class="doc-meta">
+    <div class="doc-meta-item"><strong id="lbl_dt">테스트 일시</strong>2026년 4월 8일</div>
+    <div class="doc-meta-item"><strong id="lbl_dev">디바이스</strong>Samsung SM-S942U</div>
+    <div class="doc-meta-item"><strong id="lbl_eng">엔진</strong>llama.cpp (CPU)</div>
+    <div class="doc-meta-item"><strong id="lbl_pr">프롬프트</strong>25개</div>
+  </div>
+</div>
+
+<main class="main">
+
+  <!-- COLOR LEGEND -->
+  <div class="color-legend reveal">
+    <div class="legend-item"><div class="legend-dot" style="background:#1550FC"></div><span id="leg1">파란색 = Q3_K_M (경량)</span></div>
+    <div class="legend-sep"></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#E700DB"></div><span id="leg2">마젠타 = Q4_K_M (균형)</span></div>
+    <div class="legend-sep"></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#10b981"></div><span id="leg3">초록 = Q8_0 (고정밀)</span></div>
+    <div class="legend-sep"></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f43f5e"></div><span id="leg4">빨강 = 퇴보 / 주의</span></div>
+  </div>
+
+  <!-- S1: ENV -->
+  <section class="section reveal">
+    <div class="section-label">Section 01</div>
+    <div class="section-title" id="s1_title">테스트 환경 및 모델 정보</div>
+    <div class="divider"></div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title" id="s1_spec">디바이스 스펙</div>
+        <table class="data-table">
+          <tr><td style="color:var(--color-muted);font-size:12px;width:44%" id="l_mfr">제조사 / 모델</td><td>Samsung / SM-S942U (Galaxy S25 Ultra)</td></tr>
+          <tr><td style="color:var(--color-muted);font-size:12px">SoC</td><td>Qualcomm SM8850 (Snapdragon 8 Elite)</td></tr>
+          <tr><td style="color:var(--color-muted);font-size:12px" id="l_android">Android 버전</td><td>Android 16 (SDK 36)</td></tr>
+          <tr><td style="color:var(--color-muted);font-size:12px" id="l_cpu">CPU 코어</td><td>8 Cores</td></tr>
+          <tr><td style="color:var(--color-muted);font-size:12px">Max Heap</td><td>256 MB</td></tr>
+          <tr><td style="color:var(--color-muted);font-size:12px" id="l_backend">추론 백엔드</td><td>llama.cpp (CPU only)</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title" id="s1_models">테스트 모델</div>
+        <table class="data-table">
+          <thead><tr><th id="th_quant">양자화</th><th id="th_feat">특징</th></tr></thead>
+          <tbody>
+            <tr class="q3-row"><td><strong>Q3_K_M</strong> <span class="badge purple" id="lbl_q3">경량</span></td><td id="feat_q3">경량 3-bit 양자화, 최소 메모리</td></tr>
+            <tr><td><strong>Q4_K_M</strong> <span class="badge magenta" id="lbl_q4">균형</span></td><td id="feat_q4">균형형 4-bit, 속도·품질 중간</td></tr>
+            <tr class="q8-row"><td><strong>Q8_0</strong> <span class="badge green" id="lbl_q8">고정밀</span></td><td id="feat_q8">고정밀 8-bit, 최고 품질</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:14px;padding:12px 14px;background:rgba(21,80,252,0.04);border-radius:8px;font-size:12px;color:var(--color-body);line-height:1.6" id="model_note">
+          Gemma 4는 Google DeepMind의 최신 on-device 오픈 모델 시리즈입니다. E2B 변형은 효율적인 2B 파라미터 구성으로 모바일 추론에 최적화되어 있습니다.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S2: OVERALL PERF -->
+  <section class="section reveal">
+    <div class="section-label">Section 02</div>
+    <div class="section-title" id="s2_title">전체 성능 요약</div>
+    <div class="divider"></div>
+
+    <div class="grid-3" style="margin-bottom:24px">
+      <div class="metric-card">
+        <div class="metric-label" id="m1_lbl">Q8_0 최저 레이턴시</div>
+        <div class="metric-value">24.2<span class="metric-unit">s</span></div>
+        <div class="metric-change up" id="m1_sub">평균 응답 시간 최고</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label" id="m2_lbl">Q4_K_M Decode TPS</div>
+        <div class="metric-value">17.2<span class="metric-unit">tps</span></div>
+        <div class="metric-change up" id="m2_sub">스트리밍 체감 속도 최고</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label" id="m3_lbl">Q3_K_M 배터리/회</div>
+        <div class="metric-value">0.16<span class="metric-unit">%</span></div>
+        <div class="metric-change up" id="m3_sub">4종 중 최저 소비</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" id="s2_tbl_title">양자화별 성능 비교표</div>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead><tr><th id="th_model">모델</th><th id="th_lat">평균 레이턴시</th><th>Decode TPS</th><th>Prefill TPS</th><th id="th_mem">메모리 (Native)</th><th id="th_pass">검증 통과율</th></tr></thead>
+          <tbody>
+            <tr class="q3-row"><td><strong>Q3_K_M</strong> <span class="badge purple" id="lbl_q3b">경량</span></td><td>26.2s</td><td>13.18 tps</td><td>27.62 tps</td><td>706.8 MB</td><td>15/25 (60%)</td></tr>
+            <tr><td><strong>Q4_K_M</strong> <span class="badge magenta" id="lbl_q4b">균형</span></td><td>26.3s</td><td class="highlight">17.20 tps ★</td><td>34.75 tps</td><td>707.6 MB</td><td>16/25 (64%)</td></tr>
+            <tr class="q8-row"><td><strong>Q8_0</strong> <span class="badge green" id="lbl_q8b">고정밀</span></td><td class="highlight">24.2s ★</td><td>16.75 tps</td><td class="highlight">40.15 tps ★</td><td>707.7 MB</td><td class="highlight">18/25 (72%) ★</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="card-title" id="s2_chart_title">양자화별 평균 레이턴시 비교 (낮을수록 빠름)</div>
+      <div class="bar-row"><span class="bar-label">Q3_K_M</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#1550FC"></div></div><span class="bar-val" style="color:#1550FC">26.2s</span></div>
+      <div class="bar-row"><span class="bar-label">Q4_K_M</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#E700DB"></div></div><span class="bar-val" style="color:#E700DB">26.3s</span></div>
+      <div class="bar-row"><span class="bar-label">Q8_0 ★</span><div class="bar-track"><div class="bar-fill" style="width:92.4%;background:#10b981"></div></div><span class="bar-val" style="color:#10b981">24.2s</span></div>
+    </div>
+
+    <div class="insight success reveal">
+      <div class="insight-title" id="sum_ins_t">전체 요약</div>
+      <div class="insight-body" id="sum_ins_b">Q8_0이 전체 평균 레이턴시(24.2s) 기준으로 가장 빠른 결과를 보였습니다. Q4_K_M은 Decode TPS(17.2 tps)와 검증 통과율 균형에서 우수한 성능을 발휘했습니다. Q3_K_M은 소비 전력이 가장 낮아 배터리 효율 최우선 시나리오에 유리합니다.</div>
+    </div>
+  </section>
+
+  <!-- S3: TPS -->
+  <section class="section reveal">
+    <div class="section-label">Section 03</div>
+    <div class="section-title" id="s3_title">추론 처리량 (TPS)</div>
+    <div class="divider"></div>
+    <div class="insight reveal" style="margin-bottom:20px">
+      <div class="insight-title" id="tps_def_t">TPS 정의</div>
+      <div class="insight-body" id="tps_def_b">Decode TPS는 모델이 토큰을 생성하는 속도, Prefill TPS는 입력 컨텍스트를 처리하는 속도입니다. 두 지표 모두 사용자 체감 응답 속도에 직접 영향을 미칩니다.</div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title" id="s3_decode">Decode TPS (토큰 생성 속도)</div>
+        <div class="bar-row"><span class="bar-label">Q3_K_M</span><div class="bar-track"><div class="bar-fill" style="width:76.6%;background:#1550FC"></div></div><span class="bar-val" style="color:#1550FC">13.18</span></div>
+        <div class="bar-row"><span class="bar-label">Q4_K_M ★</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#E700DB"></div></div><span class="bar-val" style="color:#E700DB">17.20 (+30%)</span></div>
+        <div class="bar-row"><span class="bar-label">Q8_0</span><div class="bar-track"><div class="bar-fill" style="width:97.4%;background:#10b981"></div></div><span class="bar-val" style="color:#10b981">16.75 (+27%)</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title" id="s3_prefill">Prefill TPS (컨텍스트 처리 속도)</div>
+        <div class="bar-row"><span class="bar-label">Q3_K_M</span><div class="bar-track"><div class="bar-fill" style="width:68.8%;background:#1550FC"></div></div><span class="bar-val" style="color:#1550FC">27.62</span></div>
+        <div class="bar-row"><span class="bar-label">Q4_K_M</span><div class="bar-track"><div class="bar-fill" style="width:86.6%;background:#E700DB"></div></div><span class="bar-val" style="color:#E700DB">34.75 (+26%)</span></div>
+        <div class="bar-row"><span class="bar-label">Q8_0 ★</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#10b981"></div></div><span class="bar-val" style="color:#10b981">40.15 (+45%)</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <table class="data-table">
+        <thead><tr><th id="th_q2">양자화</th><th>Decode TPS</th><th>Prefill TPS</th><th id="th_pref_adv">Prefill 우위</th></tr></thead>
+        <tbody>
+          <tr class="q3-row"><td>Q3_K_M</td><td>13.18</td><td>27.62</td><td id="lbl_bsl">기준선</td></tr>
+          <tr><td>Q4_K_M</td><td class="highlight">17.20 (+30%) ★</td><td>34.75 (+26%)</td><td id="q4_adv">Q3 대비 +7.1 tps</td></tr>
+          <tr class="q8-row"><td>Q8_0</td><td>16.75 (+27%)</td><td class="highlight">40.15 (+45%) ★</td><td id="q8_adv">Q3 대비 +12.5 tps ★ 최고</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="insight success reveal">
+      <div class="insight-title" id="tps_ins_t">Prefill TPS 분석</div>
+      <div class="insight-body" id="tps_ins_b">Q8_0이 Prefill TPS(40.15)에서 가장 빠릅니다(Q3_K_M 대비 +45%). 이는 긴 컨텍스트 처리나 RAG(Retrieval-Augmented Generation) 파이프라인에서 특히 유리합니다. Decode TPS는 Q4_K_M이 17.20으로 최고를 기록해 스트리밍 응답에서 높은 체감 속도를 제공합니다.</div>
+    </div>
+  </section>
+
+  <!-- S4: CATEGORY LATENCY -->
+  <section class="section reveal">
+    <div class="section-label">Section 04</div>
+    <div class="section-title" id="s4_title">태스크 카테고리별 레이턴시</div>
+    <div class="divider"></div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title" id="s4_tbl">카테고리별 레이턴시 (초)</div>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead><tr><th id="th_cat">카테고리</th><th>Q3_K_M</th><th>Q4_K_M</th><th>Q8_0 ★</th></tr></thead>
+          <tbody>
+            <tr><td id="cat_s">단답 출력</td><td>0.5s</td><td>0.4s</td><td>0.4s</td></tr>
+            <tr><td id="cat_c">창의 글쓰기</td><td>6.2s</td><td>4.6s</td><td class="highlight">3.8s ★</td></tr>
+            <tr><td id="cat_r">논리 추론</td><td class="highlight">2.0s ★</td><td>8.0s</td><td>10.2s</td></tr>
+            <tr><td id="cat_su">요약</td><td>6.4s</td><td>3.5s</td><td class="highlight">2.9s ★</td></tr>
+            <tr><td id="cat_st">구조화 출력</td><td>12.3s</td><td class="highlight">6.6s ★</td><td>9.5s</td></tr>
+            <tr><td id="cat_k">지식 설명</td><td>19.6s</td><td>18.1s</td><td>18.2s</td></tr>
+            <tr><td id="cat_m">수학 계산</td><td>26.5s</td><td style="color:#f43f5e;font-weight:700">50.0s ⚠</td><td>21.6s</td></tr>
+            <tr><td id="cat_cd">코드 생성</td><td>48.6s</td><td class="highlight">38.6s ★</td><td>51.0s</td></tr>
+            <tr><td id="cat_l">장문 생성</td><td>92.4s</td><td>87.0s</td><td class="highlight">82.6s ★</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Bar charts for short vs long tasks -->
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title" id="short_task_title">단기 태스크 레이턴시</div>
+        <p style="font-size:11px;color:var(--color-muted);margin-bottom:12px" id="short_task_sub">단답 / 창의 / 요약 / 구조화 출력 평균</p>
+        <div class="bar-row"><span class="bar-label">Q3_K_M</span><div class="bar-track"><div class="bar-fill" style="width:84.9%;background:#1550FC"></div></div><span class="bar-val" style="color:#1550FC">~6.9s</span></div>
+        <div class="bar-row"><span class="bar-label">Q4_K_M</span><div class="bar-track"><div class="bar-fill" style="width:58.6%;background:#E700DB"></div></div><span class="bar-val" style="color:#E700DB">~3.8s</span></div>
+        <div class="bar-row"><span class="bar-label">Q8_0 ★</span><div class="bar-track"><div class="bar-fill" style="width:51.7%;background:#10b981"></div></div><span class="bar-val" style="color:#10b981">~4.2s</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title" id="long_task_title">장문 태스크 레이턴시</div>
+        <p style="font-size:11px;color:var(--color-muted);margin-bottom:12px" id="long_task_sub">코드 생성 / 장문 생성 평균</p>
+        <div class="bar-row"><span class="bar-label">Q3_K_M</span><div class="bar-track"><div class="bar-fill" style="width:82.0%;background:#1550FC"></div></div><span class="bar-val" style="color:#1550FC">70.5s</span></div>
+        <div class="bar-row"><span class="bar-label">Q4_K_M</span><div class="bar-track"><div class="bar-fill" style="width:73.1%;background:#E700DB"></div></div><span class="bar-val" style="color:#E700DB">62.8s</span></div>
+        <div class="bar-row"><span class="bar-label">Q8_0 ★</span><div class="bar-track"><div class="bar-fill" style="width:78.6%;background:#10b981"></div></div><span class="bar-val" style="color:#10b981">66.8s</span></div>
+      </div>
+    </div>
+
+    <div class="insight warn reveal">
+      <div class="insight-title" id="math_warn_t">수학 태스크 주의사항</div>
+      <div class="insight-body" id="math_warn_b">Q4_K_M이 수학 태스크에서 50.0s로 비정상적으로 느린 결과를 보였습니다. 이는 해당 양자화에서 chain-of-thought 추론이 과도하게 발생하기 때문으로 추정됩니다. 수학 집중 앱에서는 Q8_0 또는 Q3_K_M이 적합합니다.</div>
+    </div>
+  </section>
+
+  <!-- S5: QUALITY & SYSTEM -->
+  <section class="section reveal">
+    <div class="section-label">Section 05</div>
+    <div class="section-title" id="s5_title">품질 검증 및 시스템 영향</div>
+    <div class="divider"></div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title" id="s5_valid_title">검증 결과 (25개 프롬프트)</div>
+        <table class="data-table">
+          <thead><tr><th id="th_qnt">양자화</th><th id="th_pass_n">Pass</th><th id="th_fail">Fail</th><th id="th_warn">Warn</th><th id="th_rate">통과율</th></tr></thead>
+          <tbody>
+            <tr class="q3-row"><td>Q3_K_M</td><td>15</td><td>9</td><td>1</td><td>60.0%</td></tr>
+            <tr><td>Q4_K_M</td><td>16</td><td>5</td><td>4</td><td>64.0%</td></tr>
+            <tr class="q8-row"><td><strong>Q8_0</strong></td><td class="highlight">18</td><td>4</td><td>3</td><td class="highlight">72.0% ★</td></tr>
+          </tbody>
+        </table>
+
+        <!-- Pass rate bar -->
+        <div style="margin-top:16px">
+          <div class="bar-row"><span class="bar-label">Q3_K_M</span><div class="bar-track"><div class="bar-fill" style="width:83.3%;background:#1550FC"></div></div><span class="bar-val" style="color:#1550FC">60.0%</span></div>
+          <div class="bar-row"><span class="bar-label">Q4_K_M</span><div class="bar-track"><div class="bar-fill" style="width:88.9%;background:#E700DB"></div></div><span class="bar-val" style="color:#E700DB">64.0%</span></div>
+          <div class="bar-row"><span class="bar-label">Q8_0 ★</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#10b981"></div></div><span class="bar-val" style="color:#10b981">72.0%</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" id="s5_sys_title">배터리 및 발열 영향 (25회 실행 평균)</div>
+        <table class="data-table">
+          <thead><tr><th id="th_q3_2">양자화</th><th id="th_bat">배터리 소모/회</th><th id="th_therm">발열 델타</th><th id="th_init">초기화 시간</th></tr></thead>
+          <tbody>
+            <tr class="q3-row"><td>Q3_K_M</td><td style="color:#10b981;font-weight:700">0.160% ★</td><td style="color:#10b981;font-weight:700">10.3 ★</td><td>381ms</td></tr>
+            <tr><td>Q4_K_M</td><td>0.240%</td><td>12.9</td><td>436ms</td></tr>
+            <tr class="q8-row"><td>Q8_0</td><td style="color:#f43f5e">0.320% (Q3 대비 2×)</td><td style="color:#f43f5e">15.2 (1.5×)</td><td>523ms</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:16px">
+          <p style="font-size:11px;color:var(--color-muted);margin-bottom:8px" id="lbl_bat_chart">배터리 소모/회 비교</p>
+          <div class="bar-row"><span class="bar-label">Q3_K_M ★</span><div class="bar-track"><div class="bar-fill" style="width:50%;background:#1550FC"></div></div><span class="bar-val" style="color:#10b981">0.160%</span></div>
+          <div class="bar-row"><span class="bar-label">Q4_K_M</span><div class="bar-track"><div class="bar-fill" style="width:75%;background:#E700DB"></div></div><span class="bar-val" style="color:#E700DB">0.240%</span></div>
+          <div class="bar-row"><span class="bar-label">Q8_0</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#f43f5e"></div></div><span class="bar-val" style="color:#f43f5e">0.320%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight warn reveal">
+      <div class="insight-title" id="sys_warn_t">Q8_0 배터리 주의</div>
+      <div class="insight-body" id="sys_warn_b">Q8_0은 Q3_K_M 대비 배터리 소모가 2배, 발열이 1.5배 높습니다. 배터리 중요 시나리오(장시간 대화, 오프라인 AI 어시스턴트 등)에서는 Q3_K_M이 전력 효율 측면에서 명백히 유리합니다.</div>
+    </div>
+  </section>
+
+  <!-- S6: KEY INSIGHTS -->
+  <section class="section reveal">
+    <div class="section-label">Section 06</div>
+    <div class="section-title" id="s6_title">핵심 인사이트</div>
+    <div class="divider"></div>
+
+    <div class="insight success"><div class="insight-title" id="i1t">1. Q8_0: 속도와 품질의 승자</div><div class="insight-body" id="i1b">평균 레이턴시(24.2s), 검증 통과율(72%), Prefill TPS(40.2) 모두 최고를 기록합니다. 단, 배터리 소모와 발열이 가장 높아 충전 환경이나 단발성 사용에 적합합니다.</div></div>
+    <div class="insight accent"><div class="insight-title" id="i2t">2. Q4_K_M: 균형 잡힌 선택</div><div class="insight-body" id="i2b">Decode TPS(17.2)가 가장 높아 실시간 스트리밍 응답에서 최적의 체감 속도를 제공합니다. 품질(64%)과 속도의 균형이 필요한 프로덕션 앱에 권장됩니다.</div></div>
+    <div class="insight"><div class="insight-title" id="i3t">3. Q3_K_M: 에너지 효율 최강</div><div class="insight-body" id="i3b">배터리 소모 0.160%/회, 발열 델타 10.3으로 지속적인 백그라운드 추론이나 IoT 디바이스 시나리오에 가장 적합합니다. 단, 검증 통과율(60%)이 낮아 정확도가 중요한 업무에는 주의가 필요합니다.</div></div>
+    <div class="insight warn"><div class="insight-title" id="i4t">4. 수학 태스크 주의사항</div><div class="insight-body" id="i4b">Q4_K_M이 수학 태스크에서 49.96s로 비정상적으로 느린 결과를 보였습니다. chain-of-thought 추론이 과도하게 발생하기 때문으로 추정됩니다. 수학 집중 앱에서는 Q8_0 또는 Q3_K_M이 적합합니다.</div></div>
+  </section>
+
+  <!-- S7: CONCLUSION -->
+  <section class="section reveal">
+    <div class="section-label">Section 07</div>
+    <div class="section-title" id="s7_title">결론 및 사용 시나리오 추천</div>
+    <div class="divider"></div>
+    <div class="card">
+      <table class="scenario-table">
+        <thead><tr><th id="th_sc">사용 시나리오</th><th id="th_rc">추천 양자화</th><th id="th_rs">이유</th></tr></thead>
+        <tbody>
+          <tr><td id="sc1n">실시간 대화 어시스턴트</td><td class="rec">Q4_K_M ★</td><td id="sc1r">Decode TPS 최고 → 스트리밍 체감 속도 우수</td></tr>
+          <tr><td id="sc2n">코드/RAG 파이프라인</td><td class="rec">Q8_0 ★</td><td id="sc2r">Prefill TPS 최고 + 품질 72% → 정확도 우선</td></tr>
+          <tr><td id="sc3n">백그라운드 / 배터리 절약</td><td class="rec">Q3_K_M ★</td><td id="sc3r">배터리 소모 최저, 발열 최저 → 지속 사용 최적</td></tr>
+          <tr><td id="sc4n">수학 · 논리 집중 앱</td><td class="rec">Q8_0 / Q3_K_M</td><td id="sc4r">Q4_K_M 수학 과도한 토큰 생성 이슈 회피</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="insight" style="margin-top:20px">
+      <div class="insight-title" id="concl_t">종합 결론</div>
+      <div class="insight-body" id="concl_b">Gemma 4 E2B는 Samsung Snapdragon 8 Elite CPU에서 실용적인 on-device 추론을 구현합니다. Q8_0 기준 평균 24초의 응답 시간은 실시간 대화보다는 비동기 처리, 요약, 코드 보조 등의 시나리오에 적합합니다. GPU/NPU 가속이 활성화될 경우 처리 속도는 수 배 향상될 것으로 예상됩니다.</div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="doc-footer">
+  <span class="footer-left">tecace.com · 2026. 04. 08</span>
+  <span class="footer-right">CONFIDENTIAL | &copy; 2026 TECACE</span>
+</footer>
+
+<script>
+var T={
+  ko:{nav:"Gemma 4 온디바이스 성능 분석",lang:"English",title:"Gemma 4 온디바이스<br>성능 분석 리포트",sub:"Gemma 4 E2B (Q3_K_M / Q4_K_M / Q8_0) — Samsung Galaxy S25 Ultra 벤치마크",lbl_dt:"테스트 일시",lbl_dev:"디바이스",lbl_eng:"엔진",lbl_pr:"프롬프트",leg1:"파란색 = Q3_K_M (경량)",leg2:"마젠타 = Q4_K_M (균형)",leg3:"초록 = Q8_0 (고정밀)",leg4:"빨강 = 퇴보 / 주의",s1_title:"테스트 환경 및 모델 정보",s1_spec:"디바이스 스펙",l_mfr:"제조사 / 모델",l_android:"Android 버전",l_cpu:"CPU 코어",l_backend:"추론 백엔드",s1_models:"테스트 모델",th_quant:"양자화",th_feat:"특징",lbl_q3:"경량",lbl_q4:"균형",lbl_q8:"고정밀",feat_q3:"경량 3-bit 양자화, 최소 메모리",feat_q4:"균형형 4-bit, 속도·품질 중간",feat_q8:"고정밀 8-bit, 최고 품질",model_note:"Gemma 4는 Google DeepMind의 최신 on-device 오픈 모델 시리즈입니다. E2B 변형은 효율적인 2B 파라미터 구성으로 모바일 추론에 최적화되어 있습니다.",s2_title:"전체 성능 요약",m1_lbl:"Q8_0 최저 레이턴시",m1_sub:"평균 응답 시간 최고",m2_lbl:"Q4_K_M Decode TPS",m2_sub:"스트리밍 체감 속도 최고",m3_lbl:"Q3_K_M 배터리/회",m3_sub:"4종 중 최저 소비",s2_tbl_title:"양자화별 성능 비교표",th_model:"모델",th_lat:"평균 레이턴시",th_mem:"메모리 (Native)",th_pass:"검증 통과율",lbl_q3b:"경량",lbl_q4b:"균형",lbl_q8b:"고정밀",s2_chart_title:"양자화별 평균 레이턴시 비교 (낮을수록 빠름)",sum_ins_t:"전체 요약",sum_ins_b:"Q8_0이 전체 평균 레이턴시(24.2s) 기준으로 가장 빠른 결과를 보였습니다. Q4_K_M은 Decode TPS(17.2 tps)와 검증 통과율 균형에서 우수한 성능을 발휘했습니다. Q3_K_M은 소비 전력이 가장 낮아 배터리 효율 최우선 시나리오에 유리합니다.",s3_title:"추론 처리량 (TPS)",tps_def_t:"TPS 정의",tps_def_b:"Decode TPS는 모델이 토큰을 생성하는 속도, Prefill TPS는 입력 컨텍스트를 처리하는 속도입니다. 두 지표 모두 사용자 체감 응답 속도에 직접 영향을 미칩니다.",s3_decode:"Decode TPS (토큰 생성 속도)",s3_prefill:"Prefill TPS (컨텍스트 처리 속도)",th_q2:"양자화",th_pref_adv:"Prefill 우위",lbl_bsl:"기준선",q4_adv:"Q3 대비 +7.1 tps",q8_adv:"Q3 대비 +12.5 tps ★ 최고",tps_ins_t:"Prefill TPS 분석",tps_ins_b:"Q8_0이 Prefill TPS(40.15)에서 가장 빠릅니다(Q3_K_M 대비 +45%). 이는 긴 컨텍스트 처리나 RAG(Retrieval-Augmented Generation) 파이프라인에서 특히 유리합니다. Decode TPS는 Q4_K_M이 17.20으로 최고를 기록해 스트리밍 응답에서 높은 체감 속도를 제공합니다.",s4_title:"태스크 카테고리별 레이턴시",s4_tbl:"카테고리별 레이턴시 (초)",th_cat:"카테고리",cat_s:"단답 출력",cat_c:"창의 글쓰기",cat_r:"논리 추론",cat_su:"요약",cat_st:"구조화 출력",cat_k:"지식 설명",cat_m:"수학 계산",cat_cd:"코드 생성",cat_l:"장문 생성",short_task_title:"단기 태스크 레이턴시",short_task_sub:"단답 / 창의 / 요약 / 구조화 출력 평균",long_task_title:"장문 태스크 레이턴시",long_task_sub:"코드 생성 / 장문 생성 평균",math_warn_t:"수학 태스크 주의사항",math_warn_b:"Q4_K_M이 수학 태스크에서 50.0s로 비정상적으로 느린 결과를 보였습니다. 이는 해당 양자화에서 chain-of-thought 추론이 과도하게 발생하기 때문으로 추정됩니다. 수학 집중 앱에서는 Q8_0 또는 Q3_K_M이 적합합니다.",s5_title:"품질 검증 및 시스템 영향",s5_valid_title:"검증 결과 (25개 프롬프트)",th_qnt:"양자화",th_pass_n:"Pass",th_fail:"Fail",th_warn:"Warn",th_rate:"통과율",s5_sys_title:"배터리 및 발열 영향 (25회 실행 평균)",th_q3_2:"양자화",th_bat:"배터리 소모/회",th_therm:"발열 델타",th_init:"초기화 시간",lbl_bat_chart:"배터리 소모/회 비교",sys_warn_t:"Q8_0 배터리 주의",sys_warn_b:"Q8_0은 Q3_K_M 대비 배터리 소모가 2배, 발열이 1.5배 높습니다. 배터리 중요 시나리오(장시간 대화, 오프라인 AI 어시스턴트 등)에서는 Q3_K_M이 전력 효율 측면에서 명백히 유리합니다.",s6_title:"핵심 인사이트",i1t:"1. Q8_0: 속도와 품질의 승자",i1b:"평균 레이턴시(24.2s), 검증 통과율(72%), Prefill TPS(40.2) 모두 최고를 기록합니다. 단, 배터리 소모와 발열이 가장 높아 충전 환경이나 단발성 사용에 적합합니다.",i2t:"2. Q4_K_M: 균형 잡힌 선택",i2b:"Decode TPS(17.2)가 가장 높아 실시간 스트리밍 응답에서 최적의 체감 속도를 제공합니다. 품질(64%)과 속도의 균형이 필요한 프로덕션 앱에 권장됩니다.",i3t:"3. Q3_K_M: 에너지 효율 최강",i3b:"배터리 소모 0.160%/회, 발열 델타 10.3으로 지속적인 백그라운드 추론이나 IoT 디바이스 시나리오에 가장 적합합니다. 단, 검증 통과율(60%)이 낮아 정확도가 중요한 업무에는 주의가 필요합니다.",i4t:"4. 수학 태스크 주의사항",i4b:"Q4_K_M이 수학 태스크에서 49.96s로 비정상적으로 느린 결과를 보였습니다. chain-of-thought 추론이 과도하게 발생하기 때문으로 추정됩니다. 수학 집중 앱에서는 Q8_0 또는 Q3_K_M이 적합합니다.",s7_title:"결론 및 사용 시나리오 추천",th_sc:"사용 시나리오",th_rc:"추천 양자화",th_rs:"이유",sc1n:"실시간 대화 어시스턴트",sc1r:"Decode TPS 최고 → 스트리밍 체감 속도 우수",sc2n:"코드/RAG 파이프라인",sc2r:"Prefill TPS 최고 + 품질 72% → 정확도 우선",sc3n:"백그라운드 / 배터리 절약",sc3r:"배터리 소모 최저, 발열 최저 → 지속 사용 최적",sc4n:"수학 · 논리 집중 앱",sc4r:"Q4_K_M 수학 과도한 토큰 생성 이슈 회피",concl_t:"종합 결론",concl_b:"Gemma 4 E2B는 Samsung Snapdragon 8 Elite CPU에서 실용적인 on-device 추론을 구현합니다. Q8_0 기준 평균 24초의 응답 시간은 실시간 대화보다는 비동기 처리, 요약, 코드 보조 등의 시나리오에 적합합니다. GPU/NPU 가속이 활성화될 경우 처리 속도는 수 배 향상될 것으로 예상됩니다."},
+  en:{nav:"Gemma 4 On-Device Performance Analysis",lang:"한국어",title:"Gemma 4 On-Device<br>Performance Analysis Report",sub:"Gemma 4 E2B (Q3_K_M / Q4_K_M / Q8_0) — Samsung Galaxy S25 Ultra Benchmark",lbl_dt:"Test Date",lbl_dev:"Device",lbl_eng:"Engine",lbl_pr:"Prompts",leg1:"Blue = Q3_K_M (Lightweight)",leg2:"Magenta = Q4_K_M (Balanced)",leg3:"Green = Q8_0 (High Precision)",leg4:"Red = Regression / Warning",s1_title:"Test Environment & Model Info",s1_spec:"Device Specification",l_mfr:"Manufacturer / Model",l_android:"Android Version",l_cpu:"CPU Cores",l_backend:"Inference Backend",s1_models:"Test Models",th_quant:"Quantization",th_feat:"Characteristics",lbl_q3:"Lightweight",lbl_q4:"Balanced",lbl_q8:"High Precision",feat_q3:"Lightweight 3-bit quantization, minimal memory",feat_q4:"Balanced 4-bit, speed/quality tradeoff",feat_q8:"High-precision 8-bit, best quality",model_note:"Gemma 4 is Google DeepMind's latest on-device open model series. The E2B variant features an efficient 2B parameter configuration optimized for mobile inference.",s2_title:"Overall Performance Summary",m1_lbl:"Q8_0 Lowest Latency",m1_sub:"Best average response time",m2_lbl:"Q4_K_M Decode TPS",m2_sub:"Best perceived streaming speed",m3_lbl:"Q3_K_M Battery/Run",m3_sub:"Lowest consumption of all",s2_tbl_title:"Performance Comparison by Quantization",th_model:"Model",th_lat:"Avg Latency",th_mem:"Native Memory",th_pass:"Pass Rate",lbl_q3b:"Lightweight",lbl_q4b:"Balanced",lbl_q8b:"High Precision",s2_chart_title:"Average Latency by Quantization (lower is better)",sum_ins_t:"Overall Summary",sum_ins_b:"Q8_0 achieves the best overall average latency (24.2s). Q4_K_M excels in Decode TPS (17.2 tps) and balanced quality. Q3_K_M offers the lowest power consumption for battery-critical scenarios.",s3_title:"Inference Throughput (TPS)",tps_def_t:"TPS Definitions",tps_def_b:"Decode TPS measures token generation speed; Prefill TPS measures input context processing speed. Both directly affect perceived response latency.",s3_decode:"Decode TPS (Token Generation Speed)",s3_prefill:"Prefill TPS (Context Processing Speed)",th_q2:"Quantization",th_pref_adv:"Prefill Advantage",lbl_bsl:"Baseline",q4_adv:"+7.1 tps vs Q3",q8_adv:"+12.5 tps vs Q3 ★ Best",tps_ins_t:"Prefill TPS Analysis",tps_ins_b:"Q8_0 achieves the highest Prefill TPS (40.15), making it ideal for RAG pipelines and long-context processing. Q4_K_M leads in Decode TPS (17.20), providing the best perceived streaming speed.",s4_title:"Task Category Latency Breakdown",s4_tbl:"Latency by Category (seconds)",th_cat:"Category",cat_s:"Minimal Output",cat_c:"Creative Writing",cat_r:"Reasoning",cat_su:"Summarization",cat_st:"Structured Output",cat_k:"Knowledge",cat_m:"Math",cat_cd:"Code Generation",cat_l:"Long-Form",short_task_title:"Short Task Latency",short_task_sub:"Avg of: Minimal / Creative / Summary / Structured",long_task_title:"Long Task Latency",long_task_sub:"Avg of: Code Generation / Long-Form",math_warn_t:"Math Task Anomaly Warning",math_warn_b:"Q4_K_M shows a major outlier in math tasks (50.0s vs Q3's 26.5s). Likely caused by excessive chain-of-thought token generation at 4-bit precision. Avoid Q4_K_M for math-intensive apps — use Q8_0 or Q3_K_M instead.",s5_title:"Quality Validation & System Impact",s5_valid_title:"Validation Results (25 prompts)",th_qnt:"Quant",th_pass_n:"Pass",th_fail:"Fail",th_warn:"Warn",th_rate:"Pass Rate",s5_sys_title:"Battery & Thermal Impact (avg per run)",th_q3_2:"Quant",th_bat:"Battery Drain",th_therm:"Thermal Delta",th_init:"Init Time (avg)",lbl_bat_chart:"Battery Drain per Run",sys_warn_t:"Q8_0 Battery Warning",sys_warn_b:"Q8_0 consumes twice the battery and generates 1.5× more heat compared to Q3_K_M. For battery-critical use cases (long sessions, background AI assistants), Q3_K_M is clearly the power-efficient choice despite lower accuracy.",s6_title:"Key Insights",i1t:"1. Q8_0: Best Speed & Quality",i1b:"Q8_0 wins on average latency (24.2s), validation pass rate (72%), and Prefill TPS (40.2). Ideal for charging scenarios or single-session use where battery drain is acceptable.",i2t:"2. Q4_K_M: Balanced Choice",i2b:"Highest Decode TPS (17.2) for best perceived streaming speed. Recommended for production apps requiring a balance of quality and responsiveness.",i3t:"3. Q3_K_M: Energy Champion",i3b:"0.160% battery drain per run and lowest thermal delta (10.3). Best for persistent background inference, continuous monitoring, or IoT deployments. Note: 60% pass rate is lowest.",i4t:"4. Math Task Anomaly",i4b:"Q4_K_M shows a major outlier in math tasks (49.96s vs Q3's 26.5s). Likely caused by excessive chain-of-thought token generation at 4-bit precision. Avoid Q4_K_M for math-intensive apps.",s7_title:"Conclusion & Use-Case Recommendations",th_sc:"Use Case",th_rc:"Recommended",th_rs:"Rationale",sc1n:"Real-time chat assistant",sc1r:"Best Decode TPS → smoothest streaming UX",sc2n:"Code assistant / RAG pipeline",sc2r:"Best Prefill TPS + 72% quality → accuracy-first",sc3n:"Background AI / battery-saving",sc3r:"Lowest battery & thermal → optimal for long runs",sc4n:"Math / logic-intensive apps",sc4r:"Avoid Q4_K_M due to math token explosion",concl_t:"Overall Conclusion",concl_b:"Gemma 4 E2B delivers practical on-device inference on the Samsung Snapdragon 8 Elite CPU. The ~24s average response time (Q8_0) is suitable for async tasks, summarization, and code assistance — not real-time chat. Enabling GPU/NPU acceleration is expected to improve throughput by several multiples."}
+};
+var curLang=localStorage.getItem('tecace-lang')||'ko';
+function applyLang(lang){
+  var d=T[lang];curLang=lang;
+  localStorage.setItem('tecace-lang',lang);
+  document.documentElement.lang=lang==='ko'?'ko':'en';
+  Object.keys(d).forEach(function(id){
+    var el=document.getElementById(id);
+    if(!el)return;
+    if(id==='title'||id==='doc_title')el.innerHTML=d[id];
+    else el.textContent=d[id];
+  });
+  document.getElementById('nav_title').textContent=d.nav;
+  document.getElementById('doc_title').innerHTML=d.title;
+  document.getElementById('doc_subtitle').textContent=d.sub;
+  document.getElementById('langBtn').textContent=d.lang;
+}
+function toggleLang(){applyLang(curLang==='ko'?'en':'ko');}
+var currentTheme=localStorage.getItem('tecace-theme')||'light';
+function applyTheme(t){
+  document.documentElement.className='theme-'+t;
+  document.getElementById('themeLabel').textContent=t==='dark'?'Dark':'Light';
+  localStorage.setItem('tecace-theme',t);currentTheme=t;
+}
+function cycleTheme(){applyTheme(currentTheme==='dark'?'light':'dark');}
+applyTheme(currentTheme);
+applyLang(curLang);
+async function downloadPDF(){
+  var btn=document.getElementById('pdfBtn');
+  var orig=btn.innerHTML;btn.textContent='Generating...';btn.disabled=true;
+  document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('visible');});
+  var fname=curLang==='ko'?'TecAce_Gemma4_Analysis_KO.pdf':'TecAce_Gemma4_Analysis_EN.pdf';
+  try{
+    await html2pdf().set({margin:0,filename:fname,image:{type:'jpeg',quality:0.96},html2canvas:{scale:2,useCORS:true,letterRendering:true,logging:false},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css','legacy']}}).from(document.body).save();
+  }finally{btn.innerHTML=orig;btn.disabled=false;}
+}
+var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
+</script>
+</body>
+</html>

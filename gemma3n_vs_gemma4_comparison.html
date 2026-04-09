@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ko" class="theme-light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gemma 3n vs Gemma 4 세대 비교 리포트 — TecAce Tech Log</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html.theme-light{--color-primary:#1550FC;--color-accent:#E700DB;--color-heading:#101828;--color-body:#364153;--color-bg:#FFFFFF;--color-card-bg:#F9FAFB;--color-card-border:#E5E7EB;--color-muted:#667085;--surface:#F9FAFB;--surface-hover:#F3F4F6;--border:#E5E7EB}
+html.theme-dark{--color-primary:#4B7BFF;--color-accent:#F040E8;--color-heading:#F9FAFB;--color-body:#D1D5DB;--color-bg:#0D0D0D;--color-card-bg:#1A1A1A;--color-card-border:#2D2D2D;--color-muted:#9CA3AF;--surface:#1A1A1A;--surface-hover:#242424;--border:#2D2D2D}
+body{font-family:'Poppins','Pretendard',sans-serif;background:var(--color-bg);color:var(--color-body);line-height:1.65;transition:background 0.3s,color 0.3s}
+.top-nav{position:sticky;top:0;z-index:300;background:var(--color-bg);border-bottom:1px solid var(--color-card-border);display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:46px;transition:background 0.3s,border-color 0.3s}
+.nav-left{display:flex;align-items:center;gap:12px}
+.nav-logo{font-size:13px;font-weight:700;color:var(--color-primary)}
+.nav-sep{width:1px;height:14px;background:var(--color-card-border)}
+.nav-title{font-size:12px;color:var(--color-muted)}
+.nav-right{display:flex;gap:6px}
+.nav-btn{padding:4px 12px;border-radius:5px;border:1px solid var(--color-card-border);background:transparent;cursor:pointer;font-size:11px;font-weight:600;color:var(--color-muted);font-family:'Poppins','Pretendard',sans-serif;transition:all 0.15s;letter-spacing:0.3px}
+.nav-btn:hover{background:var(--surface-hover);color:var(--color-heading)}
+.nav-btn.primary{background:var(--color-primary);color:white;border-color:var(--color-primary)}
+.nav-btn.primary:hover{opacity:0.88}
+.nav-btn.lang-btn{background:rgba(21,80,252,0.07);color:var(--color-primary);border-color:rgba(21,80,252,0.2)}
+html.theme-dark .nav-btn.lang-btn{background:rgba(75,123,255,0.12);color:#93C5FD;border-color:rgba(75,123,255,0.3)}
+.nav-btn:disabled{opacity:0.5;cursor:default}
+.header-banner{padding:60px 64px 52px;background:linear-gradient(135deg,#0f1142 0%,#1a0a2e 30%,#0d1a5c 60%,#1a0038 100%);position:relative;overflow:hidden}
+html.theme-dark .header-banner{background:linear-gradient(135deg,#0a0a1a 0%,#0d1040 100%)}
+.header-banner::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(21,80,252,0.3) 0%,transparent 60%),radial-gradient(ellipse at 80% 30%,rgba(231,0,219,0.2) 0%,transparent 55%);pointer-events:none}
+.header-banner > *{position:relative;z-index:1}
+.doc-type-badge{display:inline-block;background:var(--color-primary);color:white;border-radius:5px;padding:4px 12px;font-size:11px;font-weight:600;letter-spacing:0.7px;text-transform:uppercase;margin-bottom:16px}
+.doc-title{font-size:clamp(24px,3.8vw,46px);font-weight:700;color:#fff;margin-bottom:12px;line-height:1.2}
+.doc-subtitle{font-size:14px;color:rgba(255,255,255,0.72);max-width:680px;line-height:1.65}
+.doc-meta{display:flex;gap:28px;margin-top:24px;flex-wrap:wrap}
+.doc-meta-item{font-size:12px;color:rgba(255,255,255,0.5)}
+.doc-meta-item strong{color:rgba(255,255,255,0.85);font-weight:600;display:block;margin-bottom:2px}
+.main{max-width:960px;margin:0 auto;padding:52px 64px}
+@media(max-width:768px){.main{padding:32px 20px}.top-nav{padding:0 20px}.header-banner{padding:40px 20px 36px}}
+.section{margin-bottom:52px}
+.section-label{font-size:11px;font-weight:600;letter-spacing:0.7px;text-transform:uppercase;color:var(--color-primary);margin-bottom:8px}
+.section-title{font-size:22px;font-weight:600;color:var(--color-heading);margin-bottom:6px}
+.divider{height:1px;background:var(--color-card-border);margin-bottom:28px}
+.card{background:var(--color-card-bg);border:1px solid var(--color-card-border);border-radius:12px;padding:24px;margin-bottom:16px}
+.card-title{font-size:13px;font-weight:700;color:var(--color-heading);margin-bottom:14px;letter-spacing:0.3px}
+.color-legend{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:11px 16px;background:var(--color-card-bg);border:1px solid var(--color-card-border);border-radius:8px;margin-bottom:28px}
+.legend-item{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:500;color:var(--color-muted)}
+.legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.legend-sep{width:1px;height:14px;background:var(--color-card-border)}
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th{background:var(--color-primary);color:white;padding:9px 12px;text-align:left;font-weight:600;font-size:11px;letter-spacing:0.3px}
+.data-table th:first-child{border-radius:6px 0 0 0}.data-table th:last-child{border-radius:0 6px 0 0}
+.data-table td{padding:9px 12px;border-bottom:1px solid var(--color-card-border);color:var(--color-body)}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:var(--surface-hover)}
+.data-table .highlight{font-weight:700;color:var(--color-heading)}
+.data-table .g3n-row{background:rgba(21,80,252,0.04)}
+.data-table .star-gold{color:#f59e0b;font-weight:700}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+@media(max-width:768px){.grid-2,.grid-3{grid-template-columns:1fr}}
+.metric-card{background:var(--color-card-bg);border:1px solid var(--color-card-border);border-radius:12px;padding:20px 24px}
+.metric-label{font-size:11px;font-weight:600;color:var(--color-muted);letter-spacing:0.4px;text-transform:uppercase;margin-bottom:6px}
+.metric-value{font-size:28px;font-weight:700;color:var(--color-heading);line-height:1.1}
+.metric-unit{font-size:13px;font-weight:400;color:var(--color-muted);margin-left:4px}
+.metric-change{font-size:12px;font-weight:600;margin-top:6px}
+.metric-change.up{color:#10b981}.metric-change.down{color:#f43f5e}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.bar-label{font-size:12px;font-weight:500;color:var(--color-body);width:160px;flex-shrink:0}
+.bar-track{flex:1;height:7px;background:var(--color-card-border);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px}
+.bar-val{font-size:12px;font-weight:700;width:90px;text-align:right;flex-shrink:0}
+.insight{border-left:3px solid var(--color-primary);padding:13px 18px;background:rgba(21,80,252,0.04);border-radius:0 10px 10px 0;margin-bottom:14px}
+html.theme-dark .insight{background:rgba(75,123,255,0.06)}
+.insight.warn{border-color:#f43f5e;background:rgba(244,63,94,0.04)}
+.insight.success{border-color:#10b981;background:rgba(16,185,129,0.04)}
+.insight.accent{border-color:var(--color-accent);background:rgba(231,0,219,0.04)}
+.insight-title{font-size:13px;font-weight:700;color:var(--color-primary);margin-bottom:5px}
+.insight.warn .insight-title{color:#f43f5e}.insight.success .insight-title{color:#10b981}.insight.accent .insight-title{color:var(--color-accent)}
+.insight-body{font-size:13px;color:var(--color-body);line-height:1.65}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase}
+.badge.blue{background:rgba(21,80,252,0.1);color:var(--color-primary)}
+.badge.green{background:rgba(16,185,129,0.1);color:#10b981}
+.scenario-table{width:100%;border-collapse:collapse;font-size:13px}
+.scenario-table th{background:var(--surface);color:var(--color-heading);padding:10px 14px;text-align:left;font-weight:600;font-size:12px;border-bottom:2px solid var(--color-card-border)}
+.scenario-table td{padding:10px 14px;border-bottom:1px solid var(--color-card-border);color:var(--color-body);vertical-align:top}
+.scenario-table tr:last-child td{border-bottom:none}
+.scenario-table .rec{font-weight:700;color:var(--color-primary)}
+.reveal{opacity:0;transform:translateY(14px);transition:opacity 0.5s ease,transform 0.5s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.doc-footer{background:#0D0D0F;height:40px;display:flex;align-items:center;justify-content:space-between;padding:0 48px}
+.footer-left{font-size:11px;color:#667085}
+.footer-right{font-size:11px;font-weight:600;color:#E700DB;letter-spacing:0.3px;text-transform:uppercase}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="nav-left">
+    <span class="nav-logo">TecAce</span>
+    <span class="nav-sep"></span>
+    <span class="nav-title" id="nav_title">Gemma 3n vs Gemma 4 세대 비교</span>
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn lang-btn" id="langBtn" onclick="toggleLang()">English</button>
+    <button class="nav-btn" onclick="cycleTheme()"><span id="themeLabel">Light</span></button>
+    <button class="nav-btn primary" id="pdfBtn" onclick="downloadPDF()">PDF Download</button>
+  </div>
+</nav>
+
+<div class="header-banner">
+  <span class="doc-type-badge">ANALYSIS REPORT</span>
+  <h1 class="doc-title" id="doc_title">Gemma 3n vs Gemma 4<br>온디바이스 세대 비교 리포트</h1>
+  <p class="doc-subtitle" id="doc_subtitle">Gemma 3n E2B-Q8_0 vs Gemma 4 E2B (Q3_K_M / Q4_K_M / Q8_0) — Samsung SM-S942U 벤치마크</p>
+  <div class="doc-meta">
+    <div class="doc-meta-item"><strong id="lbl_device">디바이스</strong>Samsung SM-S942U (Galaxy S25 Ultra)</div>
+    <div class="doc-meta-item"><strong>SoC</strong>Snapdragon 8 Elite · 8 Cores</div>
+    <div class="doc-meta-item"><strong id="lbl_engine">추론 엔진</strong>llama.cpp (CPU only)</div>
+    <div class="doc-meta-item"><strong id="lbl_date">테스트 날짜</strong>2026년 4월 8일</div>
+  </div>
+</div>
+
+<main class="main">
+
+  <!-- COLOR LEGEND -->
+  <div class="color-legend reveal">
+    <div class="legend-item"><div class="legend-dot" style="background:#1550FC"></div><span id="leg1">파란색 = Gemma 3n Q8_0 (이전 세대 기준)</span></div>
+    <div class="legend-sep"></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#a855f7"></div><span id="leg2">보라색 = G4 Q3_K_M</span></div>
+    <div class="legend-sep"></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#E700DB"></div><span id="leg3">마젠타 = G4 Q4_K_M</span></div>
+    <div class="legend-sep"></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#10b981"></div><span id="leg4">초록 = G4 Q8_0 (최고)</span></div>
+    <div class="legend-sep"></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f43f5e"></div><span id="leg5">빨강 = 퇴보 / 주의</span></div>
+  </div>
+
+  <!-- S1: TEST ENV -->
+  <section class="section reveal">
+    <div class="section-label">Section 01</div>
+    <div class="section-title" id="s1_title">테스트 환경</div>
+    <div class="divider"></div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title" id="s1_spec">디바이스 스펙</div>
+        <table class="data-table">
+          <tr><td style="color:var(--color-muted);font-size:12px;width:44%" id="l_dev">디바이스</td><td>Samsung SM-S942U (Galaxy S25 Ultra)</td></tr>
+          <tr><td style="color:var(--color-muted);font-size:12px">SoC</td><td>QTI SM8850 (Snapdragon 8 Elite) · 8 Cores</td></tr>
+          <tr><td style="color:var(--color-muted);font-size:12px">Android</td><td>Android 16 (SDK 36)</td></tr>
+          <tr><td style="color:var(--color-muted);font-size:12px" id="l_eng">추론 엔진</td><td>llama.cpp (CPU only)</td></tr>
+          <tr><td style="color:var(--color-muted);font-size:12px" id="l_dt">테스트 날짜</td><td>2026년 4월 8일</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title" id="s1_models">테스트 모델</div>
+        <table class="data-table">
+          <thead><tr><th id="th_gen">세대</th><th id="th_quant">양자화</th><th id="th_note">비고</th></tr></thead>
+          <tbody>
+            <tr class="g3n-row"><td>Gemma 3n</td><td>Q8_0</td><td id="note_base">이전 세대 기준선</td></tr>
+            <tr><td>Gemma 4</td><td>Q3_K_M</td><td id="note_q3">경량 3-bit</td></tr>
+            <tr><td>Gemma 4</td><td>Q4_K_M</td><td id="note_q4">균형형 4-bit</td></tr>
+            <tr><td>Gemma 4</td><td class="star-gold">Q8_0 ★</td><td id="note_q8">고정밀 8-bit</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- S2: OVERALL -->
+  <section class="section reveal">
+    <div class="section-label">Section 02</div>
+    <div class="section-title" id="s2_title">전체 성능 요약</div>
+    <div class="divider"></div>
+    <div class="grid-3" style="margin-bottom:24px">
+      <div class="metric-card">
+        <div class="metric-label" id="m1_lbl">레이턴시 개선</div>
+        <div class="metric-value">37<span class="metric-unit">%</span></div>
+        <div class="metric-change up" id="m1_sub">G4 Q8_0 vs G3n Q8_0 단축</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label" id="m2_lbl">Prefill TPS 향상</div>
+        <div class="metric-value">2.1<span class="metric-unit">×</span></div>
+        <div class="metric-change up" id="m2_sub">G4 Q8_0: 40.2 vs G3n: 19.4</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label" id="m3_lbl">메모리 절감</div>
+        <div class="metric-value">~70<span class="metric-unit">MB</span></div>
+        <div class="metric-change up" id="m3_sub">779 MB → 708 MB</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" id="s2_tbl_title">모델별 성능 비교표</div>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead><tr><th id="th_model">모델</th><th id="th_lat">평균 레이턴시</th><th>Decode TPS</th><th>Prefill TPS</th><th id="th_mem">메모리</th><th id="th_pass">검증 통과율</th></tr></thead>
+          <tbody>
+            <tr class="g3n-row"><td><strong>G3n Q8_0</strong> <span class="badge blue" id="lbl_base">기준선</span></td><td>38.4s</td><td>13.71</td><td>19.41</td><td>779 MB</td><td>18/25 (72%)</td></tr>
+            <tr><td>G4 Q3_K_M</td><td>26.2s</td><td>13.18</td><td>27.62</td><td>707 MB</td><td>15/25 (60%)</td></tr>
+            <tr><td>G4 Q4_K_M</td><td>26.3s</td><td class="highlight">17.20 ★</td><td>34.75</td><td>708 MB</td><td>16/25 (64%)</td></tr>
+            <tr><td>G4 Q8_0 <span class="badge green" id="lbl_rec">추천</span></td><td class="highlight">24.2s</td><td>16.75</td><td class="highlight">40.15 ★</td><td>708 MB</td><td class="highlight">18/25 (72%)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="card-title" id="s2_chart_title">평균 레이턴시 비교 (낮을수록 빠름)</div>
+      <div class="bar-row"><span class="bar-label">G3n Q8_0</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#1550FC"></div></div><span class="bar-val" style="color:#1550FC">38.4s</span></div>
+      <div class="bar-row"><span class="bar-label">G4 Q3_K_M</span><div class="bar-track"><div class="bar-fill" style="width:68.2%;background:#a855f7"></div></div><span class="bar-val" style="color:#a855f7">26.2s</span></div>
+      <div class="bar-row"><span class="bar-label">G4 Q4_K_M</span><div class="bar-track"><div class="bar-fill" style="width:68.5%;background:#E700DB"></div></div><span class="bar-val" style="color:#E700DB">26.3s</span></div>
+      <div class="bar-row"><span class="bar-label">G4 Q8_0 ★</span><div class="bar-track"><div class="bar-fill" style="width:63.0%;background:#10b981"></div></div><span class="bar-val" style="color:#10b981">24.2s</span></div>
+    </div>
+  </section>
+
+  <!-- S3: TPS -->
+  <section class="section reveal">
+    <div class="section-label">Section 03</div>
+    <div class="section-title" id="s3_title">추론 처리량 (TPS) 세대 비교</div>
+    <div class="divider"></div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title" id="s3_decode">Decode TPS (토큰 생성 속도)</div>
+        <div class="bar-row"><span class="bar-label">G3n Q8_0</span><div class="bar-track"><div class="bar-fill" style="width:79.7%;background:#1550FC"></div></div><span class="bar-val" style="color:#1550FC">13.71</span></div>
+        <div class="bar-row"><span class="bar-label">G4 Q3_K_M</span><div class="bar-track"><div class="bar-fill" style="width:76.6%;background:#a855f7"></div></div><span class="bar-val" style="color:#a855f7">13.18 (-4%)</span></div>
+        <div class="bar-row"><span class="bar-label">G4 Q4_K_M ★</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#E700DB"></div></div><span class="bar-val" style="color:#E700DB">17.20 (+25%)</span></div>
+        <div class="bar-row"><span class="bar-label">G4 Q8_0</span><div class="bar-track"><div class="bar-fill" style="width:97.4%;background:#10b981"></div></div><span class="bar-val" style="color:#10b981">16.75 (+22%)</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title" id="s3_prefill">Prefill TPS (컨텍스트 처리 속도)</div>
+        <div class="bar-row"><span class="bar-label">G3n Q8_0</span><div class="bar-track"><div class="bar-fill" style="width:48.3%;background:#1550FC"></div></div><span class="bar-val" style="color:#1550FC">19.41</span></div>
+        <div class="bar-row"><span class="bar-label">G4 Q3_K_M</span><div class="bar-track"><div class="bar-fill" style="width:68.8%;background:#a855f7"></div></div><span class="bar-val" style="color:#a855f7">27.62 (+42%)</span></div>
+        <div class="bar-row"><span class="bar-label">G4 Q4_K_M</span><div class="bar-track"><div class="bar-fill" style="width:86.6%;background:#E700DB"></div></div><span class="bar-val" style="color:#E700DB">34.75 (+79%)</span></div>
+        <div class="bar-row"><span class="bar-label">G4 Q8_0 ★</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#10b981"></div></div><span class="bar-val" style="color:#10b981">40.15 (+107%)</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <table class="data-table">
+        <thead><tr><th id="th_m2">모델</th><th>Decode TPS</th><th>Prefill TPS</th><th id="th_pgrow">Prefill 성장 (G3n 대비)</th></tr></thead>
+        <tbody>
+          <tr class="g3n-row"><td>G3n Q8_0</td><td>13.71</td><td>19.41</td><td id="lbl_bsl">기준선</td></tr>
+          <tr><td>G4 Q3_K_M</td><td>13.18 (-4%)</td><td>27.62 (+42%)</td><td>+8.2 tps</td></tr>
+          <tr><td>G4 Q4_K_M</td><td class="highlight">17.20 (+25%) ★</td><td>34.75 (+79%)</td><td>+15.3 tps</td></tr>
+          <tr><td>G4 Q8_0</td><td>16.75 (+22%)</td><td class="highlight">40.15 (+107%) ★</td><td>+20.7 tps (2.1×)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- S4: CATEGORIES -->
+  <section class="section reveal">
+    <div class="section-label">Section 04</div>
+    <div class="section-title" id="s4_title">태스크 카테고리별 세대 비교</div>
+    <div class="divider"></div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title" id="s4_tbl">카테고리별 레이턴시 (초)</div>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead><tr><th id="th_cat">카테고리</th><th>G3n Q8_0</th><th>G4 Q3_K_M</th><th>G4 Q4_K_M</th><th>G4 Q8_0 ★</th><th id="th_spdup">G4 최고 배속</th></tr></thead>
+          <tbody>
+            <tr><td id="cat_s">단답 출력</td><td>0.5s</td><td>0.5s</td><td>0.4s</td><td>0.4s</td><td>1.42×</td></tr>
+            <tr><td id="cat_c">창의 글쓰기</td><td>9.2s</td><td>6.2s</td><td>4.6s</td><td>3.8s</td><td class="highlight">2.40×</td></tr>
+            <tr><td id="cat_r">논리 추론</td><td>4.0s</td><td>2.0s</td><td>8.0s</td><td>10.2s</td><td class="highlight">1.99×</td></tr>
+            <tr><td id="cat_su">요약</td><td>13.5s</td><td>6.4s</td><td>3.5s</td><td>2.9s</td><td class="highlight">4.72×</td></tr>
+            <tr><td id="cat_st">구조화 출력</td><td>40.6s</td><td>12.3s</td><td>6.6s</td><td>9.5s</td><td class="highlight" style="color:var(--color-primary)">6.19× ★</td></tr>
+            <tr><td id="cat_k">지식 설명</td><td>38.3s</td><td>19.6s</td><td>18.1s</td><td>18.2s</td><td class="highlight">2.12×</td></tr>
+            <tr><td id="cat_m">수학 계산</td><td>9.1s</td><td>26.5s</td><td style="color:#f43f5e;font-weight:700">50.0s ⚠</td><td>21.6s</td><td style="color:#f43f5e">0.42× ⚠</td></tr>
+            <tr><td id="cat_cd">코드 생성</td><td>93.3s</td><td>48.6s</td><td>38.6s</td><td>51.0s</td><td class="highlight">2.42×</td></tr>
+            <tr><td id="cat_l">장문 생성</td><td>104.5s</td><td>92.4s</td><td>87.0s</td><td>82.6s</td><td>1.27×</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="insight warn reveal">
+      <div class="insight-title" id="ins_warn_t">수학 태스크 역전 주의</div>
+      <div class="insight-body" id="ins_warn_b">G4 Q4_K_M의 수학 레이턴시(50.0s)가 G3n(9.1s) 대비 5배 느린 역전이 발생합니다. chain-of-thought 토큰 생성이 과도하게 발생하는 현상으로, 수학 전용 앱에서는 G4 Q8_0 또는 Q3_K_M을 권장합니다.</div>
+    </div>
+    <div class="insight success reveal">
+      <div class="insight-title" id="ins_best_t">구조화 출력 최고 성과: 6.2× 향상</div>
+      <div class="insight-body" id="ins_best_b">구조화 출력(JSON, 마크다운 테이블 등) 태스크에서 G4 Q4_K_M(6.6s)이 G3n(40.6s) 대비 6.2배 빠른 압도적 개선을 보였습니다.</div>
+    </div>
+  </section>
+
+  <!-- S5: SYSTEM IMPACT -->
+  <section class="section reveal">
+    <div class="section-label">Section 05</div>
+    <div class="section-title" id="s5_title">시스템 영향 및 품질 비교</div>
+    <div class="divider"></div>
+    <div class="card">
+      <div class="card-title" id="s5_tbl">메모리 / 배터리 / 발열 / 검증 비교</div>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead><tr><th id="th_md">모델</th><th id="th_mm">메모리</th><th id="th_bt">배터리/회</th><th id="th_th">발열 델타</th><th id="th_it">초기화 시간</th><th id="th_ps">검증 통과율</th></tr></thead>
+          <tbody>
+            <tr class="g3n-row"><td><strong>G3n Q8_0</strong></td><td>779.0 MB</td><td>0.240%</td><td style="color:#10b981;font-weight:700">6.0 ★</td><td>542ms</td><td>72.0%</td></tr>
+            <tr><td>G4 Q3_K_M</td><td style="color:#10b981;font-weight:700">706.8 MB ★</td><td style="color:#10b981;font-weight:700">0.160% ★</td><td>10.32</td><td style="color:#10b981;font-weight:700">381ms ★</td><td>60.0%</td></tr>
+            <tr><td>G4 Q4_K_M</td><td>707.6 MB</td><td>0.240%</td><td>12.92</td><td>436ms</td><td>64.0%</td></tr>
+            <tr><td>G4 Q8_0 <span class="badge green" id="lbl_rec2">추천</span></td><td>707.7 MB</td><td>0.320%</td><td>15.20</td><td>523ms</td><td class="highlight">72.0% ★</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- S6: INSIGHTS -->
+  <section class="section reveal">
+    <div class="section-label">Section 06</div>
+    <div class="section-title" id="s6_title">핵심 인사이트</div>
+    <div class="divider"></div>
+    <div class="insight success"><div class="insight-title" id="i1t">1. Q8_0 기준: Gemma 4가 1.6× 빠름</div><div class="insight-body" id="i1b">동일 양자화(Q8_0) 비교에서 Gemma 4가 38.4s → 24.2s로 37% 단축. 1세대 만의 실질적 성능 도약입니다.</div></div>
+    <div class="insight success"><div class="insight-title" id="i2t">2. Prefill TPS: 2.1× 세대 향상</div><div class="insight-body" id="i2b">G4 Q8_0의 Prefill TPS(40.2)는 G3n(19.4) 대비 2배 이상. 긴 대화 히스토리, RAG, 문서 처리 등 컨텍스트 집약 앱에서 체감 차이가 큽니다.</div></div>
+    <div class="insight"><div class="insight-title" id="i3t">3. 메모리 효율 개선: -70MB</div><div class="insight-body" id="i3b">Gemma 4는 모델 크기는 동일하지만 더 효율적인 메모리 관리로 약 70MB 절감됩니다. (779MB → 708MB)</div></div>
+    <div class="insight warn"><div class="insight-title" id="i4t">4. 수학 태스크 역전 주의 (G4 Q4)</div><div class="insight-body" id="i4b">G4 Q4_K_M의 수학 레이턴시(50.0s)가 G3n(9.1s) 대비 5배 느린 역전이 발생합니다. 수학 전용 앱에서는 G4 Q8_0 또는 Q3_K_M을 권장합니다.</div></div>
+    <div class="insight accent"><div class="insight-title" id="i5t">5. 구조화 출력: G4 Q4가 6.2× 최고</div><div class="insight-body" id="i5b">구조화 출력(JSON, 마크다운 테이블 등) 태스크에서 G4 Q4_K_M(6.6s)이 G3n(40.6s) 대비 6.2배 빠른 압도적 개선을 보였습니다.</div></div>
+  </section>
+
+  <!-- S7: CONCLUSION -->
+  <section class="section reveal">
+    <div class="section-label">Section 07</div>
+    <div class="section-title" id="s7_title">결론 및 세대 선택 가이드</div>
+    <div class="divider"></div>
+    <div class="card">
+      <table class="scenario-table">
+        <thead><tr><th id="th_sc">시나리오</th><th id="th_rc">추천</th><th id="th_rs">이유</th></tr></thead>
+        <tbody>
+          <tr><td id="sc1n">최대 성능 (속도+품질)</td><td class="rec">G4 Q8_0 ★</td><td id="sc1r">G3n 대비 1.6× 빠름, 메모리 더 적음</td></tr>
+          <tr><td id="sc2n">스트리밍 대화 (Decode TPS 최고)</td><td class="rec">G4 Q4_K_M ★</td><td id="sc2r">Decode TPS 17.2 — G3n 대비 +25%</td></tr>
+          <tr><td id="sc3n">배터리 절약 우선</td><td class="rec">G4 Q3_K_M</td><td id="sc3r">0.160%/회로 4종 중 최저</td></tr>
+          <tr><td id="sc4n">수학/논리 집중 앱</td><td class="rec">G4 Q8_0 또는 G3n</td><td id="sc4r">G4 Q4_K_M 수학 이상 회피 필요</td></tr>
+          <tr><td id="sc5n">구조화 출력 (JSON/표)</td><td class="rec">G4 Q4_K_M ★</td><td id="sc5r">G3n 대비 6.2× 압도적 개선</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="insight" style="margin-top:20px">
+      <div class="insight-title" id="concl_t">종합 결론</div>
+      <div class="insight-body" id="concl_b">전반적으로 Gemma 4 E2B는 동일 파라미터 규모에서 Gemma 3n 대비 명확한 세대 발전을 보여줍니다. 특히 Q8_0 기준 37% 레이턴시 감소와 Prefill 2× 향상은 실 앱 적용에서 체감 차이가 큽니다. 단, 수학 태스크에서 Q4 양자화의 이상 현상은 모델 선택 시 주의가 필요합니다.</div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="doc-footer">
+  <span class="footer-left">tecace.com · 2026. 04. 08</span>
+  <span class="footer-right">CONFIDENTIAL | &copy; 2026 TECACE</span>
+</footer>
+
+<script>
+var T={
+  ko:{nav:"Gemma 3n vs Gemma 4 세대 비교",lang:"English",title:"Gemma 3n vs Gemma 4<br>온디바이스 세대 비교 리포트",sub:"Gemma 3n E2B-Q8_0 vs Gemma 4 E2B (Q3_K_M / Q4_K_M / Q8_0) — Samsung SM-S942U 벤치마크",lbl_device:"디바이스",lbl_engine:"추론 엔진",lbl_date:"테스트 날짜",leg1:"파란색 = Gemma 3n Q8_0 (이전 세대 기준)",leg2:"보라색 = G4 Q3_K_M",leg3:"마젠타 = G4 Q4_K_M",leg4:"초록 = G4 Q8_0 (최고)",leg5:"빨강 = 퇴보 / 주의",s1_title:"테스트 환경",s1_spec:"디바이스 스펙",l_dev:"디바이스",l_eng:"추론 엔진",l_dt:"테스트 날짜",s1_models:"테스트 모델",th_gen:"세대",th_quant:"양자화",th_note:"비고",note_base:"이전 세대 기준선",note_q3:"경량 3-bit",note_q4:"균형형 4-bit",note_q8:"고정밀 8-bit",s2_title:"전체 성능 요약",m1_lbl:"레이턴시 개선",m1_sub:"G4 Q8_0 vs G3n Q8_0 단축",m2_lbl:"Prefill TPS 향상",m2_sub:"G4 Q8_0: 40.2 vs G3n: 19.4",m3_lbl:"메모리 절감",m3_sub:"779 MB → 708 MB",s2_tbl_title:"모델별 성능 비교표",th_model:"모델",th_lat:"평균 레이턴시",th_mem:"메모리",th_pass:"검증 통과율",lbl_base:"기준선",lbl_rec:"추천",s2_chart_title:"평균 레이턴시 비교 (낮을수록 빠름)",s3_title:"추론 처리량 (TPS) 세대 비교",s3_decode:"Decode TPS (토큰 생성 속도)",s3_prefill:"Prefill TPS (컨텍스트 처리 속도)",th_m2:"모델",th_pgrow:"Prefill 성장 (G3n 대비)",lbl_bsl:"기준선",s4_title:"태스크 카테고리별 세대 비교",s4_tbl:"카테고리별 레이턴시 (초)",th_cat:"카테고리",th_spdup:"G4 최고 배속",cat_s:"단답 출력",cat_c:"창의 글쓰기",cat_r:"논리 추론",cat_su:"요약",cat_st:"구조화 출력",cat_k:"지식 설명",cat_m:"수학 계산",cat_cd:"코드 생성",cat_l:"장문 생성",ins_warn_t:"수학 태스크 역전 주의",ins_warn_b:"G4 Q4_K_M의 수학 레이턴시(50.0s)가 G3n(9.1s) 대비 5배 느린 역전이 발생합니다. chain-of-thought 토큰 생성이 과도하게 발생하는 현상으로, 수학 전용 앱에서는 G4 Q8_0 또는 Q3_K_M을 권장합니다.",ins_best_t:"구조화 출력 최고 성과: 6.2× 향상",ins_best_b:"구조화 출력(JSON, 마크다운 테이블 등) 태스크에서 G4 Q4_K_M(6.6s)이 G3n(40.6s) 대비 6.2배 빠른 압도적 개선을 보였습니다.",s5_title:"시스템 영향 및 품질 비교",s5_tbl:"메모리 / 배터리 / 발열 / 검증 비교",th_md:"모델",th_mm:"메모리",th_bt:"배터리/회",th_th:"발열 델타",th_it:"초기화 시간",th_ps:"검증 통과율",lbl_rec2:"추천",s6_title:"핵심 인사이트",i1t:"1. Q8_0 기준: Gemma 4가 1.6× 빠름",i1b:"동일 양자화(Q8_0) 비교에서 Gemma 4가 38.4s → 24.2s로 37% 단축. 1세대 만의 실질적 성능 도약입니다.",i2t:"2. Prefill TPS: 2.1× 세대 향상",i2b:"G4 Q8_0의 Prefill TPS(40.2)는 G3n(19.4) 대비 2배 이상. 긴 대화 히스토리, RAG, 문서 처리 등 컨텍스트 집약 앱에서 체감 차이가 큽니다.",i3t:"3. 메모리 효율 개선: -70MB",i3b:"Gemma 4는 모델 크기는 동일하지만 더 효율적인 메모리 관리로 약 70MB 절감됩니다. (779MB → 708MB)",i4t:"4. 수학 태스크 역전 주의 (G4 Q4)",i4b:"G4 Q4_K_M의 수학 레이턴시(50.0s)가 G3n(9.1s) 대비 5배 느린 역전이 발생합니다. 수학 전용 앱에서는 G4 Q8_0 또는 Q3_K_M을 권장합니다.",i5t:"5. 구조화 출력: G4 Q4가 6.2× 최고",i5b:"구조화 출력(JSON, 마크다운 테이블 등) 태스크에서 G4 Q4_K_M(6.6s)이 G3n(40.6s) 대비 6.2배 빠른 압도적 개선을 보였습니다.",s7_title:"결론 및 세대 선택 가이드",th_sc:"시나리오",th_rc:"추천",th_rs:"이유",sc1n:"최대 성능 (속도+품질)",sc1r:"G3n 대비 1.6× 빠름, 메모리 더 적음",sc2n:"스트리밍 대화 (Decode TPS 최고)",sc2r:"Decode TPS 17.2 — G3n 대비 +25%",sc3n:"배터리 절약 우선",sc3r:"0.160%/회로 4종 중 최저",sc4n:"수학/논리 집중 앱",sc4r:"G4 Q4_K_M 수학 이상 회피 필요",sc5n:"구조화 출력 (JSON/표)",sc5r:"G3n 대비 6.2× 압도적 개선",concl_t:"종합 결론",concl_b:"전반적으로 Gemma 4 E2B는 동일 파라미터 규모에서 Gemma 3n 대비 명확한 세대 발전을 보여줍니다. 특히 Q8_0 기준 37% 레이턴시 감소와 Prefill 2× 향상은 실 앱 적용에서 체감 차이가 큽니다. 단, 수학 태스크에서 Q4 양자화의 이상 현상은 모델 선택 시 주의가 필요합니다."},
+  en:{nav:"Gemma 3n vs Gemma 4 Generation Comparison",lang:"한국어",title:"Gemma 3n vs Gemma 4<br>On-Device Generation Comparison Report",sub:"Gemma 3n E2B-Q8_0 vs Gemma 4 E2B (Q3_K_M / Q4_K_M / Q8_0) — Samsung SM-S942U Benchmark",lbl_device:"Device",lbl_engine:"Inference Engine",lbl_date:"Test Date",leg1:"Blue = Gemma 3n Q8_0 (Prev Gen Baseline)",leg2:"Purple = G4 Q3_K_M",leg3:"Magenta = G4 Q4_K_M",leg4:"Green = G4 Q8_0 (Best)",leg5:"Red = Regression / Warning",s1_title:"Test Environment",s1_spec:"Device Specification",l_dev:"Device",l_eng:"Inference Engine",l_dt:"Test Date",s1_models:"Test Models",th_gen:"Generation",th_quant:"Quantization",th_note:"Note",note_base:"Baseline (prev gen)",note_q3:"3-bit lightweight",note_q4:"Balanced 4-bit",note_q8:"8-bit high precision",s2_title:"Overall Performance Summary",m1_lbl:"Latency Improvement",m1_sub:"G4 Q8_0 vs G3n Q8_0 reduction",m2_lbl:"Prefill TPS Gain",m2_sub:"G4 Q8_0: 40.2 vs G3n: 19.4",m3_lbl:"Memory Savings",m3_sub:"779 MB → 708 MB",s2_tbl_title:"Model Performance Comparison",th_model:"Model",th_lat:"Avg Latency",th_mem:"Memory",th_pass:"Pass Rate",lbl_base:"Baseline",lbl_rec:"Recommended",s2_chart_title:"Average Latency Comparison (lower is better)",s3_title:"Throughput (TPS) Generation Comparison",s3_decode:"Decode TPS (Token Generation Speed)",s3_prefill:"Prefill TPS (Context Processing Speed)",th_m2:"Model",th_pgrow:"Prefill Growth (vs G3n)",lbl_bsl:"Baseline",s4_title:"Task Category Generation Comparison",s4_tbl:"Latency by Category (seconds)",th_cat:"Category",th_spdup:"Best G4 Speedup",cat_s:"Minimal Output",cat_c:"Creative Writing",cat_r:"Reasoning",cat_su:"Summarization",cat_st:"Structured Output",cat_k:"Knowledge",cat_m:"Math",cat_cd:"Code Generation",cat_l:"Long-Form",ins_warn_t:"Math Task Regression Warning",ins_warn_b:"G4 Q4_K_M math latency (50.0s) is 5× slower than G3n (9.1s) — caused by excessive chain-of-thought generation at 4-bit. Avoid Q4_K_M for math-intensive apps; use Q8_0 or Q3_K_M instead.",ins_best_t:"Structured Output Best Performance: 6.2× Speedup",ins_best_b:"G4 Q4_K_M (6.6s) is 6.2× faster than G3n (40.6s) for structured output tasks (JSON, markdown tables).",s5_title:"System Impact & Quality Comparison",s5_tbl:"Memory / Battery / Thermal / Quality Comparison",th_md:"Model",th_mm:"Memory",th_bt:"Battery/Run",th_th:"Thermal Delta",th_it:"Init Time",th_ps:"Pass Rate",lbl_rec2:"Recommended",s6_title:"Key Insights",i1t:"1. Q8_0: Gemma 4 is 1.6× Faster",i1b:"At equal Q8_0 quantization, Gemma 4 cuts latency from 38.4s to 24.2s (-37%). A meaningful generational leap.",i2t:"2. Prefill TPS: 2.1× Generation Gain",i2b:"G4 Q8_0 Prefill TPS (40.2) is 2× G3n (19.4). Especially impactful for long conversation history, RAG, and document processing.",i3t:"3. Memory Efficiency: -70MB",i3b:"Gemma 4 reduces memory usage by ~70MB (779MB → 708MB) at the same parameter scale through improved memory management.",i4t:"4. Math Task Regression Warning (G4 Q4)",i4b:"G4 Q4_K_M math latency (50.0s) is 5× slower than G3n (9.1s). Use G4 Q8_0 or Q3_K_M for math-intensive applications.",i5t:"5. Structured Output: G4 Q4 is 6.2× Best",i5b:"G4 Q4_K_M achieves 6.2× speedup over G3n for structured output tasks (JSON, markdown tables).",s7_title:"Conclusion & Generation Selection Guide",th_sc:"Scenario",th_rc:"Recommendation",th_rs:"Rationale",sc1n:"Max Performance (Speed+Quality)",sc1r:"1.6× faster than G3n, less memory",sc2n:"Streaming Chat (Best Decode TPS)",sc2r:"Decode TPS 17.2 — +25% vs G3n",sc3n:"Battery Saving Priority",sc3r:"0.160%/run — lowest of all 4 models",sc4n:"Math / Logic Apps",sc4r:"Avoid G4 Q4_K_M math anomaly",sc5n:"Structured Output (JSON / Tables)",sc5r:"6.2× improvement over G3n",concl_t:"Overall Conclusion",concl_b:"Gemma 4 E2B shows clear generational progress over Gemma 3n at the same parameter scale. The 37% latency reduction and 2× Prefill gain at Q8_0 are significant for real-app deployment. However, the Q4_K_M math anomaly requires careful model selection."}
+};
+var curLang=localStorage.getItem('tecace-lang')||'ko';
+function applyLang(lang){
+  var d=T[lang];curLang=lang;
+  localStorage.setItem('tecace-lang',lang);
+  document.documentElement.lang=lang==='ko'?'ko':'en';
+  var ids=Object.keys(d);
+  ids.forEach(function(id){
+    var el=document.getElementById(id);
+    if(!el)return;
+    if(id==='title'||id==='doc_title')el.innerHTML=d[id];
+    else el.textContent=d[id];
+  });
+  document.getElementById('nav_title').textContent=d.nav;
+  document.getElementById('doc_title').innerHTML=d.title;
+  document.getElementById('doc_subtitle').textContent=d.sub;
+  document.getElementById('langBtn').textContent=d.lang;
+}
+function toggleLang(){applyLang(curLang==='ko'?'en':'ko');}
+var currentTheme=localStorage.getItem('tecace-theme')||'light';
+function applyTheme(t){
+  document.documentElement.className='theme-'+t;
+  document.getElementById('themeLabel').textContent=t==='dark'?'Dark':'Light';
+  localStorage.setItem('tecace-theme',t);currentTheme=t;
+}
+function cycleTheme(){applyTheme(currentTheme==='dark'?'light':'dark');}
+applyTheme(currentTheme);
+applyLang(curLang);
+async function downloadPDF(){
+  var btn=document.getElementById('pdfBtn');
+  var orig=btn.innerHTML;btn.textContent='Generating...';btn.disabled=true;
+  document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('visible');});
+  var fname=curLang==='ko'?'TecAce_Gemma3n_vs_Gemma4_KO.pdf':'TecAce_Gemma3n_vs_Gemma4_EN.pdf';
+  try{
+    await html2pdf().set({margin:0,filename:fname,image:{type:'jpeg',quality:0.96},html2canvas:{scale:2,useCORS:true,letterRendering:true,logging:false},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css','legacy']}}).from(document.body).save();
+  }finally{btn.innerHTML=orig;btn.disabled=false;}
+}
+var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
+</script>
+</body>
+</html>
