@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 보안 준비도 자가진단 | TecAce</title>
+
+<!-- TecAce Design System v2 Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&family=Sora:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════
+   TecAce Design System v2 — CSS Token Layer
+   --tc-* namespace · 8px base grid
+═══════════════════════════════════════════════════ */
+:root {
+  /* Brand Colors */
+  --tc-navy:         #1E2E69;
+  --tc-navy-light:   #2D3F7B;
+  --tc-navy-dark:    #141F4A;
+  --tc-indigo:       #5860D5;
+  --tc-cyan:         #0E97D0;
+  --tc-lilac:        #B9BFFF;
+  --tc-magenta:      #D46BC4;
+  --tc-pink:         #F5A8D6;
+
+  /* Backgrounds */
+  --tc-bg-sky-1:     #F1FDFF;
+  --tc-bg-sky-2:     #E3FFFF;
+  --tc-bg-sky-3:     #FBFEFF;
+  --tc-bg-pale:      #F0F4FF;
+
+  /* Gradients */
+  --tc-gradient-hero: linear-gradient(118deg, #1E2E69, #5860D5, #D46BC4, #F5A8D6);
+  --tc-gradient-cyan: linear-gradient(90deg, #0E97D0, #5860D5);
+  --tc-gradient-soft: linear-gradient(135deg, #F0F4FF, #E3FFFF);
+  --tc-gradient-text: linear-gradient(90deg, #1E2E69, #5860D5, #D46BC4);
+
+  /* Typography */
+  --tc-font-heading:  'Poppins', sans-serif;
+  --tc-font-body:     'Sora', sans-serif;
+  --tc-font-kr:       'Pretendard', sans-serif;
+
+  /* Neutral Scale */
+  --n-0:   #FFFFFF;
+  --n-50:  #F9FAFB;
+  --n-100: #F3F4F6;
+  --n-200: #E5E7EB;
+  --n-300: #D1D5DB;
+  --n-400: #9CA3AF;
+  --n-500: #6B7280;
+  --n-600: #4B5563;
+  --n-700: #374151;
+  --n-800: #1F2937;
+  --n-900: #111827;
+
+  /* Status Colors */
+  --status-ready:    #22C55E;
+  --status-indexing: #F59E0B;
+  --status-error:    #EF4444;
+  --status-info:     #3B82F6;
+
+  /* Spacing (8px grid) */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+  --sp-8:  32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+}
+
+/* ═══════════════════════════════════════════════════
+   Reset & Base
+═══════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--tc-font-body);
+  background: var(--tc-bg-sky-3);
+  color: var(--n-700);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══════════════════════════════════════════════════
+   Navigation — .tc-nav
+   white/blur · navy text · indigo gradient underline
+═══════════════════════════════════════════════════ */
+.tc-nav {
+  position: sticky; top: 0; z-index: 300;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(30,46,105,0.08);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 var(--sp-12); height: var(--sp-12);
+}
+.nav-left  { display: flex; align-items: center; gap: var(--sp-3); }
+.nav-logo  {
+  font-family: var(--tc-font-heading);
+  font-size: 14px; font-weight: 700;
+  color: var(--tc-navy); letter-spacing: 0.02em;
+}
+.nav-sep   { width: 1px; height: 14px; background: rgba(30,46,105,0.15); }
+.nav-title {
+  font-family: var(--tc-font-body);
+  font-size: 12px; font-weight: 400;
+  color: var(--n-500);
+}
+.nav-right { display: flex; gap: var(--sp-2); align-items: center; }
+
+/* Nav buttons — text only, no icons */
+.nav-btn {
+  padding: var(--sp-1) var(--sp-3);
+  border-radius: 6px;
+  border: 1px solid rgba(30,46,105,0.15);
+  background: transparent; cursor: pointer;
+  font-size: 11px; font-weight: 500;
+  color: var(--n-500);
+  font-family: var(--tc-font-heading);
+  transition: all 0.15s; letter-spacing: 0.2px;
+}
+.nav-btn:hover { background: var(--tc-bg-pale); color: var(--tc-navy); border-color: rgba(88,96,213,0.3); }
+.nav-btn.lang-btn {
+  background: var(--tc-bg-pale);
+  color: var(--tc-indigo);
+  border-color: rgba(88,96,213,0.25);
+}
+.nav-btn.lang-btn:hover { background: var(--tc-lilac); color: var(--tc-navy); }
+
+@media (max-width: 768px) {
+  .tc-nav { padding: 0 var(--sp-4); }
+  .nav-title { display: none; }
+}
+
+/* ═══════════════════════════════════════════════════
+   Hero Banner — .tc-hero
+   118deg gradient + 3중 radial mesh overlay
+═══════════════════════════════════════════════════ */
+.tc-hero {
+  background: var(--tc-gradient-hero);
+  position: relative; overflow: hidden;
+  padding: 60px var(--sp-16) var(--sp-12);
+}
+/* Mesh overlay — 물결치는 실크 질감 */
+.tc-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(14,151,208,0.3), transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(88,96,213,0.4), transparent 50%),
+    radial-gradient(ellipse at 60% 80%, rgba(212,107,196,0.3), transparent 50%);
+  pointer-events: none;
+}
+.tc-hero > * { position: relative; z-index: 1; }
+
+/* Chip — 투명 + rgba white 0.25 border */
+.hero-chip {
+  display: inline-block;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 4px;
+  padding: var(--sp-1) var(--sp-3);
+  font-family: var(--tc-font-heading);
+  font-size: 10px; font-weight: 600;
+  color: rgba(255,255,255,0.88);
+  letter-spacing: 0.9px; text-transform: uppercase;
+  margin-bottom: var(--sp-4);
+}
+
+/* Hero title — Poppins 200, clamp */
+.hero-title {
+  font-family: var(--tc-font-heading);
+  font-size: clamp(28px, 4.5vw, 56px);
+  font-weight: 200;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: #fff;
+  margin-bottom: var(--sp-3);
+}
+
+/* Lead subtitle — Sora 300 */
+.hero-lead {
+  font-family: var(--tc-font-body);
+  font-size: 15px; font-weight: 300;
+  color: rgba(255,255,255,0.78);
+  max-width: 580px; line-height: 1.7;
+}
+
+/* Meta row */
+.hero-meta {
+  display: flex; gap: var(--sp-8);
+  margin-top: var(--sp-6); flex-wrap: wrap;
+}
+.hero-meta-item {
+  font-family: var(--tc-font-body);
+  font-size: 11px; font-weight: 300;
+  color: rgba(255,255,255,0.5);
+}
+.hero-meta-item strong {
+  display: block;
+  font-weight: 500;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 2px;
+  font-size: 11px;
+}
+
+@media (max-width: 768px) {
+  .tc-hero { padding: var(--sp-10) var(--sp-5) var(--sp-8); }
+}
+
+/* ═══════════════════════════════════════════════════
+   Page Wrapper
+═══════════════════════════════════════════════════ */
+.page-wrap {
+  max-width: 960px; margin: 0 auto;
+  padding: var(--sp-8) var(--sp-16) var(--sp-16);
+}
+@media (max-width: 768px) {
+  .page-wrap { padding: var(--sp-5) var(--sp-4) var(--sp-12); }
+}
+
+/* ═══════════════════════════════════════════════════
+   Scoreboard — sticky below nav
+═══════════════════════════════════════════════════ */
+.scoreboard {
+  position: sticky; top: var(--sp-12); z-index: 200;
+  background: var(--n-0);
+  border-radius: 12px;
+  border: 1px solid rgba(30,46,105,0.1);
+  box-shadow: 0 2px 8px rgba(30,46,105,0.08);
+  padding: var(--sp-4) var(--sp-6);
+  margin-bottom: var(--sp-8);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--sp-5); align-items: center;
+}
+.score-total   { display: flex; align-items: baseline; gap: var(--sp-1); }
+.score-num {
+  font-family: var(--tc-font-heading);
+  font-size: 40px; font-weight: 200;
+  background: var(--tc-gradient-text);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; line-height: 1;
+}
+.score-denom {
+  font-family: var(--tc-font-heading);
+  font-size: 13px; font-weight: 300;
+  color: var(--n-400);
+}
+.score-bar-track {
+  height: 6px; background: var(--n-100);
+  border-radius: 999px; overflow: hidden;
+}
+.score-bar-fill {
+  height: 100%; width: 0%;
+  background: var(--tc-gradient-hero);
+  border-radius: 999px;
+  transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+.score-stage-pill {
+  font-family: var(--tc-font-heading);
+  font-size: 11px; font-weight: 600;
+  padding: 4px 12px; border-radius: 999px;
+  white-space: nowrap; letter-spacing: 0.3px;
+  transition: all 0.3s;
+}
+/* Status colors from Design System */
+.score-stage-pill[data-stage="위험"],
+.score-stage-pill[data-stage="Critical"]  { background: rgba(239,68,68,0.1);   color: var(--status-error); }
+.score-stage-pill[data-stage="기본"],
+.score-stage-pill[data-stage="Basic"]     { background: rgba(245,158,11,0.1);  color: var(--status-indexing); }
+.score-stage-pill[data-stage="관리"],
+.score-stage-pill[data-stage="Managed"]  { background: rgba(59,130,246,0.1);  color: var(--status-info); }
+.score-stage-pill[data-stage="성숙"],
+.score-stage-pill[data-stage="Advanced"] { background: rgba(34,197,94,0.1);   color: var(--status-ready); }
+
+@media (max-width: 640px) {
+  .scoreboard { grid-template-columns: 1fr; gap: var(--sp-3); top: var(--sp-12); }
+}
+
+/* ═══════════════════════════════════════════════════
+   Section Card — .tc-card
+   white bg · navy shadow · hover lift + indigo border
+═══════════════════════════════════════════════════ */
+.tc-card {
+  background: var(--n-0);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(30,46,105,0.08);
+  padding: var(--sp-6);
+  border: 1px solid transparent;
+  margin-bottom: var(--sp-4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.tc-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(30,46,105,0.12);
+  border-color: var(--tc-indigo);
+}
+
+.section-head {
+  display: flex; align-items: baseline;
+  justify-content: space-between; gap: var(--sp-3);
+  margin-bottom: var(--sp-4); padding-bottom: var(--sp-3);
+  border-bottom: 1px solid var(--n-100);
+}
+@media (max-width: 640px) {
+  .section-head { flex-direction: column; align-items: flex-start; gap: var(--sp-2); }
+}
+
+/* Section title — Poppins 600 / H3 */
+.section-title {
+  font-family: var(--tc-font-heading);
+  font-size: 15px; font-weight: 600;
+  color: var(--tc-navy);
+  display: flex; align-items: center; gap: var(--sp-2);
+}
+
+/* Badge — Solid Navy variant */
+.tc-pill {
+  display: inline-block;
+  background: var(--tc-navy);
+  color: white;
+  border-radius: 4px;
+  padding: 3px 9px;
+  font-family: var(--tc-font-heading);
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.7px; text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.section-score {
+  font-family: var(--tc-font-heading);
+  font-size: 12px; font-weight: 500;
+  color: var(--n-400); white-space: nowrap;
+}
+.section-score b { color: var(--tc-indigo); font-weight: 700; }
+
+/* ═══════════════════════════════════════════════════
+   Checklist Items
+═══════════════════════════════════════════════════ */
+.checklist { list-style: none; }
+.checklist li {
+  display: flex; align-items: flex-start; gap: var(--sp-3);
+  padding: 11px 0;
+  border-bottom: 1px solid var(--n-100);
+  cursor: pointer; transition: background 0.1s;
+  border-radius: 4px;
+}
+.checklist li:last-child { border-bottom: none; }
+.checklist li:hover .check-box { border-color: var(--tc-indigo); }
+
+.check-box {
+  flex-shrink: 0; width: 18px; height: 18px;
+  border: 1.5px solid var(--n-300);
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s ease; margin-top: 2px;
+  background: var(--n-0);
+}
+.check-box svg {
+  width: 11px; height: 11px; color: #fff;
+  opacity: 0; transform: scale(0.4);
+  transition: all 0.2s ease;
+}
+.checklist li.is-checked .check-box {
+  background: var(--tc-indigo); border-color: var(--tc-indigo);
+}
+.checklist li.is-checked .check-box svg { opacity: 1; transform: scale(1); }
+.checklist li.is-checked .item-text {
+  color: var(--n-400);
+  text-decoration: line-through;
+  text-decoration-color: var(--n-200);
+}
+
+/* Body text — Sora 300, 14px (Admin UI body spec) */
+.item-text {
+  flex: 1;
+  font-family: var(--tc-font-kr);
+  font-size: 14px; font-weight: 400;
+  color: var(--n-700); line-height: 1.6;
+  transition: color 0.2s;
+}
+/* Caption badge — 12px 400 */
+.item-pts {
+  flex-shrink: 0;
+  font-family: var(--tc-font-heading);
+  font-size: 11px; font-weight: 500;
+  color: var(--n-400);
+  padding: 2px 7px;
+  background: var(--tc-bg-pale);
+  border-radius: 4px;
+  margin-top: 2px; white-space: nowrap;
+}
+
+/* ═══════════════════════════════════════════════════
+   Result Card
+═══════════════════════════════════════════════════ */
+.result-card {
+  background: var(--n-0);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(30,46,105,0.08);
+  padding: var(--sp-6);
+  border: 1px solid transparent;
+  margin-top: var(--sp-8);
+}
+.result-head {
+  display: flex; align-items: center;
+  gap: var(--sp-4); margin-bottom: var(--sp-5);
+}
+.result-badge {
+  font-family: var(--tc-font-heading);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.5px; text-transform: uppercase;
+  padding: 5px 14px; border-radius: 999px;
+  background: var(--tc-gradient-hero); color: white;
+}
+.result-title {
+  font-family: var(--tc-font-heading);
+  font-size: 18px; font-weight: 600;
+  color: var(--tc-navy);
+}
+.result-desc {
+  font-family: var(--tc-font-body);
+  font-size: 14px; font-weight: 300;
+  color: var(--n-600); line-height: 1.75;
+  margin-bottom: var(--sp-5);
+}
+
+/* Domain grid */
+.domain-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--sp-3); margin: var(--sp-5) 0;
+}
+.domain-cell {
+  background: var(--tc-gradient-soft);
+  border-radius: 10px; padding: var(--sp-4);
+  border: 1px solid rgba(88,96,213,0.1);
+}
+.domain-cell-label {
+  font-family: var(--tc-font-body);
+  font-size: 11px; font-weight: 400;
+  color: var(--n-500); margin-bottom: var(--sp-2);
+  line-height: 1.35;
+}
+.domain-cell-score {
+  font-family: var(--tc-font-heading);
+  font-size: 22px; font-weight: 200;
+  color: var(--tc-navy);
+}
+.domain-cell-score small {
+  font-size: 11px; font-weight: 400;
+  color: var(--n-400); margin-left: 2px;
+}
+
+/* Callout box */
+.tc-callout {
+  background: var(--tc-bg-pale);
+  border-left: 3px solid var(--tc-indigo);
+  border-radius: 0 10px 10px 0;
+  padding: var(--sp-4) var(--sp-5);
+  margin-top: var(--sp-4);
+}
+.callout-title {
+  font-family: var(--tc-font-heading);
+  font-size: 12px; font-weight: 600;
+  color: var(--tc-indigo);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin-bottom: var(--sp-3);
+}
+.action-list { list-style: none; padding: 0; }
+.action-list li {
+  font-family: var(--tc-font-body);
+  font-size: 13px; font-weight: 300;
+  color: var(--n-700);
+  padding: 5px 0 5px 18px;
+  position: relative; line-height: 1.55;
+}
+.action-list li::before {
+  content: '';
+  position: absolute; left: 0; top: 12px;
+  width: 6px; height: 6px;
+  background: var(--tc-cyan);
+  border-radius: 50%;
+}
+
+/* ═══════════════════════════════════════════════════
+   Buttons — 52px pill (TecAce Brand spec)
+═══════════════════════════════════════════════════ */
+.bottom-actions { display: flex; gap: var(--sp-3); margin-top: var(--sp-6); flex-wrap: wrap; }
+
+.tc-btn {
+  border-radius: 26px; height: 44px;
+  padding: 0 var(--sp-6);
+  font-family: var(--tc-font-heading);
+  font-weight: 500; font-size: 13px;
+  cursor: pointer; border: none;
+  transition: all 0.2s ease;
+  display: inline-flex; align-items: center; gap: var(--sp-2);
+}
+/* Outline */
+.tc-btn-outline {
+  border: 1.5px solid var(--tc-navy);
+  color: var(--tc-navy);
+  background: transparent;
+}
+.tc-btn-outline:hover { background: var(--tc-bg-pale); border-color: var(--tc-indigo); color: var(--tc-indigo); }
+/* Solid Navy */
+.tc-btn-solid {
+  background: var(--tc-navy);
+  color: white; border: none;
+}
+.tc-btn-solid:hover { background: var(--tc-navy-light); }
+/* Gradient */
+.tc-btn-gradient {
+  background: var(--tc-gradient-hero);
+  color: white; border: none;
+  box-shadow: 0 4px 14px rgba(88,96,213,0.3);
+}
+.tc-btn-gradient:hover { opacity: 0.9; box-shadow: 0 6px 20px rgba(88,96,213,0.4); }
+
+/* ═══════════════════════════════════════════════════
+   Footer — dark navy
+═══════════════════════════════════════════════════ */
+.tc-footer {
+  background: var(--tc-navy-dark);
+  height: 44px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 var(--sp-12);
+}
+.footer-left  {
+  font-family: var(--tc-font-body);
+  font-size: 11px; font-weight: 300;
+  color: rgba(255,255,255,0.4);
+}
+.footer-right {
+  font-family: var(--tc-font-heading);
+  font-size: 11px; font-weight: 600;
+  background: var(--tc-gradient-text);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.4px; text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════════════
+   Scroll Reveal
+═══════════════════════════════════════════════════ */
+.reveal { opacity: 0; transform: translateY(14px); transition: opacity 0.5s ease, transform 0.5s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* Print */
+@media print {
+  .tc-nav, .scoreboard { position: static; }
+  .bottom-actions { display: none; }
+}
+
+@media (max-width: 640px) {
+  .tc-footer { padding: 0 var(--sp-4); }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ Navigation ═════════════════════════════════ -->
+<nav class="tc-nav">
+  <div class="nav-left">
+    <span class="nav-logo">TecAce</span>
+    <span class="nav-sep"></span>
+    <span class="nav-title" data-i18n="nav_title">AI 보안 준비도 자가진단</span>
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn lang-btn" id="langBtn" onclick="toggleLang()">English</button>
+    <button class="nav-btn" onclick="cycleTheme()"><span id="themeLabel">Light</span></button>
+  </div>
+</nav>
+
+<!-- ═══ Hero Banner ════════════════════════════════ -->
+<div class="tc-hero">
+  <span class="hero-chip" data-i18n="badge">SELF-ASSESSMENT</span>
+  <h1 class="hero-title" data-i18n="title">AI 보안 준비도<br>자가진단</h1>
+  <p class="hero-lead" data-i18n="subtitle">중소기업이 지금 우리 회사 AI 사용 환경을 100점 만점으로 점검할 수 있는 50개 항목 체크리스트. 각 항목은 2점이며, 점수에 따라 단계별 우선 조치를 안내합니다.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <strong data-i18n="meta_items">총 항목</strong>
+      <span data-i18n="meta_items_val">50개 · 100점 만점</span>
+    </div>
+    <div class="hero-meta-item">
+      <strong data-i18n="meta_ref">참고 기준</strong>
+      <span>CISA · OWASP LLM Top 10 · FTC</span>
+    </div>
+    <div class="hero-meta-item">
+      <strong data-i18n="meta_ver">버전</strong>
+      <span>v1.0 · 2026</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Page Content ═══════════════════════════════ -->
+<div class="page-wrap">
+
+  <!-- Scoreboard -->
+  <div class="scoreboard">
+    <div class="score-total">
+      <span class="score-num" id="scoreNum">0</span>
+      <span class="score-denom" data-i18n="score_denom">/ 100점</span>
+    </div>
+    <div class="score-bar-track">
+      <div class="score-bar-fill" id="scoreFill"></div>
+    </div>
+    <div class="score-stage-pill" id="scoreStage" data-stage="위험" data-i18n="stage_init">위험 단계</div>
+  </div>
+
+  <!-- Checklist Sections -->
+  <main id="sections"></main>
+
+  <!-- Result Card -->
+  <section class="result-card reveal" id="result">
+    <div class="result-head">
+      <span class="result-badge" id="resultBadge">0 / 100</span>
+      <h2 class="result-title" id="resultTitle">위험 단계</h2>
+    </div>
+    <p class="result-desc" id="resultDesc" data-i18n="result_empty">아직 체크된 항목이 없습니다. 위 체크리스트를 진행해보세요.</p>
+
+    <div class="domain-grid" id="domainGrid"></div>
+
+    <div class="tc-callout" id="resultCallout" style="display:none">
+      <div class="callout-title" id="calloutTitle" data-i18n="callout_label">우선 조치 권고</div>
+      <ul class="action-list" id="resultActions"></ul>
+    </div>
+
+    <div class="bottom-actions">
+      <button class="tc-btn tc-btn-outline" id="resetBtn" data-i18n="btn_reset">처음부터 다시</button>
+      <button class="tc-btn tc-btn-gradient" onclick="window.print()" data-i18n="btn_print">결과 인쇄</button>
+    </div>
+  </section>
+
+  <p style="text-align:center;font-family:'Sora',sans-serif;font-size:11px;font-weight:300;color:var(--n-400);margin-top:40px;line-height:1.9;" data-i18n="footer_note">
+    참고 자료: CISA Secure Our World · OWASP Top 10 for LLM Applications · FTC Business Guidance
+  </p>
+</div>
+
+<!-- ═══ Footer ══════════════════════════════════════ -->
+<footer class="tc-footer">
+  <span class="footer-left">tecace.com · TecAce Design System v2 · AI Security Self-Assessment</span>
+  <span class="footer-right">CONFIDENTIAL · © 2026 TECACE</span>
+</footer>
+
+<script>
+/* ─── DATA ─────────────────────────────────────── */
+var DATA = [
+  {
+    id:'policy', pill:'A1', maxPts:16,
+    title_ko:'정책', title_en:'Policy',
+    items_ko:[
+      '회사에서 사용할 수 있는 AI 도구 목록이 있다',
+      '사용 금지 AI 도구 목록이 있다',
+      'AI에 입력 가능한 데이터와 입력 금지 데이터를 구분했다',
+      '고객정보, 계약서, 소스코드, API 키, 내부 로그 입력 금지 원칙이 있다',
+      'AI 사용 정책을 직원 온보딩 문서에 포함했다',
+      'AI 사용 정책을 최소 6개월에 한 번 검토·업데이트한다',
+      'AI 결과물에 대한 인간 검토(Human-in-the-loop) 원칙이 정의되어 있다',
+      '외부 공개 자료에 AI 활용 사실을 표기·고지하는 기준이 있다'
+    ],
+    items_en:[
+      'An approved list of AI tools for company use exists',
+      'A list of prohibited AI tools exists',
+      'Data permitted and prohibited for AI input has been categorized',
+      'Restrictions on inputting customer data, contracts, source code, API keys, and internal logs are defined',
+      'AI usage policy is included in employee onboarding materials',
+      'AI usage policy is reviewed and updated at least every 6 months',
+      'A Human-in-the-loop review principle for AI outputs is defined',
+      'Standards for disclosing AI use in publicly released materials are established'
+    ]
+  },
+  {
+    id:'ownership', pill:'A2', maxPts:14,
+    title_ko:'오너십', title_en:'Ownership',
+    items_ko:[
+      'AI 사용 책임자(오너)가 명확히 지정되어 있다',
+      '부서별 AI 사용 사례를 최소 월 1회 점검한다',
+      '신규 AI 도구 도입 전 승인 절차가 있다',
+      '퇴사자의 AI 계정 회수 절차가 있다',
+      'AI 사고 발생 시 보고 라인이 정해져 있다',
+      'AI 도구별 결제·라이선스 소유자가 명확히 지정되어 있다',
+      'AI 정책을 정기적으로 안내·교육하는 담당자가 있다'
+    ],
+    items_en:[
+      'A designated AI usage owner (DRI) is clearly assigned',
+      'AI use cases per department are reviewed at least once a month',
+      'An approval process exists before adopting new AI tools',
+      'A procedure exists to revoke AI accounts of departing employees',
+      'A reporting chain is established for AI incidents',
+      'Payment and license owners for each AI tool are clearly assigned',
+      'A person responsible for regularly communicating and training on AI policy is designated'
+    ]
+  },
+  {
+    id:'security', pill:'A3', maxPts:18,
+    title_ko:'보안 설정', title_en:'Security Settings',
+    items_ko:[
+      '회사 계정으로만 AI를 사용한다 (개인 계정 금지)',
+      '모든 AI 도구에 MFA(다단계 인증)를 적용한다',
+      '공유 링크 기능을 제한하거나 관리한다',
+      '관리자 콘솔에서 사용자 접근 권한을 관리한다',
+      '가능한 경우 SSO·DLP·감사 로그를 적용한다',
+      'ChatGPT의 "Improve the model for everyone" 토글을 끄도록 안내한다',
+      '민감 주제에는 Temporary Chat 모드 사용을 권장한다',
+      'Gemini "앱 활동" 설정을 회사 정책에 맞춰 통일했다',
+      'AI 도구의 비밀번호·토큰을 패스워드 매니저로 관리한다'
+    ],
+    items_en:[
+      'AI is only used with company accounts (personal accounts prohibited)',
+      'MFA (multi-factor authentication) is applied to all AI tools',
+      'Shared link features are restricted or managed',
+      'User access permissions are managed from the admin console',
+      'SSO, DLP, and audit logs are applied where possible',
+      'Employees are instructed to disable the "Improve the model for everyone" toggle in ChatGPT',
+      'Temporary Chat mode is recommended for sensitive topics',
+      'Gemini "App Activity" settings are unified according to company policy',
+      'Passwords and tokens for AI tools are managed with a password manager'
+    ]
+  },
+  {
+    id:'data', pill:'A4', maxPts:18,
+    title_ko:'데이터 관리', title_en:'Data Management',
+    items_ko:[
+      '내부 문서 접근 권한을 정리했다',
+      '"모두에게 공유됨" 상태의 문서를 점검했다',
+      'AI 커넥터가 접근 가능한 폴더를 제한했다',
+      '민감 데이터 분류 기준이 있다 (공개·내부·기밀·기밀-제한)',
+      'AI에 업로드한 파일의 보관·삭제 정책을 확인했다',
+      '고객 PII는 익명화 후 입력하는 기준이 있다',
+      'AI 출력에 포함된 개인정보·기밀이 외부로 유출되지 않도록 검토한다',
+      'AI 도구 제공사의 데이터 처리 정책을 검토했다',
+      '무료 계정과 기업용 계정의 데이터 사용 차이를 직원에게 안내했다'
+    ],
+    items_en:[
+      'Internal document access permissions have been organized',
+      'Documents with "Shared with everyone" status have been reviewed',
+      'Folders accessible by AI connectors have been restricted',
+      'Sensitive data classification criteria exist (Public · Internal · Confidential · Restricted)',
+      'Storage and deletion policies for files uploaded to AI have been confirmed',
+      'A standard exists to anonymize customer PII before input',
+      'Personal or confidential information in AI outputs is reviewed to prevent external leakage',
+      'The data processing policy of AI tool providers has been reviewed',
+      'Employees have been informed of data usage differences between free and enterprise accounts'
+    ]
+  },
+  {
+    id:'incident', pill:'A5', maxPts:14,
+    title_ko:'사고 대응', title_en:'Incident Response',
+    items_ko:[
+      'AI 보안 사고 신고 채널이 있다',
+      '고객·법무·보안·경영진 보고 역할이 정해져 있다',
+      '비밀번호·API 키 노출 시 즉시 폐기·재발급 절차가 있다',
+      '사고 발생 후 로그 확인 절차가 있다',
+      '필요 시 고객 통지 여부를 검토하는 프로세스가 있다',
+      '인포스틸러 멀웨어 의심 시 즉시 AI 계정 비밀번호 변경 절차가 있다',
+      '연 1회 이상 AI 보안 사고 대응 시뮬레이션을 진행한다'
+    ],
+    items_en:[
+      'A reporting channel for AI security incidents exists',
+      'Reporting roles for customers, legal, security, and executives are defined',
+      'Procedures for immediately revoking and reissuing exposed passwords or API keys exist',
+      'A log review procedure exists after an incident occurs',
+      'A process exists to assess whether customer notification is required',
+      'An immediate AI account password change procedure is in place when infostealer malware is suspected',
+      'AI security incident response simulations are conducted at least once a year'
+    ]
+  },
+  {
+    id:'emp-before', pill:'B1', maxPts:10,
+    title_ko:'직원용 — AI에 넣기 전 확인', title_en:'Employee — Pre-Input Checklist',
+    items_ko:[
+      '회사가 승인한 AI 도구인가?',
+      '회사 계정으로 로그인했는가? (개인 계정 아님)',
+      '입력 내용에 고객정보·계약 내용·소스코드·API 키가 포함되어 있지 않은가?',
+      '민감 정보(이름·금액·일정 등)를 익명화 또는 마스킹했는가?',
+      '이 내용이 회사 밖으로 나가도 괜찮은지 30초간 재확인했는가?'
+    ],
+    items_en:[
+      'Is this a company-approved AI tool?',
+      'Are you logged in with a company account (not personal)?',
+      'Does the input NOT contain customer data, contracts, source code, or API keys?',
+      'Has sensitive information (names, amounts, schedules, etc.) been anonymized or masked?',
+      'Have you taken 30 seconds to reconfirm this content is okay to leave company boundaries?'
+    ]
+  },
+  {
+    id:'emp-after', pill:'B2', maxPts:10,
+    title_ko:'직원용 — AI 결과 사용 전 확인', title_en:'Employee — Pre-Use Output Checklist',
+    items_ko:[
+      'AI가 제시한 사실·수치를 1차 검증했는가?',
+      '인용·링크가 실제로 존재하고 신뢰할 수 있는 출처인가?',
+      'AI 결과를 외부로 보내기 전 동료 또는 책임자가 검토했는가?',
+      'AI에게 자동 실행(이메일 전송·코드 배포 등)을 무비판적으로 위임하지 않았는가?',
+      '결과물의 편향·환각·부적절한 표현 여부를 검토했는가?'
+    ],
+    items_en:[
+      'Have the facts and figures provided by AI been verified?',
+      'Do citations and links actually exist and come from trustworthy sources?',
+      'Has a colleague or supervisor reviewed the AI output before sending it externally?',
+      'Have you avoided uncritically delegating automated actions (email sending, code deployment, etc.) to AI?',
+      'Has the output been reviewed for bias, hallucinations, or inappropriate expressions?'
+    ]
+  }
+];
+
+var PTS = 2;
+
+var STAGES_KO = [
+  { max:39,  key:'위험', title:'위험 단계',
+    desc:'AI 사용이 대부분 개인 판단에 맡겨져 있는 상태입니다. 직원이 고객정보·계약서·회의록·소스코드 등을 AI에 입력해도 회사가 파악하기 어렵습니다. 다음 4가지를 우선적으로 적용하세요.',
+    actions:['승인된 AI 도구 목록 만들기','입력 금지 데이터 기준 만들기','회사 계정과 MFA 적용','사고 신고 채널 만들기'] },
+  { max:59,  key:'기본', title:'기본 단계',
+    desc:'일부 기준은 있지만 문서화와 운영이 부족한 상태입니다. 특정 직원은 조심해서 사용하지만, 회사 전체 기준으로는 일관성이 부족할 가능성이 높습니다.',
+    actions:['AI 사용 정책 문서화','신규 AI 도구 승인 절차 만들기','직원 온보딩에 AI 보안 가이드 포함','민감정보 익명화 기준 만들기'] },
+  { max:79,  key:'관리', title:'관리 단계',
+    desc:'기본적인 AI 보안 체계가 작동하고 있습니다. 다만 로그 확인, DLP, 커넥터 권한, 사고 대응 등 고급 관리 영역이 부족할 수 있습니다.',
+    actions:['관리자 콘솔과 감사 로그 점검','AI 커넥터 접근 범위 제한','분기별 AI 사용 사례 리뷰','사고 대응 시뮬레이션 진행'] },
+  { max:100, key:'성숙', title:'성숙 단계',
+    desc:'AI 사용 정책·계정 관리·데이터 분류·사고 대응이 비교적 잘 운영되고 있습니다. 단순 사용 제한보다 생산성과 보안을 함께 높이는 방향으로 발전시키세요.',
+    actions:['AI 사용 로그 기반 리스크 분석','부서별 AI 활용 사례 고도화','사내 AI Safe Input Checker 또는 익명화 GPT 운영','정기적인 정책 업데이트와 교육'] }
+];
+var STAGES_EN = [
+  { max:39,  key:'Critical', title:'Critical Stage',
+    desc:'AI usage is largely left to individual judgment. It is difficult for the company to detect when employees input customer data, contracts, meeting notes, or source code into AI. Prioritize these 4 actions immediately.',
+    actions:['Create an approved AI tool list','Define prohibited data input standards','Enforce company accounts and MFA','Establish an incident reporting channel'] },
+  { max:59,  key:'Basic', title:'Basic Stage',
+    desc:'Some standards exist, but documentation and operations are lacking. Certain employees are cautious, but company-wide consistency is likely insufficient.',
+    actions:['Document the AI usage policy','Create an approval process for new AI tools','Include AI security guidelines in employee onboarding','Define standards for anonymizing sensitive data'] },
+  { max:79,  key:'Managed', title:'Managed Stage',
+    desc:'A basic AI security framework is in place. However, advanced management areas such as log review, DLP, connector permissions, and incident response may still be lacking.',
+    actions:['Review admin console and audit logs','Restrict AI connector access scope','Conduct quarterly AI use case reviews','Run incident response simulations'] },
+  { max:100, key:'Advanced', title:'Advanced Stage',
+    desc:'AI usage policy, account management, data classification, and incident response are operating reasonably well. Focus on advancing both productivity and security beyond simple usage restrictions.',
+    actions:['Risk analysis based on AI usage logs','Advance department-level AI use cases','Operate an internal AI Safe Input Checker or anonymization GPT','Regular policy updates and training'] }
+];
+
+/* ─── i18n ──────────────────────────────────────── */
+var LANG_DATA = {
+  ko: {
+    nav_title:'AI 보안 준비도 자가진단', badge:'SELF-ASSESSMENT',
+    title:'AI 보안 준비도\n자가진단',
+    subtitle:'중소기업이 지금 우리 회사 AI 사용 환경을 100점 만점으로 점검할 수 있는 50개 항목 체크리스트. 각 항목은 2점이며, 점수에 따라 단계별 우선 조치를 안내합니다.',
+    meta_items:'총 항목', meta_items_val:'50개 · 100점 만점',
+    meta_ref:'참고 기준', meta_ver:'버전',
+    score_denom:'/ 100점', stage_init:'위험 단계',
+    result_empty:'아직 체크된 항목이 없습니다. 위 체크리스트를 진행해보세요.',
+    callout_label:'우선 조치 권고',
+    btn_reset:'처음부터 다시', btn_print:'결과 인쇄',
+    footer_note:'참고 자료: CISA Secure Our World · OWASP Top 10 for LLM Applications · FTC Business Guidance',
+    lang_btn:'English', pts:'점'
+  },
+  en: {
+    nav_title:'AI Security Self-Assessment', badge:'SELF-ASSESSMENT',
+    title:'AI Security Readiness\nSelf-Assessment',
+    subtitle:'A 50-item checklist for SMBs to assess their AI usage environment on a 100-point scale. Each item is worth 2 points; prioritized actions are provided based on your score.',
+    meta_items:'Total Items', meta_items_val:'50 items · 100 pts',
+    meta_ref:'References', meta_ver:'Version',
+    score_denom:'/ 100 pts', stage_init:'Critical Stage',
+    result_empty:'No items checked yet. Start working through the checklist above.',
+    callout_label:'Recommended Actions',
+    btn_reset:'Reset All', btn_print:'Print Results',
+    footer_note:'References: CISA Secure Our World · OWASP Top 10 for LLM Applications · FTC Business Guidance',
+    lang_btn:'한국어', pts:'pts'
+  }
+};
+
+var curLang = localStorage.getItem('tc-lang') || 'ko';
+var state   = {};
+
+/* ─── Theme (light only — DS v2 is light-first) ─── */
+var currentTheme = 'light';
+function applyTheme(t) {
+  currentTheme = t;
+  document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
+  localStorage.setItem('tc-theme', t);
+}
+function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
+
+/* ─── Build ─────────────────────────────────────── */
+function build() {
+  var root = document.getElementById('sections');
+  root.innerHTML = '';
+  var d = LANG_DATA[curLang];
+
+  DATA.forEach(function(sec) {
+    if (!state[sec.id]) state[sec.id] = new Array(sec.items_ko.length).fill(false);
+    var title = curLang === 'ko' ? sec.title_ko : sec.title_en;
+    var items = curLang === 'ko' ? sec.items_ko : sec.items_en;
+    var ptsLabel = d.pts;
+
+    var el = document.createElement('section');
+    el.className = 'tc-card reveal';
+    el.id = 'sec-' + sec.id;
+    el.innerHTML =
+      '<div class="section-head">' +
+        '<h3 class="section-title"><span class="tc-pill">' + sec.pill + '</span>' + title + '</h3>' +
+        '<span class="section-score"><b data-section-score="' + sec.id + '">0</b> / ' + sec.maxPts + ptsLabel + '</span>' +
+      '</div>' +
+      '<ul class="checklist"></ul>';
+
+    var ul = el.querySelector('ul');
+    items.forEach(function(item, idx) {
+      var li = document.createElement('li');
+      if (state[sec.id][idx]) li.classList.add('is-checked');
+      li.innerHTML =
+        '<span class="check-box" aria-hidden="true">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' +
+        '</span>' +
+        '<span class="item-text">' + item + '</span>' +
+        '<span class="item-pts">' + PTS + ptsLabel + '</span>';
+      li.addEventListener('click', function() { toggle(sec.id, idx, li); });
+      ul.appendChild(li);
+    });
+    root.appendChild(el);
+  });
+
+  document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+  render();
+}
+
+/* ─── Score Logic ───────────────────────────────── */
+function toggle(secId, idx, el) {
+  state[secId][idx] = !state[secId][idx];
+  el.classList.toggle('is-checked', state[secId][idx]);
+  render();
+}
+function sectionScore(id) {
+  return state[id] ? state[id].filter(Boolean).length * PTS : 0;
+}
+function totalScore() {
+  return DATA.reduce(function(s, sec) { return s + sectionScore(sec.id); }, 0);
+}
+function stageFor(score) {
+  var stages = curLang === 'ko' ? STAGES_KO : STAGES_EN;
+  return stages.find(function(s) { return score <= s.max; }) || stages[stages.length - 1];
+}
+
+/* ─── Render ────────────────────────────────────── */
+function render() {
+  var total = totalScore();
+  var stage = stageFor(total);
+  var d = LANG_DATA[curLang];
+
+  document.getElementById('scoreNum').textContent  = total;
+  document.getElementById('scoreFill').style.width = total + '%';
+  var sb = document.getElementById('scoreStage');
+  sb.textContent = stage.title; sb.dataset.stage = stage.key;
+
+  DATA.forEach(function(sec) {
+    var el = document.querySelector('[data-section-score="' + sec.id + '"]');
+    if (el) el.textContent = sectionScore(sec.id);
+  });
+
+  document.getElementById('resultBadge').textContent = total + ' / 100';
+  document.getElementById('resultTitle').textContent  = stage.title;
+  document.getElementById('resultDesc').textContent   = total === 0 ? d.result_empty : stage.desc;
+
+  var callout = document.getElementById('resultCallout');
+  var actEl   = document.getElementById('resultActions');
+  actEl.innerHTML = '';
+  if (total > 0) {
+    callout.style.display = '';
+    stage.actions.forEach(function(a) {
+      var li = document.createElement('li'); li.textContent = a; actEl.appendChild(li);
+    });
+  } else { callout.style.display = 'none'; }
+
+  var grid = document.getElementById('domainGrid');
+  grid.innerHTML = '';
+  DATA.forEach(function(sec) {
+    var cell = document.createElement('div');
+    cell.className = 'domain-cell';
+    var title = curLang === 'ko' ? sec.title_ko : sec.title_en;
+    cell.innerHTML =
+      '<div class="domain-cell-label">' + title + '</div>' +
+      '<div class="domain-cell-score">' + sectionScore(sec.id) + '<small> / ' + sec.maxPts + '</small></div>';
+    grid.appendChild(cell);
+  });
+}
+
+/* ─── i18n ──────────────────────────────────────── */
+function applyLang(lang) {
+  curLang = lang; localStorage.setItem('tc-lang', lang);
+  document.documentElement.lang = lang;
+  var d = LANG_DATA[lang];
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var k = el.getAttribute('data-i18n');
+    if (d[k] !== undefined) el.textContent = d[k];
+  });
+  document.getElementById('langBtn').textContent = d.lang_btn;
+  build();
+}
+function toggleLang() { applyLang(curLang === 'ko' ? 'en' : 'ko'); }
+
+/* ─── Scroll Reveal ─────────────────────────────── */
+var obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+
+/* ─── Init ──────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', function() {
+  applyLang(curLang);
+
+  document.getElementById('resetBtn').addEventListener('click', function() {
+    var msg = curLang === 'ko' ? '체크한 항목을 모두 초기화할까요?' : 'Reset all checked items?';
+    if (!confirm(msg)) return;
+    DATA.forEach(function(s) { if (state[s.id]) state[s.id].fill(false); });
+    document.querySelectorAll('.checklist li.is-checked').forEach(function(li) { li.classList.remove('is-checked'); });
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+});
+</script>
+</body>
+</html>
